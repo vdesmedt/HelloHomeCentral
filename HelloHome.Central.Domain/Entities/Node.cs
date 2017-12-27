@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HelloHome.Central.Domain.Entities
 {
-    class Node
+    public class Node
     {
     }
 }
