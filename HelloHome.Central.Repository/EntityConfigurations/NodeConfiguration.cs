@@ -7,11 +7,12 @@ using System.Text;
 
 namespace HelloHome.Central.Repository.EntityConfigurations
 {
-    public class NodeConfiguration : IEntityTypeConfiguration<Node>
+    public class NodeConfiguration : IEntityTypeConfiguration<Domain.Entities.Node>
     {
-        public void Configure(EntityTypeBuilder<Node> builder)
+        public void Configure(EntityTypeBuilder<Domain.Entities.Node> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("Node");
+            builder.HasIndex(x => x.RfAddress).IsUnique();
         }
     }
 }
