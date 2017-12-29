@@ -5,4 +5,4 @@ install:
  - dotnet restore
 script:
  - dotnet build
- - dotnet test HelloHome.Central.Tests\HelloHome.Central.Tests.csproj
+ - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj
