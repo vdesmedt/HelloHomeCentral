@@ -3,18 +3,22 @@ using Castle.MicroKernel.Registration;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Repository;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using HelloHome.Central.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+using HelloHome.Central.Hub.MessageChannel;
 
 namespace HelloHome.Central.Hub
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -37,17 +41,34 @@ namespace HelloHome.Central.Hub
                     .ImplementedBy<HelloHomeContext>()
                     .LifestyleSingleton(),
                 Component.For<DbContextOptions<HelloHomeContext>>()
-                    .Instance(dbCOntextOptionsBuilder.Options)                    
+                    .Instance(dbCOntextOptionsBuilder.Options),
+                Component.For<MessageHub>(),
+                Component.For<IMessageChannel>().ImplementedBy<RandomMessageChannel>()
             );
 
-            var ctx = ioc.Resolve<IUnitOfWork>();
+            var hub = ioc.Resolve<MessageHub>();
+            var cts = new CancellationTokenSource();
+            var t = hub.Process(cts.Token);
 
-            ctx.Nodes.Add(new Domain.Entities.Node { RfAddress = 1, Signature = long.MaxValue, LastSeen = DateTime.Now, LastStartupTime = DateTime.Now, Metadata = new NodeMetadata() });
-            ctx.SaveChanges();
+            Console.ReadKey();
+            Console.WriteLine("Stoping hub...");
+            cts.Cancel();
 
-            var nodes = ctx.Nodes;
-            Console.WriteLine($"Node count:{nodes.ToList().Count}");
-            ioc.Release(ctx);
+            var l = hub.LeftToProcess;
+            while (l > 0)
+            {
+                Console.WriteLine($"{hub.LeftToProcess} message(s) left to process...");
+                while (l == hub.LeftToProcess) ;
+                Thread.Sleep(100);
+                l = hub.LeftToProcess;
+            }
+
+            Console.WriteLine("Processing last message before exiting....");
+
+            t.Wait();
+
+            Console.WriteLine("Done ! Bye bye !");
+            ioc.Release(hub);
         }
     }
 }

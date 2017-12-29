@@ -18,14 +18,4 @@ namespace HelloHome.Central.Domain.Entities
 
         public NodeMetadata Metadata { get; set; }
     }
-
-    public class NodeMetadata
-    {
-        public int Id { get; set; }
-
-        public Node Node { get; set; }
-        public string Name { get; set; }
-
-        public string Version { get; set; }
-    }
 }
