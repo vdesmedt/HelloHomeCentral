@@ -8,7 +8,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\HelloHome.Central.Common\HelloHome.Central.Common.csproj" />
     <ProjectReference Include="..\HelloHome.Central.Domain\HelloHome.Central.Domain.csproj" />

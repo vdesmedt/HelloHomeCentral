@@ -13,6 +13,15 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         {
             builder.ToTable("Node");
             builder.HasIndex(x => x.RfAddress).IsUnique();
+            builder.OwnsOne(x => x.Metadata, nm =>
+            {
+                nm.Property(mx => mx.Name)
+                    .HasColumnName("Name")
+                    .HasMaxLength(50);
+                nm.Property(mx => mx.Version)
+                    .HasColumnName("Version")
+                    .HasMaxLength(10);
+            });
         }
     }
 }
