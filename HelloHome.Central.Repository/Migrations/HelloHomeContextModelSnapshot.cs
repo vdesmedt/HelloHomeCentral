@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
 namespace HelloHome.Central.Repository.Migrations
@@ -23,7 +25,13 @@ namespace HelloHome.Central.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("LastSeen");
+
+                    b.Property<DateTimeOffset>("LastStartupTime");
+
                     b.Property<byte>("RfAddress");
+
+                    b.Property<long>("Signature");
 
                     b.HasKey("Id");
 
@@ -33,23 +41,29 @@ namespace HelloHome.Central.Repository.Migrations
                     b.ToTable("Node");
                 });
 
-            modelBuilder.Entity("HelloHome.Central.Domain.Entities.Node", b =>
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeMetadata", b =>
                 {
-                    b.OwnsOne("HelloHome.Central.Domain.Entities.NodeMetadata", "Metadata", b1 =>
-                        {
-                            b1.Property<int>("NodeId");
+                    b.Property<int>("Id");
 
-                            b1.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(50);
 
-                            b1.Property<string>("Version");
+                    b.Property<string>("Version")
+                        .HasColumnName("Version")
+                        .HasMaxLength(10);
 
-                            b1.ToTable("Node");
+                    b.HasKey("Id");
 
-                            b1.HasOne("HelloHome.Central.Domain.Entities.Node")
-                                .WithOne("Metadata")
-                                .HasForeignKey("HelloHome.Central.Domain.Entities.NodeMetadata", "NodeId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
+                    b.ToTable("Node");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeMetadata", b =>
+                {
+                    b.HasOne("HelloHome.Central.Domain.Entities.Node", "Node")
+                        .WithOne("Metadata")
+                        .HasForeignKey("HelloHome.Central.Domain.Entities.NodeMetadata", "Id")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

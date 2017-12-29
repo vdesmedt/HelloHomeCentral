@@ -7,13 +7,25 @@ namespace HelloHome.Central.Domain.Entities
     public class Node
     {
         public int Id { get; set; }
+
+        public long Signature { get; set; }
+
         public byte RfAddress { get; set; }
-        public NodeMetadata Metadata { get; set; }      
+
+        public DateTimeOffset LastStartupTime { get; set; }
+
+        public DateTime LastSeen { get; set; }
+
+        public NodeMetadata Metadata { get; set; }
     }
 
     public class NodeMetadata
     {
+        public int Id { get; set; }
+
+        public Node Node { get; set; }
         public string Name { get; set; }
+
         public string Version { get; set; }
     }
 }

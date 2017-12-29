@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Castle.Windsor" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
   </ItemGroup>
   
   <ItemGroup>
@@ -19,5 +22,7 @@
     <ProjectReference Include="..\HelloHome.Central.Domain\HelloHome.Central.Domain.csproj" />
     <ProjectReference Include="..\HelloHome.Central.Repository\HelloHome.Central.Repository.csproj" />
   </ItemGroup>
+  
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

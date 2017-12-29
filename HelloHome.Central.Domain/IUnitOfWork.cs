@@ -9,5 +9,7 @@ namespace HelloHome.Central.Domain
     public interface IUnitOfWork
     {
         DbSet<Node> Nodes { get; set; }
+
+        int SaveChanges();
     }
 }

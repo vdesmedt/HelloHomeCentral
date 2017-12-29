@@ -7,21 +7,23 @@ using System.Text;
 
 namespace HelloHome.Central.Repository.EntityConfigurations
 {
-    public class NodeConfiguration : IEntityTypeConfiguration<Domain.Entities.Node>
+    public class NodeConfig : IEntityTypeConfiguration<Domain.Entities.Node>
     {
         public void Configure(EntityTypeBuilder<Domain.Entities.Node> builder)
         {
             builder.ToTable("Node");
             builder.HasIndex(x => x.RfAddress).IsUnique();
-            builder.OwnsOne(x => x.Metadata, nm =>
-            {
-                nm.Property(mx => mx.Name)
-                    .HasColumnName("Name")
-                    .HasMaxLength(50);
-                nm.Property(mx => mx.Version)
-                    .HasColumnName("Version")
-                    .HasMaxLength(10);
-            });
+            builder.HasOne(x => x.Metadata).WithOne(x => x.Node).HasForeignKey<NodeMetadata>(x => x.Id);
+        }
+    }
+
+    public class NodeMetaConfig : IEntityTypeConfiguration<NodeMetadata>
+    {
+        public void Configure(EntityTypeBuilder<NodeMetadata> builder)
+        {
+            builder.ToTable("Node");
+            builder.Property(x => x.Name).HasColumnName("Name").HasMaxLength(50);
+            builder.Property(x => x.Version).HasColumnName("Version").HasMaxLength(10);
         }
     }
 }
