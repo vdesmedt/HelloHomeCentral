@@ -5,7 +5,7 @@ install:
  - dotnet restore
 script:
  - shash=${TRAVIS_COMMIT} | cut -c 1-6
- - dotnet build --version-suffix shash
+ - dotnet build --version-suffix $shash
  - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj
 before_deploy:
  - cd ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/
