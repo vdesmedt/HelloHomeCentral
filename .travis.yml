@@ -4,7 +4,7 @@ dotnet: 2.1.3
 install:
  - dotnet restore
 script:
- - shash=${TRAVIS_COMMIT} | cut -c 1-6
+ - shash=$(echo ${TRAVIS_COMMIT} | cut -c 1-6)
  - echo ${shash}
  - dotnet build --version-suffix ${shash}
  - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj
