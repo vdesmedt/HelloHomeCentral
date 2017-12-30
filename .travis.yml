@@ -4,10 +4,12 @@ dotnet: 2.1.3
 install:
  - dotnet restore
 script:
- - dotnet build
+ - shash=${echo ${TRAVIS_COMMIT} | cut -c 1-6}
+ - dotnet build --version-suffix shash
  - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj
 before_deploy:
  - cd ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/
+ - echo ${TRAVIS_COMMIT} > version.txt
  - tar -zcf HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz *.*
 deploy:
   provider: releases
