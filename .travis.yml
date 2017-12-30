@@ -9,6 +9,7 @@ script:
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
+  file_glob: true
   file: HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/*
   skip_cleanup: true
   on:
