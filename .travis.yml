@@ -6,11 +6,14 @@ install:
 script:
  - dotnet build
  - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj
+before_deploy:
+ - cd ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/
+ - tar -zcf HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz *.*
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file_glob: true
-  file: HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/*
+  file: ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz
   skip_cleanup: true
   on:
     tags: true
