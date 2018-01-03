@@ -25,13 +25,15 @@ namespace HelloHome.Central.Hub
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appconfig.json")
                 .Build();
-
+            var cns = config.GetConnectionString("Default");
+            
             var ioc = new WindsorContainer();
+            ioc.Register(Component.For<IConfigurationRoot>().Instance(config));
             ioc.Install(                
                 new FacilityInstaller(),
                 new HubInstaller(),
                 new MessageChannelInstaller(),
-                new DbContextInstaller(config)
+                new DbContextInstaller(cns)
             );
 
 

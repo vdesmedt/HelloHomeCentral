@@ -11,13 +11,13 @@ namespace HelloHome.Central.Hub.IoC.Installers
 {
     public class DbContextInstaller : IWindsorInstaller
     {
-        private readonly IConfigurationRoot _config;
+        private readonly string _connectionString;
 
-        public DbContextInstaller(IConfigurationRoot config)
+        public DbContextInstaller(string connectionString)
         {
-            _config = config;
+            _connectionString = connectionString;
         }
-
+        
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HelloHomeContext>();
@@ -26,7 +26,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
             loggerFactory.AddConsole();
 
             dbCOntextOptionsBuilder
-                .UseMySql(_config.GetConnectionString("Default"))
+                .UseMySql(_connectionString)
                 .UseLoggerFactory(loggerFactory);
 
             container.Register(
