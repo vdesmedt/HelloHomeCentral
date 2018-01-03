@@ -15,9 +15,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 
 		protected override byte[] EncodeInternal (NodeConfigCommand message)
 		{
-			var bytes = new List<byte> ();
-			bytes.Add (2 + (0 << 2));
-		    bytes.AddRange(BitConverter.GetBytes(message.Signature));
+			var bytes = new List<byte> {2 + (0 << 2)};
+			bytes.AddRange(BitConverter.GetBytes(message.Signature));
 			bytes.Add(message.NewRfAddress);
 			bytes.Add(_pinConfigEncoder.EncodePins(message.Hal1Pin, message.Hal2Pin));
 			bytes.Add(_pinConfigEncoder.EncodePins(message.DryPin));
