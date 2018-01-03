@@ -1,6 +1,6 @@
 ﻿namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
-	public class NodeInfoReport : Report
+	public class NodeInfoReport : IncomingMessage
 	{
 		public int SendErrorCount { get; set; }
 		public int StartCount { get; set; }

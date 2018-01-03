@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Castle.FactorySupportFacility" Version="4.1.0" />
     <PackageReference Include="Castle.Windsor" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
@@ -20,6 +21,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MessageChannel\Messages" />
+    <Folder Include="MessageChannel\SerialPortMessageChannel\Encoders" />
+    <Folder Include="MessageChannel\SerialPortMessageChannel\Parsers" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

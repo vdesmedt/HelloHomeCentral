@@ -1,6 +1,6 @@
 ﻿namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
-	public class PulseReport : Report
+	public class PulseReport : IncomingMessage
 	{
 		public int SubNode { get; set; }
 		public int NewPulses { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
-	public class EnvironmentalReport : Report
+	public class EnvironmentalReport : IncomingMessage
 	{
 		public float Temperature { get; set; }
 

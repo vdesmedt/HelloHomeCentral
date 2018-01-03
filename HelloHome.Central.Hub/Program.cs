@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
 
 namespace HelloHome.Central.Hub
@@ -26,25 +27,13 @@ namespace HelloHome.Central.Hub
                 .Build();
 
             var ioc = new WindsorContainer();
-
-            var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HelloHomeContext>();
-
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole();
-
-            dbCOntextOptionsBuilder
-                .UseMySql(config.GetConnectionString("Default"))
-                .UseLoggerFactory(loggerFactory);
-
-            ioc.Register(
-                Component.For<IUnitOfWork>()
-                    .ImplementedBy<HelloHomeContext>()
-                    .LifestyleSingleton(),
-                Component.For<DbContextOptions<HelloHomeContext>>()
-                    .Instance(dbCOntextOptionsBuilder.Options),
-                Component.For<MessageHub>(),
-                Component.For<IMessageChannel>().ImplementedBy<RandomMessageChannel>()
+            ioc.Install(                
+                new FacilityInstaller(),
+                new HubInstaller(),
+                new MessageChannelInstaller(),
+                new DbContextInstaller(config)
             );
+
 
             var hub = ioc.Resolve<MessageHub>();
             var cts = new CancellationTokenSource();

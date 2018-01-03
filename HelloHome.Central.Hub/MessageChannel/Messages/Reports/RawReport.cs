@@ -2,7 +2,7 @@ using System.Text;
 
 namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
-	public class RawReport : Report
+	public class RawReport : IncomingMessage
 	{
 
 		public byte[] Bytes { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
-	public class CommentReport : Report
+	public class CommentReport : IncomingMessage
 	{
 		public string Comment { get; private set; }
 
