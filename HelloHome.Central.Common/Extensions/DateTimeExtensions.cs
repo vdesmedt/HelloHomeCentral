@@ -2,7 +2,7 @@
 
 namespace HelloHome.Central.Common.Extensions
 {
-	public static class DateTimeExtentions
+	public static class DateTimeExtensions
 	{
 		static readonly DateTime epochRef = new DateTime (1970, 1, 1);
 

@@ -2,7 +2,7 @@
 
 namespace HelloHome.Central.Common.Extensions
 {
-    public static class TypeExtentions
+    public static class TypeExtensions
     {
         public static bool IsSubclassOfRawGeneric (this Type toCheck, Type generic )
         {
