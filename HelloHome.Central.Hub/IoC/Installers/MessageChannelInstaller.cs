@@ -27,7 +27,9 @@ namespace HelloHome.Central.Hub.IoC.Installers
                     .AsFactory(typeof(MessageParserComponentSelector)),
                 Classes.FromAssemblyContaining<IMessageParser>()
                     .BasedOn<IMessageParser>()
-                    .WithServiceSelf());
+                    .WithServiceSelf()
+                    .Configure(x => x.LifestyleSingleton())
+            );
             
             //Encoders
             container.Register(
@@ -36,7 +38,8 @@ namespace HelloHome.Central.Hub.IoC.Installers
                     .AsFactory(typeof(EncoderFactoryComponentSelector)),
                 Classes.FromAssemblyContaining<IMessageEncoder>()
                     .BasedOn<IMessageEncoder>()
-                    .WithServiceSelf(),
+                    .WithServiceSelf()
+                    .Configure(x => x.LifestyleSingleton()),
                 Component.For<PinConfigEncoder>()
             );
         }
