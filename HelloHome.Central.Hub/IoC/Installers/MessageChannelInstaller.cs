@@ -34,7 +34,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
             //Encoders
             container.Register(
                 Component.For<EncoderFactoryComponentSelector>(),
-                Component.For<IEncoderFactory>()
+                Component.For<IMessageEncoderFactory>()
                     .AsFactory(typeof(EncoderFactoryComponentSelector)),
                 Classes.FromAssemblyContaining<IMessageEncoder>()
                     .BasedOn<IMessageEncoder>()
