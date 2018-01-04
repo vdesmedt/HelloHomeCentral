@@ -4,20 +4,21 @@ using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 {
-    [ParserFor(0 + (3 << 2))]
+    [ParserFor(ParserForAttribute.MessageType.Report, 3)]
 	public class NodeStartedParser : IMessageParser
 	{
 		#region IMessageParser implementation
 
 	    public IncomingMessage Parse (byte[] record)
 		{
+			if(record.Length != 17 + 3)
+				throw new ArgumentException("NodeStartedReport should be 20 bytes long");
             return new NodeStartedReport {
                 FromRfAddress = record [0],
                 Rssi = (int)BitConverter.ToInt16 (record, 1),
-                Major = record [4],
-                Minor = record [5],
-                Signature = BitConverter.ToInt64 (record, 6),
-                NeedNewRfAddress = BitConverter.ToBoolean (record, 14),
+                Signature = BitConverter.ToInt64 (record, 4),
+                NeedNewRfAddress = BitConverter.ToBoolean (record, 12),
+	            Version = BitConverter.ToString(record, 13, 7),
             };
 		}
 

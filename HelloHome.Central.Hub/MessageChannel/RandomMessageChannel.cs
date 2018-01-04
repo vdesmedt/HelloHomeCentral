@@ -22,8 +22,7 @@ namespace HelloHome.Central.Hub.MessageChannel
                         return new NodeStartedReport
                         {
                             FromRfAddress = 2,
-                            Major = 1,
-                            Minor = 1,
+                            Version = "aaabbbc", 
                             Signature = 2
                         };
                 }

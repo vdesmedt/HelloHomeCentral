@@ -4,14 +4,14 @@ using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 {
-    [ParserFor(0 + (0 << 2))]
+    [ParserFor(ParserForAttribute.MessageType.Report, 0)]
     public class NodeInfoReportParser : IMessageParser
 	{
 		#region IMessageParser implementation
 
 	    public IncomingMessage Parse (byte[] record)
 		{
-			var voltage = ((float)BitConverter.ToInt16 (record, 8)) / 100.0f;
+			var voltage = BitConverter.ToInt16 (record, 8) / 100.0f;
 			return new NodeInfoReport {
 				FromRfAddress = record [0],
 				Rssi = (int)BitConverter.ToInt16(record,1),

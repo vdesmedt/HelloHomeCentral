@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HelloHome.Central.Domain
 {
@@ -12,5 +13,6 @@ namespace HelloHome.Central.Domain
         DbSet<Trigger> Triggers { get; set; }
 
         int SaveChanges();
+        Task CommitAsync();
     }
 }

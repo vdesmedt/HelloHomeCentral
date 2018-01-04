@@ -16,7 +16,7 @@ namespace HelloHome.Central.Hub.IoC.FactoryComponentSelector
             _cache = typeof(IMessageParser).Assembly.GetTypes()
                 .Where(x => typeof(IMessageParser).IsAssignableFrom(x)
                             && x.GetCustomAttribute<ParserForAttribute>() != null)
-                .ToDictionary(x => x.GetCustomAttribute<ParserForAttribute>().DiscrimatorByte);
+                .ToDictionary(x => x.GetCustomAttribute<ParserForAttribute>().RawDiscrimator);
         }
 
         protected override Type GetComponentType(MethodInfo method, object[] arguments)

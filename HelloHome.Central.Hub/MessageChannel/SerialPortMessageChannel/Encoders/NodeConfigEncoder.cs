@@ -21,12 +21,10 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 			bytes.Add(_pinConfigEncoder.EncodePins(message.Hal1Pin, message.Hal2Pin));
 			bytes.Add(_pinConfigEncoder.EncodePins(message.DryPin));
 			bytes.Add(_pinConfigEncoder.EncodePins(message.VInTriggerPin, message.VInMeasurePin));
-		    bytes.Add(message.RestartCheckFreq);
+			bytes.Add((byte)message.Features);
+		    bytes.Add(message.RestartFreq);
 		    bytes.Add(message.NodeInfoFreq);
 		    bytes.Add(message.EnvironmentFreq);
-		    var features = message.SiEnable ? 1 : 0;
-		    features += (message.BmpEnable ? 1 : 0) << 1;
-		    bytes.Add ((byte)features);
 
 			return bytes.ToArray ();
 		}

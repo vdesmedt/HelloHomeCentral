@@ -2,6 +2,7 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using HelloHome.Central.Domain;
+using HelloHome.Central.Hub.Handlers;
 using HelloHome.Central.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +33,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
             container.Register(
                 Component.For<IUnitOfWork>()
                     .ImplementedBy<HelloHomeContext>()
-                    .LifestyleSingleton(),
+                    .LifestyleBoundTo<IMessageHandler>(),
                 Component.For<DbContextOptions<HelloHomeContext>>()
                     .Instance(dbCOntextOptionsBuilder.Options)
             );

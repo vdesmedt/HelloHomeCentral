@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="MessageChannel\Messages" />
     <Folder Include="MessageChannel\SerialPortMessageChannel\Encoders" />
-    <Folder Include="MessageChannel\SerialPortMessageChannel\Parsers" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

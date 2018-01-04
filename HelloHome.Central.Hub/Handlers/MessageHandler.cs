@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using HelloHome.Central.Domain;
+using HelloHome.Central.Hub.MessageChannel.Messages;
+using NLog;
+
+namespace HelloHome.Central.Hub.Handlers
+{
+    public abstract class MessageHandler<T> : IMessageHandler where T : IncomingMessage
+    {
+		readonly IUnitOfWork _dbCtx;
+
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
+
+        protected MessageHandler (IUnitOfWork dbCtx)
+		{
+			_dbCtx = dbCtx;
+		}
+
+        public async Task<IList<OutgoingMessage>> HandleAsync(IncomingMessage request, CancellationToken cToken)
+        {
+            if(request.GetType() != typeof(T))
+                throw new ArgumentException($"request of type {request.GetType().Name} cannot be processed by {this.GetType().Name}");
+            var outgoigMessages = new List<OutgoingMessage>();
+            await HandleAsync((T) request, outgoigMessages, cToken);
+            await _dbCtx.CommitAsync();
+            return outgoigMessages;
+        }
+
+        protected abstract Task HandleAsync(T request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken);
+    }
+}

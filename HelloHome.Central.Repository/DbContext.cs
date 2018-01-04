@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HelloHome.Central.Repository
 {
@@ -37,6 +38,11 @@ namespace HelloHome.Central.Repository
         int IUnitOfWork.SaveChanges()
         {
             return SaveChanges();
+        }
+
+        public Task CommitAsync()
+        {
+            return SaveChangesAsync();
         }
     }
 }

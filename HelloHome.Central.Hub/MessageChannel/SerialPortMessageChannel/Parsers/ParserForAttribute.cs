@@ -5,11 +5,21 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
     [AttributeUsage(AttributeTargets.Class)]
     public class ParserForAttribute : Attribute
     {
-        public byte DiscrimatorByte { get; }
-
-        public ParserForAttribute(byte discrimatorByte)
+        public enum MessageType : byte
         {
-            DiscrimatorByte = discrimatorByte;
+            Report = 0,
+            Command = 2,
+        }
+
+        public byte RawDiscrimator { get; }
+
+        public ParserForAttribute(byte rawDiscrimator)
+        {
+            RawDiscrimator = rawDiscrimator;
+        }
+        public ParserForAttribute(MessageType type, byte discriminator)
+        {
+            RawDiscrimator = (byte)((byte)type + discriminator << 2);
         }
     }
 }

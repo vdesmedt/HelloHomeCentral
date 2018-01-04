@@ -4,7 +4,7 @@ using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 {
-    [ParserFor(0 + (2 << 2))]
+    [ParserFor(ParserForAttribute.MessageType.Report, 2)]
     public class EnvironmentReportParser : IMessageParser
 	{
 		#region IMessageParser implementation
