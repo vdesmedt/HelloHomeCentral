@@ -5,4 +5,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HelloHome.Central.Common\HelloHome.Central.Common.csproj">
+      <Project>{79E9C528-29A7-4893-9FC1-100DFBA7EAD9}</Project>
+      <Name>HelloHome.Central.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

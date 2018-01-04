@@ -26,6 +26,7 @@ namespace HelloHome.Central.Repository
             : base(options) { }
 
         public DbSet<Node> Nodes { get; set; }
+        public DbSet<Trigger> Triggers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
