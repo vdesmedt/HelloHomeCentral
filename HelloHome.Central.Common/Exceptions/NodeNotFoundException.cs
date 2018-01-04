@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HelloHome.Common.Exceptions
+namespace HelloHome.Central.Common.Exceptions
 {
     [Serializable]
     public class NodeNotFoundException : HelloHomeException
