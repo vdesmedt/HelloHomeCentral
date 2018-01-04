@@ -17,6 +17,9 @@ namespace HelloHome.Central.Hub.IoC.Installers
             container.Register(
                 Component.For<IMessageChannel>()
                     .ImplementedBy<SerialPortMessageChannel>()
+                    .LifestyleSingleton(),
+                Component.For<IByteStream>()
+                    .ImplementedBy<SerialByteStream>()
                     .LifestyleSingleton()
             );
             

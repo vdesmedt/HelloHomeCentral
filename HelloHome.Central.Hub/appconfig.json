@@ -1,5 +1,10 @@
 ﻿{
-  "connectionStrings": {
-    "default": "Server=127.0.0.1;Database=HelloHome_Dev;User Id=hhgtw;Password=othe"
+  "ConnectionString": "Server=127.0.0.1;Database=HelloHome_Dev;User Id=hhgtw;Password=othe",
+  "SerialConfig": {
+    "Port": "COM1",
+    "BaudRate": "115200"
+  },
+  "EmonCmsConfig": {
+    "ApiKey": "095c9600b100c726b41bde08c68ff456"
   }
 }

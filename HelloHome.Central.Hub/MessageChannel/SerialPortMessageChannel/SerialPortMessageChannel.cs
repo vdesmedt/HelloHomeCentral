@@ -12,7 +12,6 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         private readonly IByteStream _byteStream;
         private readonly IMessageParserFactory _messageParserFactory;
         private readonly IMessageEncoderFactory _messageEncoderFactory;
-        private SerialPortStream _port { get; set; }
 
         public SerialPortMessageChannel(IByteStream byteStream, IMessageParserFactory messageParserFactoryFactory, IMessageEncoderFactory messageEncoderFactoryFactory)
         {

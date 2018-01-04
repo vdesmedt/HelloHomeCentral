@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using HelloHome.Central.Common.Configuration;
+using Microsoft.Extensions.Configuration;
 using RJCP.IO.Ports;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
@@ -7,10 +8,10 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
     {
         private SerialPortStream _port;
 
-        public SerialByteStream(IConfigurationRoot config)
+        public SerialByteStream(SerialConfig config)
         {
-            _port = new SerialPortStream(config["messageChannel:serial:port"],
-                config.GetValue<int>("messageChannel:seria:baud"), 8, Parity.None, StopBits.One);
+            _port = new SerialPortStream(config.Port,
+                config.BaudRate, 8, Parity.None, StopBits.One);
             _port.Open();            
         }
     }

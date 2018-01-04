@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Castle.Windsor.Installer;
+using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
 
@@ -21,19 +23,24 @@ namespace HelloHome.Central.Hub
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
+            Console.WriteLine(Environment.MachineName);
+            var configRoot = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appconfig.json")
+                .AddJsonFile("appconfig.json", optional:false, reloadOnChange:true)
+                .AddJsonFile($"appconfig.{Environment.MachineName}.json", optional:false, reloadOnChange:true)
+                .AddEnvironmentVariables()
                 .Build();
-            var cns = config.GetConnectionString("Default");
+            var config = new HhConfig();
+            configRoot.Bind(config);
+            
             
             var ioc = new WindsorContainer();
-            ioc.Register(Component.For<IConfigurationRoot>().Instance(config));
             ioc.Install(                
+                new ConfigInstaller(config),
                 new FacilityInstaller(),
                 new HubInstaller(),
                 new MessageChannelInstaller(),
-                new DbContextInstaller(cns)
+                new DbContextInstaller(config.ConnectionString)
             );
 
 
