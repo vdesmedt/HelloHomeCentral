@@ -4,7 +4,8 @@ namespace HelloHome.Central.Domain.Entities
 {
     public class NodeAggregatedData
     {
-		public virtual int NodeId { get; set; }
+        public virtual int Id { get; set; }
+        public Node Node { get; set; }
 		public virtual float? VIn { get; set; }
         public virtual int SendErrorCount { get; set; }
         public virtual float? Temperature { get; set; }

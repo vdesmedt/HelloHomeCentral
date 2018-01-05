@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace HelloHome.Central.Domain.Entities
 {
@@ -8,10 +9,19 @@ namespace HelloHome.Central.Domain.Entities
         public int TriggerId { get; set; }
         public Trigger Trigger { get; set; }
         public int Sequence { get; set; }
-        public List<ActuatorPort> Actuators { get; set; }
     }
 
-    public abstract class RelayAction : Action
+    public class ScheduleAction : Action
+    {
+        public TimeSpan Delay { get; set; }
+        public Action ScheduledAction { get; set; }
+    }
+
+    public abstract class ActuatorAction : Action {
+        public ActuatorPort Actuator { get; set; }
+    }
+
+    public abstract class RelayAction : ActuatorAction
     {
     }
 

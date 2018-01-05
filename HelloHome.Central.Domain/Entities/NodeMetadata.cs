@@ -5,6 +5,7 @@
         public int Id { get; set; }
 
         public Node Node { get; set; }
+        
         public string Name { get; set; }
         
         public virtual int? EmonCmsNodeId { get; set; }

@@ -5,8 +5,12 @@ namespace HelloHome.Central.Domain.Entities
     public abstract class Trigger
     {
         public int Id { get; set; }
-        public List<SensorPort> Sensors { get; set; }
         public List<Action> Actions { get; set; }
+    }
+
+    public abstract class SensorTrigger : Trigger
+    {
+        public SensorPort SensorPort { get; set; }
     }
 
     public class CronTrigger : Trigger
@@ -14,16 +18,17 @@ namespace HelloHome.Central.Domain.Entities
         public string CronExpression { get; set; }
     }
 
-    public class PushTrigger : Trigger
+    public class PushTrigger : SensorTrigger
     {
     }
 
-    public class SwitchTrigger : Trigger
+    public class SwitchTrigger : SensorTrigger
     {
         public bool? TriggerOnState { get; set; }
     }
 
-    public class VarioTrigger : Trigger
+    public class VarioTrigger : SensorTrigger
     {
+        public int MinDelta { get; set; }
     }
 }

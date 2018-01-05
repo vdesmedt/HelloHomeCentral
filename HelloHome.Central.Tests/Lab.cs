@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using HelloHome.Central.Domain.Entities;
+using HelloHome.Central.Repository;
 using Xunit;
 
 namespace HelloHome.Central.Tests
@@ -14,6 +17,27 @@ namespace HelloHome.Central.Tests
             c.Add(2);
             var i = c.Take();
             Assert.Equal(1, i);
+        }
+
+        [Fact]
+        public void EfTests()
+        {
+            var ctx = new DesignTimeFactory().CreateDbContext(null);
+            ctx.Nodes.Add(new Node
+            {
+                AggregatedData =  new NodeAggregatedData(),
+                Metadata = new NodeMetadata(),
+                RfAddress = 1,
+                Ports = new List<Port>
+                {
+                    new PushSensorPort
+                    {
+                        Number = 1,
+                        Name = "My first push button"
+                    }
+                }
+            });
+            ctx.SaveChanges();
         }
     }
 }

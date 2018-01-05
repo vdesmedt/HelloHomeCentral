@@ -21,7 +21,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
         
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HelloHomeContext>();
+            var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HelloHomeDbContext>();
 
             var loggerFactory = new LoggerFactory();
             loggerFactory.AddConsole();
@@ -32,9 +32,9 @@ namespace HelloHome.Central.Hub.IoC.Installers
 
             container.Register(
                 Component.For<IUnitOfWork>()
-                    .ImplementedBy<HelloHomeContext>()
+                    .ImplementedBy<HelloHomeDbContext>()
                     .LifestyleBoundTo<IMessageHandler>(),
-                Component.For<DbContextOptions<HelloHomeContext>>()
+                Component.For<DbContextOptions<HelloHomeDbContext>>()
                     .Instance(dbCOntextOptionsBuilder.Options)
             );
         }
