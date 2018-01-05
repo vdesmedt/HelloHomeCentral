@@ -43,7 +43,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
                 Component.For<ITimeProvider>()
                     .ImplementedBy<TimeProvider>(),
                 Component.For<IRfAddressStrategy>()
-                    .ImplementedBy<FindHoleRfAddressStrategy>()
+                    .ImplementedBy<FillHolesRfAddressStrategy>()
                     .LifestyleBoundTo<IMessageHandler>()
             );
             

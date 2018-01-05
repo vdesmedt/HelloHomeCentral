@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HelloHome.Central.Common.Exceptions;
+using HelloHome.Central.Hub.Queries;
 using NLog;
 
 namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 {
-	public class FindHoleRfAddressStrategy : IRfAddressStrategy
+	public class FillHolesRfAddressStrategy : IRfAddressStrategy
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
 
 		private readonly SortedSet<byte> _exisitingRfAddresses;
 		private readonly Random _rnd;
-		
-		public int RfADdressUpperBound { get; set; }
 
-		public FindHoleRfAddressStrategy (IEnumerable<byte> exisitingRfAddresses)
+		public int RfAddressUpperBound { get; set; } = 250;
+
+		private FillHolesRfAddressStrategy()
 		{
-			_exisitingRfAddresses = new SortedSet<byte>(exisitingRfAddresses);
 			_rnd = new Random ();
 		}
 
+		public FillHolesRfAddressStrategy (IListRfIdsQuery listRfAddressesQuery): this()
+		{
+			_exisitingRfAddresses = new SortedSet<byte>(listRfAddressesQuery.Execute());
+		}
+
+		public FillHolesRfAddressStrategy (IEnumerable<byte> existingRfAddresses) : this()
+		{
+			_exisitingRfAddresses = new SortedSet<byte>(existingRfAddresses);
+		}
 
 		#region IRfNodeIdGeneratorStrategy implementation
 
@@ -31,13 +41,15 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 			var holes = Enumerable.Range(1, maxExisting).Select(i => (byte)i).Where (i => !_exisitingRfAddresses.Contains(i)).ToList ();
 			if (holes.Any()) 
 				return holes [_rnd.Next(holes.Count - 1)];
-			return (byte)(_rnd.Next(maxExisting+1, Math.Min(maxExisting+1, RfADdressUpperBound)));
+			return (byte)(_rnd.Next(maxExisting+1, RfAddressUpperBound));
 		}
 
 	    #endregion
 
 		public byte FindAvailableRfAddress()
 		{
+			if(_exisitingRfAddresses.Count == RfAddressUpperBound)
+				throw new NoAvailableRfAddressException(false);
 			var findValidCandidate = false;
 			var iteration = 0;
 			byte candidate = 0;
@@ -45,7 +57,7 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 			while (!findValidCandidate && iteration < 5)
 			{
 				candidate = FindRfAddressInternal();
-				lock (typeof(FindHoleRfAddressStrategy))
+				lock (typeof(FillHolesRfAddressStrategy))
 				{
 					findValidCandidate = !_exisitingRfAddresses.Contains(candidate);
 					if (findValidCandidate)
@@ -57,7 +69,7 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 
 			if(findValidCandidate)
 				return candidate;
-			throw new ApplicationException($"Could not find an available Rf Address after {iteration} iterations.");
+			throw new NoAvailableRfAddressException(true);
 		}
 	}
 }

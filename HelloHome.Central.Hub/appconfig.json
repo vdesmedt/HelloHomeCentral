@@ -1,7 +1,7 @@
 ﻿{
   "ConnectionString": "Server=127.0.0.1;Database=HelloHome_Dev;User Id=hhgtw;Password=othe",
   "SerialConfig": {
-    "Port": "COM1",
+    "Port": "DefineInLocalConfig",
     "BaudRate": "115200"
   },
   "EmonCmsConfig": {

@@ -1,16 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
-        <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0"/>
-        <PackageReference Include="xunit" Version="2.3.1"/>
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1"/>
-        <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1"/>
-    </ItemGroup>
-    
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RuntimeFrameworkVersion>2.0.3</RuntimeFrameworkVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HelloHome.Central.Hub\HelloHome.Central.Hub.csproj">
+      <Project>{F54BB2C6-DEF6-4C29-8D3F-6C23FF9682C9}</Project>
+      <Name>HelloHome.Central.Hub</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
