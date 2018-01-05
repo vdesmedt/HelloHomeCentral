@@ -33,7 +33,7 @@ namespace HelloHome.Central.Tests
                 {
                     new PushSensorPort
                     {
-                        Number = 1,
+                        Pin = NodePin.D4,
                         Name = "My first push button"
                     }
                 }

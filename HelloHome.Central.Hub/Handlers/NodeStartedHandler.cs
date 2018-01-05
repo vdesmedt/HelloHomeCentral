@@ -43,37 +43,17 @@ namespace HelloHome.Central.Hub.Handlers
 
 		protected override async Task HandleAsync (NodeStartedReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
 		{
-			var node = await _findNodeQuery.BySignatureAsync (request.Signature, NodeInclude.Facts | NodeInclude.Metadata);
-		    if (node == default (Node))
-		    {
-			    Logger.Debug("Node not found based on signature {0}. A node will be created.", request.Signature);
+			var node = await _findNodeQuery.BySignatureAsync (request.Signature, NodeInclude.Metadata);
+		    if (node == default (Node)) {
+			    Logger.Info(() => $"Node not found based on signature {request.Signature}. A node will be created.");
 		        var rfId = _rfIdGenerationStrategy.FindAvailableRfAddress();
 				node = await _createNodeCommand.ExecuteAsync (request.Signature, rfId);
-			} else if (request.NeedNewRfAddress)
-			{
-			    Logger.Debug("Node was found based on signature {0} but a new rfAddress was requestd", request.Signature);
-			    node.RfAddress = _rfIdGenerationStrategy.FindAvailableRfAddress();
 			}
 
 			if (node.RfAddress != request.FromRfAddress)
-		    {
-		        Logger.Debug("Node with signature {1} received a new rfAddress ({0}).",node.RfAddress, node.Signature);
-		        outgoingMessages.Add(new NodeConfigCommand
-		        {
-		            ToRfAddress = request.FromRfAddress,
-		            Signature = request.Signature,
-		            NewRfAddress = node.RfAddress
-		        });
-		    }
-		    else
-		    {
-		        outgoingMessages.Add(new NodeConfigCommand
-		        {
-		            ToRfAddress = request.FromRfAddress,
-		            Signature = request.Signature,
-		        });
-		    }
-		    node.Metadata.Version = request.Version;
+		        Logger.Warn($"Node with signature {node.RfAddress} received a new rfAddress ({node.Signature}).");
+
+			node.Metadata.Version = request.Version;
 			node.AggregatedData.StartupTime = _timeProvider.UtcNow;
 		    node.AddLog("STRT");
 		    await _touchNode.TouchAsync (node, request.Rssi);

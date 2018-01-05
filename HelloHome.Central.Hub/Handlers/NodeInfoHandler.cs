@@ -36,7 +36,7 @@ namespace HelloHome.Central.Hub.Handlers
             var nodeInfo = new NodeHealthHistory { SendErrorCount = request.SendErrorCount };
             node.AggregatedData.VIn = request.Voltage;
             nodeInfo.VIn = request.Voltage;
-            node.CommunicationHistory.Add(nodeInfo);
+            node.NodeHistory.Add(nodeInfo);
         }
     }
 }

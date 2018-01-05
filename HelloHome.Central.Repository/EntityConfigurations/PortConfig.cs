@@ -35,7 +35,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         {
             builder.HasBaseType<SensorPort>();
             builder.ToTable("Port");
-            builder.HasMany(x => x.PulseData).WithOne();
+            builder.HasMany(x => x.PulseHistory).WithOne(x => x.PulseSensorPort).HasForeignKey(x => x.PulseSensorPortId);
         }
     }
     

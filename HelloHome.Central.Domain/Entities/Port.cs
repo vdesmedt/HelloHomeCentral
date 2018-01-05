@@ -6,11 +6,11 @@ namespace HelloHome.Central.Domain.Entities
 {
     public abstract class Port
     {
-        public virtual int Id { get; set; }
-        public virtual Node Node { get; set; }
-        public virtual int NodeId { get; set; }
-        public virtual int Number { get; set; }
-        public virtual string Name { get; set; }
+        public int Id { get; set; }
+        public Node Node { get; set; }
+        public int NodeId { get; set; }
+        public NodePin Pin { get; set; }
+        public string Name { get; set; }
     }
 
     public abstract class SensorPort : Port
@@ -20,8 +20,8 @@ namespace HelloHome.Central.Domain.Entities
 
     public class PulseSensorPort : SensorPort
     {
-        public virtual int PulseCount { get; set; }
-        public virtual IList<PulseHistory> PulseData { get; set; }
+        public int PulseCount { get; set; }
+        public IList<PulseHistory> PulseHistory { get; set; }
     }
 
     public class PushSensorPort : SensorPort
@@ -30,12 +30,12 @@ namespace HelloHome.Central.Domain.Entities
     
     public class SwitchSensorPort : SensorPort
     {        
-        public virtual bool State { get; set; }
+        public bool State { get; set; }
     }
 
     public class VarioSensorPort : SensorPort
     {
-        public virtual int Value { get; set; }
+        public int Value { get; set; }
     }
 
 
