@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Repository;
 using Xunit;
+using Xunit.Sdk;
 
 namespace HelloHome.Central.Tests
 {
@@ -19,7 +20,7 @@ namespace HelloHome.Central.Tests
             Assert.Equal(1, i);
         }
 
-        [Fact]
+        [Fact, Trait("skip", "ci")]
         public void EfTests()
         {
             var ctx = new DesignTimeFactory().CreateDbContext(null);
