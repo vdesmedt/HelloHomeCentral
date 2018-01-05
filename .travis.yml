@@ -6,7 +6,7 @@ install:
 script:
  - shash=$(echo ${TRAVIS_COMMIT} | cut -c 1-7)
  - dotnet build --version-suffix ${shash}
- - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj
+ - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj --filter skip!=ci
 before_deploy:
  - cd ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/
  - echo ${TRAVIS_COMMIT} > version.txt
