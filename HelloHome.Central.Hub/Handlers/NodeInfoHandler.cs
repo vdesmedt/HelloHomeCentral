@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using HelloHome.Central.Common;
 using HelloHome.Central.Common.Exceptions;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
@@ -19,7 +20,7 @@ namespace HelloHome.Central.Hub.Handlers
         private readonly IFindNodeQuery _findNodeQuery;
         private readonly ITouchNode _touchNode;
 
-		public NodeInfoHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode) : base(dbCtx)
+        public NodeInfoHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode) : base(dbCtx)
         {
             _findNodeQuery = findNodeQuery;
             _touchNode = touchNode;
@@ -29,14 +30,20 @@ namespace HelloHome.Central.Hub.Handlers
         {
             var node = await _findNodeQuery.ByRfIdAsync(request.FromRfAddress);
             if (node == null)
-                throw new NodeNotFoundException(request.FromRfAddress);
-            await _touchNode.TouchAsync(node, request.Rssi);
+                throw new NodeNotFoundException(request.FromRfAddress);            
+            _touchNode.Touch(node, request.Rssi);
 
             node.AggregatedData.SendErrorCount = request.SendErrorCount;
-            var nodeInfo = new NodeHealthHistory { SendErrorCount = request.SendErrorCount };
             node.AggregatedData.VIn = request.Voltage;
-            nodeInfo.VIn = request.Voltage;
-            node.NodeHistory.Add(nodeInfo);
+
+            var nodeHealthHistory = new NodeHealthHistory
+            {
+                Timestamp = TimeProvider.Current.UtcNow,
+                Rssi = request.Rssi,
+                SendErrorCount = request.SendErrorCount,
+                VIn = request.Voltage,                
+            };
+            node.NodeHistory.Add(nodeHealthHistory);
         }
     }
 }

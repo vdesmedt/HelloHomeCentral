@@ -8,7 +8,7 @@ namespace HelloHome.Central.Hub.Commands
 {
     public interface ITouchNode : ICommand
     {
-        Task TouchAsync(Node node, int rssi);
+        void Touch(Node node, int rssi);
     }
 
     public class TouchNode : ITouchNode
@@ -22,7 +22,7 @@ namespace HelloHome.Central.Hub.Commands
             _timeProvider = timeProvider;
         }
 
-        public async Task TouchAsync(Node node, int rssi)
+        public void Touch(Node node, int rssi)
         {
             if(node.AggregatedData == default(NodeAggregatedData))
                 throw new ArgumentException("node entity should be loaded with its aggregated data for Touch to work");
@@ -36,7 +36,6 @@ namespace HelloHome.Central.Hub.Commands
                     )
                 );
             Logger.Debug(() => $"Node with signature {node.Signature} was touched");
-            await Task.Yield();
         }
     }
 }

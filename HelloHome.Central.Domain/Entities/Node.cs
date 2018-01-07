@@ -34,7 +34,6 @@ namespace HelloHome.Central.Domain.Entities
             if(Logs == null)
                 Logs = new List<NodeLog>();
             Logs.Add(new NodeLog { Time = TimeProvider.Current.UtcNow, NodeId = this.Id, Type = type, Data = data });
-        }
-        
+        }        
     }
 }

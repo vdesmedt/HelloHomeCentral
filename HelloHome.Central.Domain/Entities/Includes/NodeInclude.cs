@@ -10,8 +10,8 @@ namespace HelloHome.Central.Domain.Entities.Includes
 		None = 0,
 		All = ~None,
 		Metadata = 1,
-		Ports = 2,
-		AggregatedData = 4,
+		AggregatedData = 2,
+		Ports = 4,
 	}
 
 	public static class NodeExtentions
