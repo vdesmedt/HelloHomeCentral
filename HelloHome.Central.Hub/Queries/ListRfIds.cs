@@ -9,7 +9,7 @@ namespace HelloHome.Central.Hub.Queries
 {
     public interface IListRfIdsQuery : IQuery
     {
-        Task<IList<byte>> ExecuteAsync();
+        Task<IList<byte>> ExecuteAsync(CancellationToken cToken);
         Task<IList<byte>> ExecuteAsync(byte network, CancellationToken cToken);
         IList<byte> Execute();
     }
@@ -23,9 +23,9 @@ namespace HelloHome.Central.Hub.Queries
             _ctx = ctx;
         }
 
-        public async Task<IList<byte>> ExecuteAsync()
+        public async Task<IList<byte>> ExecuteAsync(CancellationToken cToken)
         {
-            return await _ctx.Nodes.Select(x => (byte)x.RfAddress).ToListAsync();
+            return await _ctx.Nodes.Select(x => (byte)x.RfAddress).ToListAsync(cToken);
         }
         public IList<byte> Execute()
         {

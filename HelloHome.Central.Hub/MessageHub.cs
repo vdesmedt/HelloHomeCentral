@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using HelloHome.Central.Hub.Handlers;
 using HelloHome.Central.Hub.Handlers.Factory;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages;
@@ -38,11 +40,9 @@ namespace HelloHome.Central.Hub
                     if (_incomingMessages.TryTake(out msg, 1000))
                     {
                         Logger.Debug(() => $"Processing message of type {msg.GetType().ShortDisplayName()}");
-                        var handler = _messageHandlerFactory.Create(msg);
-                        var responses = await handler.HandleAsync(msg, token);
+                        var responses = await ProcessOne(msg, token);
                         foreach(var response in responses)
                             _messageChannel.Send(response);
-                        _messageHandlerFactory.Release(handler);
                     }
                 }
             });
@@ -62,5 +62,14 @@ namespace HelloHome.Central.Hub
             
             await Task.WhenAll(consumerTask, producerTask);
         }
+        
+        public async Task<IList<OutgoingMessage>> ProcessOne(IncomingMessage msg, CancellationToken token)
+        {
+            var handler = _messageHandlerFactory.Create(msg);
+            var responses = await handler.HandleAsync(msg, token);
+            _messageHandlerFactory.Release(handler);
+            return responses;
+        }
+
     }
 }

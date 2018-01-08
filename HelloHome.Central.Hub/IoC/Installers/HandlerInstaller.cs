@@ -28,23 +28,14 @@ namespace HelloHome.Central.Hub.IoC.Installers
                     .AsFactory(typeof(MessageHandlerComponentSelector))
             );
 
-            //Queries & Commands
-            container.Register(Classes.FromAssemblyContaining<IQuery>()
-                .BasedOn<IQuery>()
-                .WithServiceAllInterfaces()
-                .LifestyleBoundTo<IMessageHandler>());
-            container.Register(Classes.FromAssemblyContaining<ICommand>()
-                .BasedOn<ICommand>()
-                .WithServiceAllInterfaces()
-                .LifestyleBoundTo<IMessageHandler>());
-
             //Logic
             container.Register(
                 Component.For<ITimeProvider>()
                     .ImplementedBy<TimeProvider>(),
                 Component.For<IRfAddressStrategy>()
                     .ImplementedBy<FillHolesRfAddressStrategy>()
-                    .LifestyleBoundTo<IMessageHandler>()
+                    .LifestyleBoundTo<IMessageHandler>(),
+                Component.For<ITouchNode>().ImplementedBy<TouchNode>()
             );
             
             TimeProvider.Current = container.Resolve<ITimeProvider>();

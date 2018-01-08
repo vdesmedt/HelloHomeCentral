@@ -42,6 +42,8 @@ namespace HelloHome.Central.Hub
                 new ConfigInstaller(config),
                 new FacilityInstaller(),
                 new HubInstaller(),
+                new HandlerInstaller(),
+                new CommandAndQueriesInstaller(),
                 new MessageChannelInstaller(),
                 new DbContextInstaller(config.ConnectionString)
             );
