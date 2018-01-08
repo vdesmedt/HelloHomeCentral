@@ -7,6 +7,12 @@ namespace HelloHome.Central.Domain.Entities
 {
     public class Node
     {
+        public Node()
+        {
+            Metadata = new NodeMetadata();
+            AggregatedData = new NodeAggregatedData();
+        }
+        
         public int Id { get; set; }
 
         public long Signature { get; set; }

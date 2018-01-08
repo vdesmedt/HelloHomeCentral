@@ -32,7 +32,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
         protected void RegisterDbContext(string inMemoryDbName)
         {
             var options = new DbContextOptionsBuilder<HhDbContext>()
-                .UseInMemoryDatabase(databaseName: "Add_writes_to_database")
+                .UseInMemoryDatabase(databaseName: inMemoryDbName)
                 .Options;
             DbCtx = new HhDbContext(options);
             _windsorContainer.Register(Component.For<IUnitOfWork>().Instance(DbCtx));
