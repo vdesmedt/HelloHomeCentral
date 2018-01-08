@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Hub.Commands;
+using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using HelloHome.Central.Hub.Queries;
 using Moq;
@@ -12,20 +14,20 @@ using Xunit;
 
 namespace HelloHome.Central.Tests.IntegrationTests
 {
-    public class NodeStartScenarios : IClassFixture<IntegrationTestFixture>
+    public class NodeStartScenarios : IntegrationTestBase
     {
-        private readonly IntegrationTestFixture _integrationTestFixture;
         private CancellationTokenSource _cts;
 
-        public NodeStartScenarios(IntegrationTestFixture integrationTestFixture)
+        public NodeStartScenarios() : base()
         {
-            _integrationTestFixture = integrationTestFixture;
             _cts = new CancellationTokenSource();
         }
 
         [Fact]
-        public async Task NodeStartCreateNodeIfSignatureNotFound()
+        public async Task NodeStart_CreateNode_When_SignatureNotFound()
         {
+            RegisterDbContext(nameof(NodeStart_CreateNode_When_SignatureNotFound));
+            
             var nodeStartedReport = new NodeStartedReport
             {
                 FromRfAddress = 2,
@@ -33,18 +35,25 @@ namespace HelloHome.Central.Tests.IntegrationTests
                 Signature = long.MaxValue,
                 Version = "1234567",      
             };
-
-            _integrationTestFixture.RegisterMock<IFindNodeQuery>()
-                .Setup(_ => _.BySignatureAsync(nodeStartedReport.Signature, It.IsAny<NodeInclude>()))
-                .ReturnsAsync((Node)null);
-            _integrationTestFixture.RegisterMock<ICreateNodeCommand>()
-                .Setup(_ => _.ExecuteAsync(nodeStartedReport.Signature, It.IsAny<byte>()))
-                .ReturnsAsync(new Node { Metadata = new NodeMetadata(), AggregatedData = new NodeAggregatedData()});
-                
-            _integrationTestFixture.RegisterMock<IListRfIdsQuery>()
-                .Setup(_ => _.Execute()).Returns(new List<byte> {1});
             
-            var responses = await _integrationTestFixture.Hub.ProcessOne(nodeStartedReport, _cts.Token);
+            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);
+                        
+            //Node is properly created in Db
+            Assert.Equal(1, DbCtx.Nodes.Count());
+            var dbNode = DbCtx.Nodes.Single();            
+            Assert.Equal("1234567", dbNode.Metadata.Version);
+            Assert.NotNull(dbNode.Logs);
+            Assert.Equal(2, dbNode.Logs.Count);
+            Assert.Contains(dbNode.Logs, _ => _.Type == "CRTD");
+            Assert.Contains(dbNode.Logs, _ => _.Type == "STRT");
+            
+            //Config message is correct
+            Assert.Equal(1, responses.Count);
+            Assert.IsType<NodeConfigCommand>(responses[0]);
+            var configCommand = responses[0] as NodeConfigCommand;
+            Assert.Equal(nodeStartedReport.Signature, configCommand.Signature);
+            Assert.Equal(nodeStartedReport.FromRfAddress, configCommand.ToRfAddress);
+            Assert.True(configCommand.NewRfAddress > 0);
         }
     }
 }

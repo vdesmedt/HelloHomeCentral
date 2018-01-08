@@ -8,13 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HelloHome.Central.Repository
 {
-    public class HelloHomeDbContext : DbContext, IUnitOfWork
+    public class HhDbContext : DbContext, IUnitOfWork
     {
-        public HelloHomeDbContext(DbContextOptions<HelloHomeDbContext> options)
+        public HhDbContext(DbContextOptions<HhDbContext> options)
             : base(options) { }
 
         public DbSet<Node> Nodes { get; set; }
         public DbSet<Trigger> Triggers { get; set; }
+        public DbSet<NodeLog> NodeLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,12 +38,12 @@ namespace HelloHome.Central.Repository
             }                        
         }
 
-        int IUnitOfWork.SaveChanges()
+        int IUnitOfWork.Commit()
         {
             return SaveChanges();
         }
 
-        public Task CommitAsync()
+        public Task<int> CommitAsync()
         {
             return SaveChangesAsync();
         }

@@ -11,8 +11,9 @@ namespace HelloHome.Central.Domain
     {
         DbSet<Node> Nodes { get; set; }
         DbSet<Trigger> Triggers { get; set; }
+        DbSet<NodeLog> NodeLogs { get; set; }
 
-        int SaveChanges();
-        Task CommitAsync();
+        int Commit();
+        Task<int> CommitAsync();
     }
 }

@@ -19,11 +19,11 @@ namespace HelloHome.Central.Domain.Entities.Includes
 		public static IQueryable<Node> Include (this IQueryable<Node> query, NodeInclude include)
 		{
 			if (include.HasFlag (NodeInclude.Metadata))
-				query = query.Include (_ => _.Metadata);
+				query = query.Include (x => x.Metadata);
 			if (include.HasFlag (NodeInclude.Ports))
-				query = query.Include (_ => _.Ports);
+				query = query.Include (x => x.Ports);
 			if (include.HasFlag (NodeInclude.AggregatedData))
-				query = query.Include (_ => _.AggregatedData);
+				query = query.Include (x => x.AggregatedData);
 			return query;
 		}
 	}

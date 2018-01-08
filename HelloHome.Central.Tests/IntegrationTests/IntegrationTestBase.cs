@@ -4,27 +4,38 @@ using HelloHome.Central.Domain;
 using HelloHome.Central.Hub;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
-using HelloHome.Central.Hub.Queries;
+using HelloHome.Central.Repository;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace HelloHome.Central.Tests.IntegrationTests
 {
-    public class IntegrationTestFixture
+    public abstract class IntegrationTestBase
     {
-        private WindsorContainer _windsorContainer;
+        private readonly WindsorContainer _windsorContainer;
+        protected HhDbContext DbCtx;
 
-        public IntegrationTestFixture()
+        protected IntegrationTestBase()
         {
             _windsorContainer = new WindsorContainer();
             _windsorContainer.Install(
                 new FacilityInstaller(),
                 new HandlerInstaller(),
+                new CommandAndQueriesInstaller(),
                 new HubInstaller()
             );
-            
-            _windsorContainer.Register(Component.For<IUnitOfWork>().Instance(UnitOfWorkMoq.Object));
+                        
             _windsorContainer.Register(Component.For<IMessageChannel>().Instance(MsgChannelMoq.Object));
             Hub = _windsorContainer.Resolve<MessageHub>();
+        }
+
+        protected void RegisterDbContext(string inMemoryDbName)
+        {
+            var options = new DbContextOptionsBuilder<HhDbContext>()
+                .UseInMemoryDatabase(databaseName: "Add_writes_to_database")
+                .Options;
+            DbCtx = new HhDbContext(options);
+            _windsorContainer.Register(Component.For<IUnitOfWork>().Instance(DbCtx));
         }
 
         public Mock<TMock> RegisterMock<TMock>() where TMock : class
@@ -35,7 +46,6 @@ namespace HelloHome.Central.Tests.IntegrationTests
         }
 
         public Mock<IMessageChannel> MsgChannelMoq { get; } = new Mock<IMessageChannel>();
-        public Mock<IUnitOfWork> UnitOfWorkMoq { get; } = new Mock<IUnitOfWork>();
         public MessageHub Hub { get; private set; }
     }
     

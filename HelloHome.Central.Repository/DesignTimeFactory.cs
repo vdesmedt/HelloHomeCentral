@@ -8,14 +8,14 @@ using HelloHome.Central.Common.Extensions;
 
 namespace HelloHome.Central.Repository
 {
-    public class DesignTimeFactory : IDesignTimeDbContextFactory<HelloHomeDbContext>
+    public class DesignTimeFactory : IDesignTimeDbContextFactory<HhDbContext>
     {
-        public HelloHomeDbContext CreateDbContext(string[] args)
+        public HhDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<HelloHomeDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<HhDbContext>();
             optionsBuilder.UseMySql("Server=127.0.0.1;Port=3306;Database=HelloHome_Dev;User Id=hhgtw;Password=othe");
 
-            return new HelloHomeDbContext(optionsBuilder.Options);
+            return new HhDbContext(optionsBuilder.Options);
         }
     }
 }
