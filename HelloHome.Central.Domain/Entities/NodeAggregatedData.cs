@@ -4,27 +4,21 @@ namespace HelloHome.Central.Domain.Entities
 {
     public class NodeAggregatedData
     {
-        public virtual int Id { get; set; }
+        public int Id { get; set; }
         public Node Node { get; set; }
-		public virtual float? VIn { get; set; }
-        public virtual int SendErrorCount { get; set; }
-        public virtual float? Temperature { get; set; }
-        public virtual float? Humidity { get; set; }
-        public virtual float? AtmosphericPressure { get; set; }
-		public virtual int Rssi { get; set; }
-		public virtual DateTime StartupTime { get; set; }
-        internal virtual float MaxUpTimeRaw { get; set; }
+		public float? VIn { get; set; }
+        public int SendErrorCount { get; set; }
+        public float? Temperature { get; set; }
+        public float? Humidity { get; set; }
+        public float? AtmosphericPressure { get; set; }
+		public int Rssi { get; set; }
+		public DateTime StartupTime { get; set; }
+        public float MaxUpTimeRaw { get; set; }
 
-        public virtual TimeSpan MaxUpTime
+        public TimeSpan MaxUpTime
         {
-            get
-            {
-                return TimeSpan.FromDays(MaxUpTimeRaw);
-            }
-            set
-            {
-                MaxUpTimeRaw = (float)value.TotalDays;
-            }
+            get => TimeSpan.FromDays(MaxUpTimeRaw);
+            set => MaxUpTimeRaw = (float)value.TotalDays;
         }
     }
 }

@@ -6,11 +6,10 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 	{
 		public string Version { get; set; }
 		public long Signature { get; set; }
-	    public bool NeedNewRfAddress { get; set; }
 
 		public override string ToString ()
 		{
-			return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}, NeedNewRfAddress={NeedNewRfAddress}]";
+			return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}]";
 		}
 	}
 }

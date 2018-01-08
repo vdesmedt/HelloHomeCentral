@@ -18,11 +18,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 			var bytes = new List<byte> {2 + (0 << 2)};
 			bytes.AddRange(BitConverter.GetBytes(message.Signature));
 			bytes.Add(message.NewRfAddress);
-			bytes.Add(_pinConfigEncoder.EncodePins(message.Hal1Pin, message.Hal2Pin));
-			bytes.Add(_pinConfigEncoder.EncodePins(message.DryPin));
-			bytes.Add(_pinConfigEncoder.EncodePins(message.VInTriggerPin, message.VInMeasurePin));
-			bytes.Add((byte)message.Features);
-		    bytes.Add(message.RestartFreq);
+			bytes.Add((byte)message.ExtraFeatures);
 		    bytes.Add(message.NodeInfoFreq);
 		    bytes.Add(message.EnvironmentFreq);
 
