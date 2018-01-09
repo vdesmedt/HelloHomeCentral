@@ -80,9 +80,9 @@ namespace HelloHome.Central.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task NodeStart_Update_LastStartupTime()
+        public async Task NodeStart_Update_LastSeen_LastStartupTime()
         {
-            var dbCtx = RegisterDbContext(nameof(NodeStart_Update_LastStartupTime));
+            var dbCtx = RegisterDbContext(nameof(NodeStart_Update_LastSeen_LastStartupTime));
 
             var nodeStartedReport = new NodeStartedReport
             {
@@ -93,6 +93,8 @@ namespace HelloHome.Central.Tests.IntegrationTests
             };
 
             var ancianTime = DateTime.UtcNow.AddDays(-1);
+            var modernTime = DateTime.UtcNow;
+            
             dbCtx.Nodes.Add(new Node()
             {
                 RfAddress = nodeStartedReport.FromRfAddress,
@@ -100,12 +102,16 @@ namespace HelloHome.Central.Tests.IntegrationTests
                 AggregatedData = new NodeAggregatedData {StartupTime = ancianTime}
             });
             dbCtx.SaveChanges();
+
+            RegisterMock<ITimeProvider>()
+                .Setup(_ => _.UtcNow).Returns(modernTime);
             
-            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);
+            await Hub.ProcessOne(nodeStartedReport, _cts.Token);
 
             var dbNode = dbCtx.Nodes.Single(x => x.Signature == nodeStartedReport.Signature);
             
-            Assert.True(dbNode.AggregatedData.StartupTime > ancianTime);
+            Assert.Equal(modernTime, dbNode.AggregatedData.StartupTime);
+            Assert.Equal(modernTime, dbNode.LastSeen);
         }
     }
 }

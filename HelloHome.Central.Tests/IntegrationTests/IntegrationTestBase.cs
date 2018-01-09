@@ -6,6 +6,7 @@ using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Moq;
 
 namespace HelloHome.Central.Tests.IntegrationTests
@@ -20,11 +21,11 @@ namespace HelloHome.Central.Tests.IntegrationTests
             _windsorContainer.Install(
                 new FacilityInstaller(),
                 new HandlerInstaller(),
-                new BusinessLogicInstaller(),                
+                new BusinessLogicInstaller(),
                 new CommandAndQueriesInstaller(),
                 new HubInstaller()
             );
-                        
+
             _windsorContainer.Register(Component.For<IMessageChannel>().Instance(MsgChannelMoq.Object));
             Hub = _windsorContainer.Resolve<MessageHub>();
         }
@@ -42,12 +43,16 @@ namespace HelloHome.Central.Tests.IntegrationTests
         public Mock<TMock> RegisterMock<TMock>() where TMock : class
         {
             var mock = new Mock<TMock>();
-            _windsorContainer.Register(Component.For<TMock>().Instance(mock.Object));
+            _windsorContainer.Register(
+                Component.For<TMock>()
+                    .Instance(mock.Object)
+                    .Named($"IntTest_{typeof(TMock).ShortDisplayName()}_Override")
+                    .IsDefault()
+            );
             return mock;
         }
 
         public Mock<IMessageChannel> MsgChannelMoq { get; } = new Mock<IMessageChannel>();
         public MessageHub Hub { get; private set; }
     }
-    
 }
