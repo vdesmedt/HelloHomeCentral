@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HelloHome.Central.Common;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Hub.Commands;
@@ -27,32 +29,27 @@ namespace HelloHome.Central.Tests.IntegrationTests
         [Fact]
         public async Task NodeStart_CreateNode_When_SignatureNotFound()
         {
-            RegisterDbContext(nameof(NodeStart_CreateNode_When_SignatureNotFound));
-            
+            var dbCtx = RegisterDbContext(nameof(NodeStart_CreateNode_When_SignatureNotFound));
+
             var nodeStartedReport = new NodeStartedReport
             {
                 FromRfAddress = 2,
                 Rssi = -90,
                 Signature = long.MaxValue,
-                Version = "1234567",      
+                Version = "1234567",
             };
-            
-            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);                                    
+
+            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);
 
             //Node is properly created in Db
-            Assert.Equal(1, DbCtx.Nodes.Count());
-            var dbNode = DbCtx.Nodes.Single();            
+            Assert.Equal(1, dbCtx.Nodes.Count());
+            var dbNode = dbCtx.Nodes.Single();
             Assert.True(dbNode.RfAddress > 0);
             Assert.Equal("1234567", dbNode.Metadata.Version);
-            Assert.NotNull(dbNode.Logs);
-            Assert.Equal(2, dbNode.Logs.Count);
-            Assert.Contains(dbNode.Logs, _ => _.Type == "CRTD");
-            Assert.Contains(dbNode.Logs, _ => _.Type == "STRT");
-            
+
             //Config message is correct
             Assert.Equal(1, responses.Count);
-            Assert.IsType<NodeConfigCommand>(responses[0]);
-            var configCommand = responses[0] as NodeConfigCommand;
+            var configCommand = Assert.IsType<NodeConfigCommand>(responses[0]);
             Assert.Equal(nodeStartedReport.Signature, configCommand.Signature);
             Assert.Equal(nodeStartedReport.FromRfAddress, configCommand.ToRfAddress);
             Assert.Equal(dbNode.RfAddress, configCommand.NewRfAddress);
@@ -61,27 +58,54 @@ namespace HelloHome.Central.Tests.IntegrationTests
         [Fact]
         public async Task NodeStart_ReuseRfADdress_When_Exists()
         {
-            RegisterDbContext(nameof(NodeStart_ReuseRfADdress_When_Exists));
-            DbCtx.Nodes.Add(new Node() { RfAddress = 3, Signature = long.MaxValue });
-            DbCtx.SaveChanges();
+            var dbCtx = RegisterDbContext(nameof(NodeStart_ReuseRfADdress_When_Exists));
+            dbCtx.Nodes.Add(new Node() {RfAddress = 3, Signature = long.MaxValue});
+            dbCtx.SaveChanges();
             var nodeStartedReport = new NodeStartedReport
             {
                 FromRfAddress = 3,
                 Rssi = -90,
                 Signature = long.MaxValue,
-                Version = "1234567",      
+                Version = "1234567",
             };
-            
-            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);                                    
-            
+
+            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);
+
             Assert.Equal(1, responses.Count);
-            Assert.IsType<NodeConfigCommand>(responses[0]);
-            var configCommand = responses[0] as NodeConfigCommand;
+            var configCommand = Assert.IsType<NodeConfigCommand>(responses[0]);
 
             Assert.Equal(nodeStartedReport.Signature, configCommand.Signature);
             Assert.Equal(3, configCommand.ToRfAddress);
             Assert.Equal(3, configCommand.NewRfAddress);
+        }
+
+        [Fact]
+        public async Task NodeStart_Update_LastStartupTime()
+        {
+            var dbCtx = RegisterDbContext(nameof(NodeStart_Update_LastStartupTime));
+
+            var nodeStartedReport = new NodeStartedReport
+            {
+                FromRfAddress = 3,
+                Rssi = -90,
+                Signature = long.MaxValue,
+                Version = "1234567",
+            };
+
+            var ancianTime = DateTime.UtcNow.AddDays(-1);
+            dbCtx.Nodes.Add(new Node()
+            {
+                RfAddress = nodeStartedReport.FromRfAddress,
+                Signature = nodeStartedReport.Signature,
+                AggregatedData = new NodeAggregatedData {StartupTime = ancianTime}
+            });
+            dbCtx.SaveChanges();
             
+            var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);
+
+            var dbNode = dbCtx.Nodes.Single(x => x.Signature == nodeStartedReport.Signature);
+            
+            Assert.True(dbNode.AggregatedData.StartupTime > ancianTime);
         }
     }
 }

@@ -13,7 +13,6 @@ namespace HelloHome.Central.Tests.IntegrationTests
     public abstract class IntegrationTestBase
     {
         private readonly WindsorContainer _windsorContainer;
-        protected HhDbContext DbCtx;
 
         protected IntegrationTestBase()
         {
@@ -29,13 +28,14 @@ namespace HelloHome.Central.Tests.IntegrationTests
             Hub = _windsorContainer.Resolve<MessageHub>();
         }
 
-        protected void RegisterDbContext(string inMemoryDbName)
+        protected HhDbContext RegisterDbContext(string inMemoryDbName)
         {
             var options = new DbContextOptionsBuilder<HhDbContext>()
                 .UseInMemoryDatabase(databaseName: inMemoryDbName)
                 .Options;
-            DbCtx = new HhDbContext(options);
-            _windsorContainer.Register(Component.For<IUnitOfWork>().Instance(DbCtx));
+            var dbCtx = new HhDbContext(options);
+            _windsorContainer.Register(Component.For<IUnitOfWork>().Instance(dbCtx));
+            return dbCtx;
         }
 
         public Mock<TMock> RegisterMock<TMock>() where TMock : class
