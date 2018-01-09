@@ -28,20 +28,6 @@ namespace HelloHome.Central.Hub.IoC.Installers
                 Component.For<IMessageHandlerFactory>()
                     .AsFactory(typeof(MessageHandlerComponentSelector))
             );
-
-            //Logic
-            container.Register(
-                Component.For<ITimeProviderFactory>()
-                    .AsFactory(),
-                Component.For<ITimeProvider>()
-                    .ImplementedBy<TimeProvider>(),
-                Component.For<IRfAddressStrategy>()
-                    .ImplementedBy<FillHolesRfAddressStrategy>()
-                    .LifestyleBoundTo<IMessageHandler>(),
-                Component.For<ITouchNode>().ImplementedBy<TouchNode>()
-            );
-
-            NodeLogger.TimeProviderFactory = container.Resolve<ITimeProviderFactory>();
         }
     }
 }

@@ -43,6 +43,7 @@ namespace HelloHome.Central.Hub
                 new FacilityInstaller(),
                 new HubInstaller(),
                 new HandlerInstaller(),
+                new BusinessLogicInstaller(),
                 new CommandAndQueriesInstaller(),
                 new MessageChannelInstaller(),
                 new DbContextInstaller(config.ConnectionString)

@@ -20,6 +20,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
             _windsorContainer.Install(
                 new FacilityInstaller(),
                 new HandlerInstaller(),
+                new BusinessLogicInstaller(),                
                 new CommandAndQueriesInstaller(),
                 new HubInstaller()
             );
