@@ -19,11 +19,13 @@ namespace HelloHome.Central.Hub.Handlers
 
         private readonly IFindNodeQuery _findNodeQuery;
         private readonly ITouchNode _touchNode;
+        private readonly ITimeProvider _timeProvider;
 
-        public NodeInfoHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode) : base(dbCtx)
+        public NodeInfoHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode, ITimeProvider timeProvider) : base(dbCtx)
         {
             _findNodeQuery = findNodeQuery;
             _touchNode = touchNode;
+            _timeProvider = timeProvider;
         }
 
         protected override async Task HandleAsync(NodeInfoReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
@@ -38,7 +40,7 @@ namespace HelloHome.Central.Hub.Handlers
 
             var nodeHealthHistory = new NodeHealthHistory
             {
-                Timestamp = TimeProvider.Current.UtcNow,
+                Timestamp = _timeProvider.UtcNow,
                 Rssi = request.Rssi,
                 SendErrorCount = request.SendErrorCount,
                 VIn = request.Voltage,                

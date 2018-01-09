@@ -7,6 +7,7 @@ using HelloHome.Central.Hub.Commands;
 using HelloHome.Central.Hub.Handlers;
 using HelloHome.Central.Hub.Handlers.Factory;
 using HelloHome.Central.Hub.IoC.FactoryComponentSelector;
+using HelloHome.Central.Hub.Logic;
 using HelloHome.Central.Hub.Logic.RfAddressStrategy;
 using HelloHome.Central.Hub.Queries;
 
@@ -30,6 +31,8 @@ namespace HelloHome.Central.Hub.IoC.Installers
 
             //Logic
             container.Register(
+                Component.For<ITimeProviderFactory>()
+                    .AsFactory(),
                 Component.For<ITimeProvider>()
                     .ImplementedBy<TimeProvider>(),
                 Component.For<IRfAddressStrategy>()
@@ -37,8 +40,8 @@ namespace HelloHome.Central.Hub.IoC.Installers
                     .LifestyleBoundTo<IMessageHandler>(),
                 Component.For<ITouchNode>().ImplementedBy<TouchNode>()
             );
-            
-            TimeProvider.Current = container.Resolve<ITimeProvider>();
+
+            NodeLogger.TimeProviderFactory = container.Resolve<ITimeProviderFactory>();
         }
     }
 }

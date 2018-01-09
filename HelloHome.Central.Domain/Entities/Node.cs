@@ -21,8 +21,6 @@ namespace HelloHome.Central.Domain.Entities
 
         public byte RfAddress { get; set; }
 
-        public DateTimeOffset LastStartupTime { get; set; }
-
         public DateTime LastSeen { get; set; }
 
         public NodeMetadata Metadata { get; set; }
@@ -33,13 +31,6 @@ namespace HelloHome.Central.Domain.Entities
         
         public IList<NodeLog> Logs { get; set; }
 
-        public IList<NodeHistory> NodeHistory { get; set; }
-
-        public void AddLog(string type, string data = null)
-        {
-            if(Logs == null)
-                Logs = new List<NodeLog>();
-            Logs.Add(new NodeLog { Time = TimeProvider.Current.UtcNow, NodeId = this.Id, Type = type, Data = data });
-        }        
+        public IList<NodeHistory> NodeHistory { get; set; }       
     }
 }

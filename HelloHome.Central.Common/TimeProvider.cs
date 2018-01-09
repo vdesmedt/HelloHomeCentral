@@ -2,6 +2,12 @@
 
 namespace HelloHome.Central.Common
 {
+    public interface ITimeProviderFactory
+    {
+        ITimeProvider Create();
+        void Release(ITimeProvider timeProvider);
+    }
+
     public interface ITimeProvider
     {
         DateTime UtcNow { get; }
@@ -10,7 +16,5 @@ namespace HelloHome.Central.Common
     public class TimeProvider : ITimeProvider
     {
         public DateTime UtcNow => DateTime.UtcNow;
-
-        public static ITimeProvider Current { get; set; }
     }
 }

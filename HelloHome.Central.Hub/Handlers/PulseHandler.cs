@@ -16,10 +16,12 @@ namespace HelloHome.Central.Hub.Handlers
     {
         readonly IFindNodeQuery _findNodeQuery;
         readonly ITouchNode _touchNode;
+        private readonly ITimeProvider _timeProvider;
 
-        public PulseHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode) : base(dbCtx)
+        public PulseHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode, ITimeProvider timeProvider) : base(dbCtx)
         {
             _touchNode = touchNode;
+            _timeProvider = timeProvider;
             _findNodeQuery = findNodeQuery;
         }
 
@@ -33,7 +35,7 @@ namespace HelloHome.Central.Hub.Handlers
 
             var nodePulseHistory = new PulseHistory
             {
-                Timestamp = TimeProvider.Current.UtcNow,
+                Timestamp = _timeProvider.UtcNow,
                 Rssi = request.Rssi,                
                 NewPulses = request.NewPulses,                
             };

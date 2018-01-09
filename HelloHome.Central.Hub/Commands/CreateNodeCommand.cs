@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
+using HelloHome.Central.Hub.Logic;
 using NLog;
 
 namespace HelloHome.Central.Hub.Commands
