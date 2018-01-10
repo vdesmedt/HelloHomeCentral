@@ -44,7 +44,7 @@ namespace HelloHome.Central.Hub
                         {
                             var responses = await ProcessOne(msg, token);
                             foreach(var response in responses)
-                                _messageChannel.Send(response);
+                                await _messageChannel.SendAsync(response, CancellationToken.None);
 
                         }
                         catch (Exception e)
@@ -56,13 +56,13 @@ namespace HelloHome.Central.Hub
             });
 
             //Producer
-            var producerTask = Task.Run(() =>            
+            var producerTask = Task.Run(async () =>            
             {
                 while (!token.IsCancellationRequested)
                 {
                     try
                     {
-                        var msg = _messageChannel.TryReadNext(1000, token);
+                        var msg = await _messageChannel.TryReadNextAsync(CancellationToken.None);
                         if (msg == null) continue;
                         Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
                         _incomingMessages.Add(msg);

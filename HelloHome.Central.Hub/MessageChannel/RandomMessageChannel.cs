@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+using System.Threading.Tasks;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 
@@ -8,11 +9,11 @@ namespace HelloHome.Central.Hub.MessageChannel
 {
     public class RandomMessageChannel : IMessageChannel
     {
-        private Random _rnd = new Random();
+        private readonly Random _rnd = new Random();
 
-        public IncomingMessage TryReadNext(int millisecond, CancellationToken cancellationToken)
+        public async Task<IncomingMessage> TryReadNextAsync(CancellationToken cancellationToken)
         {
-            var d = DateTime.Now.AddMilliseconds(millisecond);
+            var d = DateTime.Now.AddMilliseconds(1000);
             while (!cancellationToken.IsCancellationRequested && DateTime.Now < d)
             {
                 var next = _rnd.Next(10);
@@ -33,8 +34,9 @@ namespace HelloHome.Central.Hub.MessageChannel
             return null;
         }
 
-        public void Send(OutgoingMessage message)
+        public Task SendAsync(OutgoingMessage message, CancellationToken cancellationToken)
         {
+            throw new NotImplementedException();
         }
     }
 }
