@@ -40,9 +40,17 @@ namespace HelloHome.Central.Hub
                     if (_incomingMessages.TryTake(out msg, 1000))
                     {
                         Logger.Debug(() => $"Processing message of type {msg.GetType().ShortDisplayName()}");
-                        var responses = await ProcessOne(msg, token);
-                        foreach(var response in responses)
-                            _messageChannel.Send(response);
+                        try
+                        {
+                            var responses = await ProcessOne(msg, token);
+                            foreach(var response in responses)
+                                _messageChannel.Send(response);
+
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Error(e, () => $"Error during processign of the request of {msg.GetType().ShortDisplayName()}");
+                        }
                     }
                 }
             });
@@ -52,10 +60,18 @@ namespace HelloHome.Central.Hub
             {
                 while (!token.IsCancellationRequested)
                 {
-                    var msg = _messageChannel.TryReadNext(1000, token);
-                    if (msg == null) continue;
-                    Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
-                    _incomingMessages.Add(msg);
+                    try
+                    {
+                        var msg = _messageChannel.TryReadNext(1000, token);
+                        if (msg == null) continue;
+                        Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
+                        _incomingMessages.Add(msg);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e, "Exception while reading from the channel");
+                    }
                 }
                 _incomingMessages.CompleteAdding();
             });
