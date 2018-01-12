@@ -18,7 +18,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             };
             _port.Open();            
         }
-        
+
         public async Task<int> ReadAsync(byte[] buffer, int offset, int cout, CancellationToken cToken)
         {
             try
@@ -29,6 +29,18 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             catch (Exception e)
             {
                 return 0;
+            }
+        }
+
+        public int? ReadByteAsync(CancellationToken cToken)
+        {
+            try
+            {
+                return _port.ReadByte();
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
 
