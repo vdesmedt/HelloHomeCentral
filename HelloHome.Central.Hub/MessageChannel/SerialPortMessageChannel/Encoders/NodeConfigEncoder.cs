@@ -16,12 +16,11 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 		protected override byte[] EncodeInternal (NodeConfigCommand message)
 		{
 			var bytes = new List<byte> {2 + (0 << 2)};
-			bytes.AddRange(BitConverter.GetBytes(message.Signature));
+			bytes.AddRange(BitConverter.GetBytes((long)message.Signature));
 			bytes.Add(message.NewRfAddress);
-			bytes.Add((byte)message.ExtraFeatures);
+			bytes.AddRange(BitConverter.GetBytes((short)message.ExtraFeatures));
 		    bytes.Add(message.NodeInfoFreq);
 		    bytes.Add(message.EnvironmentFreq);
-
 			return bytes.ToArray ();
 		}
 	}

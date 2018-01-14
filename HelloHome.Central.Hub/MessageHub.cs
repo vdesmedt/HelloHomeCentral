@@ -39,7 +39,7 @@ namespace HelloHome.Central.Hub
                     IncomingMessage msg;
                     if (_incomingMessages.TryTake(out msg, 1000))
                     {
-                        Logger.Debug(() => $"Processing message of type {msg.GetType().ShortDisplayName()}");
+                        Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in queue");
                         try
                         {
                             var responses = await ProcessOne(msg, token);
@@ -49,7 +49,7 @@ namespace HelloHome.Central.Hub
                         }
                         catch (Exception e)
                         {
-                            Logger.Error(e, () => $"Error during processign of the request of {msg.GetType().ShortDisplayName()}");
+                            Logger.Error(e, () => $"Exception during processing of {msg.GetType().ShortDisplayName()} : {e.Message}");
                         }
                     }
                 }
@@ -62,7 +62,7 @@ namespace HelloHome.Central.Hub
                 {
                     try
                     {
-                        var msg = await _messageChannel.TryReadNextAsync(CancellationToken.None);
+                        var msg = await _messageChannel.TryReadNextAsync(token);
                         if (msg == null) continue;
                         Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
                         _incomingMessages.Add(msg);
@@ -70,7 +70,7 @@ namespace HelloHome.Central.Hub
                     }
                     catch (Exception e)
                     {
-                        Logger.Error(e, "Exception while reading from the channel");
+                        Logger.Error(e, $"Exception from channel : {e.Message}");
                     }
                 }
                 _incomingMessages.CompleteAdding();
@@ -82,6 +82,7 @@ namespace HelloHome.Central.Hub
         public async Task<IList<OutgoingMessage>> ProcessOne(IncomingMessage msg, CancellationToken token)
         {
             var handler = _messageHandlerFactory.Create(msg);
+            Logger.Debug(() => $"{handler.GetType().ShortDisplayName()} will be used to handle {msg.GetType().ShortDisplayName()}");
             var responses = await handler.HandleAsync(msg, token);
             _messageHandlerFactory.Release(handler);
             return responses;

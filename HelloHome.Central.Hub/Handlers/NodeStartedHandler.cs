@@ -44,11 +44,11 @@ namespace HelloHome.Central.Hub.Handlers
 
 		protected override async Task HandleAsync (NodeStartedReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
 		{
-			var node = await _findNodeQuery.BySignatureAsync (request.Signature, NodeInclude.Metadata | NodeInclude.Ports );
+			var node = await _findNodeQuery.BySignatureAsync (request.Signature, NodeInclude.Metadata | NodeInclude.AggregatedData );
 		    if (node == default (Node)) {
 			    Logger.Info(() => $"Node not found based on signature {request.Signature}. A node will be created.");
 		        var rfId = _rfIdGenerationStrategy.FindAvailableRfAddress();
-				node = await _createNodeCommand.ExecuteAsync (request.Signature, rfId);
+				node = await _createNodeCommand.ExecuteAsync (request.Signature, rfId, request.NodeType);
 			}
 
 			node.AddLog("STRT");

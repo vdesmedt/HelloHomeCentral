@@ -23,10 +23,11 @@ namespace HelloHome.Central.Hub.IoC.FactoryComponentSelector
 
 		protected override Type GetComponentType (System.Reflection.MethodInfo method, object [] arguments)
 		{
-			var type = _typeLookup[arguments.Single().GetType()].FirstOrDefault();
-			if (type == null)
+			var msgType = arguments.Single().GetType();
+			var typeGroup = _typeLookup.FirstOrDefault(_ => _.Key == msgType);
+			if (typeGroup == null)
 				throw new HelloHomeException($"No message handler found for {arguments[0].GetType().Name}");
-			return type;
+			return typeGroup.Single();
 		}
 	}
 }

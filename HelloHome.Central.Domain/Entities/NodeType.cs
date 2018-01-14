@@ -1,6 +1,6 @@
 ﻿namespace HelloHome.Central.Domain.Entities
 {
-    public enum NodeType
+    public enum NodeType 
     {
         HelloNergie = 1,    //Hal and Dry Sensor + SI7021
         HelloJulo = 2,      //Weather station 

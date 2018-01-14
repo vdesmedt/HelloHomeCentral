@@ -24,7 +24,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
             var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HhDbContext>();
 
             var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole();
+            //loggerFactory.AddConsole();
 
             dbCOntextOptionsBuilder
                 .UseMySql(_connectionString)

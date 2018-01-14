@@ -26,7 +26,6 @@ namespace HelloHome.Central.Hub
 
         public static void Main(string[] args)
         {
-
             Logger.Info("Starting on machine name : {0}", Environment.MachineName);
             var configRoot = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -71,7 +70,8 @@ namespace HelloHome.Central.Hub
 
             t.Wait();
 
-            Console.WriteLine("Done ! Bye bye !");
+            Console.WriteLine("Done ! Press any key....");
+            Console.ReadKey();
             ioc.Release(hub);
         }
     }

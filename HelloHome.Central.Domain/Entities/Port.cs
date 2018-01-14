@@ -9,7 +9,7 @@ namespace HelloHome.Central.Domain.Entities
         public int Id { get; set; }
         public Node Node { get; set; }
         public int NodeId { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; }        
     }
 
     public abstract class SensorPort : Port

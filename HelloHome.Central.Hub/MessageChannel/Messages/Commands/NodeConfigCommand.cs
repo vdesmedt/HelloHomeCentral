@@ -9,6 +9,11 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Commands
 		public NodeFeature ExtraFeatures { get; set; }
 	    public byte NodeInfoFreq { get; set; }
 	    public byte EnvironmentFreq { get; set; }
+
+		public override string ToString()
+		{
+			return $"[{nameof(NodeConfigCommand)}: To={ToRfAddress}, Signature={Signature}, NewRfAddr={NewRfAddress}, ExtraFeatures={ExtraFeatures}, NodeInfoFreq:{NodeInfoFreq}, EnvironmentFreq: {EnvironmentFreq}]";
+		}
 	}
 }
 

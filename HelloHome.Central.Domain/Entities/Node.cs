@@ -9,8 +9,6 @@ namespace HelloHome.Central.Domain.Entities
     {
         public Node()
         {
-            Metadata = new NodeMetadata();
-            AggregatedData = new NodeAggregatedData();
         }
         
         public int Id { get; set; }

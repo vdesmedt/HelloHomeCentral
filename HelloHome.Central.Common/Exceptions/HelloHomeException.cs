@@ -7,11 +7,11 @@ namespace HelloHome.Central.Common.Exceptions
     {
         public string Code { get; private set; }
 
-        public HelloHomeException(string code)
-            : base()
+        public HelloHomeException(string message)
+            : base(message)
         {
-            Code = code;
         }
+        
         public HelloHomeException(string code, string message)
             : base(message)
         {

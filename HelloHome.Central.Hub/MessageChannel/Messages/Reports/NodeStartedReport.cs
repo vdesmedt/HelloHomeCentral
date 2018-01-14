@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using HelloHome.Central.Domain.Entities;
 
 namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
@@ -6,10 +7,11 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 	{
 		public string Version { get; set; }
 		public long Signature { get; set; }
+		public NodeType NodeType { get; set; }
 
 		public override string ToString ()
 		{
-			return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}]";
+			return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}, Type={NodeType}]";
 		}
 	}
 }
