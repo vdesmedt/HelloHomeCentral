@@ -73,6 +73,8 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<float>("MaxUpTimeRaw");
 
+                    b.Property<int>("NodeStartCount");
+
                     b.Property<int>("Rssi");
 
                     b.Property<int>("SendErrorCount");
@@ -141,7 +143,7 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<byte>("EnvironmentFrequency");
 
-                    b.Property<byte>("ExtraFeatures");
+                    b.Property<short>("ExtraFeatures");
 
                     b.Property<string>("Name")
                         .HasColumnName("Name")

@@ -8,7 +8,7 @@
 
 		public override string ToString ()
 		{
-			return $"[NodeInfoReport: NodeId={FromRfAddress}, SendErrorCount={SendErrorCount}, Voltage={Voltage}]";
+			return $"[NodeInfoReport: NodeId={FromRfAddress}, SendErrorCount={SendErrorCount}, StartCount={StartCount}, Voltage={Voltage}]";
 		}
 	}
 }

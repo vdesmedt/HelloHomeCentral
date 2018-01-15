@@ -12,6 +12,7 @@ namespace HelloHome.Central.Domain.Entities
         public float? Humidity { get; set; }
         public float? AtmosphericPressure { get; set; }
 		public int Rssi { get; set; }
+        public int NodeStartCount { get; set; }
 		public DateTime StartupTime { get; set; }
         public float MaxUpTimeRaw { get; set; }
 
