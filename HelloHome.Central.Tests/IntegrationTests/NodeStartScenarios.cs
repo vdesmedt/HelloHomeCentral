@@ -59,7 +59,13 @@ namespace HelloHome.Central.Tests.IntegrationTests
         public async Task NodeStart_ReuseRfADdress_When_Exists()
         {
             var dbCtx = RegisterDbContext(nameof(NodeStart_ReuseRfADdress_When_Exists));
-            dbCtx.Nodes.Add(new Node() {RfAddress = 3, Signature = long.MaxValue});
+            dbCtx.Nodes.Add(new Node()
+            {
+                RfAddress = 3,
+                Signature = long.MaxValue,
+                AggregatedData = new NodeAggregatedData { },
+                Metadata = new NodeMetadata { }
+            });
             dbCtx.SaveChanges();
             var nodeStartedReport = new NodeStartedReport
             {
@@ -94,22 +100,23 @@ namespace HelloHome.Central.Tests.IntegrationTests
 
             var ancianTime = DateTime.UtcNow.AddDays(-1);
             var modernTime = DateTime.UtcNow;
-            
+
             dbCtx.Nodes.Add(new Node()
             {
                 RfAddress = nodeStartedReport.FromRfAddress,
                 Signature = nodeStartedReport.Signature,
-                AggregatedData = new NodeAggregatedData {StartupTime = ancianTime}
+                AggregatedData = new NodeAggregatedData {StartupTime = ancianTime},
+                Metadata = new NodeMetadata { }
             });
             dbCtx.SaveChanges();
 
             RegisterMock<ITimeProvider>()
                 .Setup(_ => _.UtcNow).Returns(modernTime);
-            
+
             await Hub.ProcessOne(nodeStartedReport, _cts.Token);
 
             var dbNode = dbCtx.Nodes.Single(x => x.Signature == nodeStartedReport.Signature);
-            
+
             Assert.Equal(modernTime, dbNode.AggregatedData.StartupTime);
             Assert.Equal(modernTime, dbNode.LastSeen);
         }
