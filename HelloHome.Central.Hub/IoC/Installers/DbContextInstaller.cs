@@ -18,7 +18,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
         {
             _connectionString = connectionString;
         }
-        
+
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HhDbContext>();
@@ -36,6 +36,13 @@ namespace HelloHome.Central.Hub.IoC.Installers
                     .LifestyleBoundTo<IMessageHandler>(),
                 Component.For<DbContextOptions<HhDbContext>>()
                     .Instance(dbCOntextOptionsBuilder.Options)
+            );
+
+            container.Register(
+                Component.For<IUnitOfWork>()
+                    .ImplementedBy<HhDbContext>()
+                    .LifestyleTransient()
+                    .Named("TransientDbContext")
             );
         }
     }

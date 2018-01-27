@@ -27,6 +27,7 @@ namespace HelloHome.Central.Hub
         public static void Main(string[] args)
         {
             Logger.Info("Starting on machine name : {0}", Environment.MachineName);
+            Logger.Info($"Current Dir : {Directory.GetCurrentDirectory()}");
             var configRoot = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appconfig.json", optional:false, reloadOnChange:true)
@@ -53,7 +54,10 @@ namespace HelloHome.Central.Hub
             var cts = new CancellationTokenSource();
             var t = hub.Process(cts.Token);
 
-            Console.ReadKey();
+            var dbCtx = ioc.Resolve<IUnitOfWork>("TransientDbContext");
+            var msgChannem = ioc.Resolve<IMessageChannel>();
+            new ConsoleApp.ConsoleApp(msgChannem, dbCtx).Run();
+            
             Console.WriteLine("Stoping hub...");
             cts.Cancel();
 
