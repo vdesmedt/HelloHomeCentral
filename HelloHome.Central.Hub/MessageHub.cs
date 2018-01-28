@@ -20,6 +20,9 @@ namespace HelloHome.Central.Hub
         private readonly BlockingCollection<IncomingMessage> _incomingMessages = new BlockingCollection<IncomingMessage>(new ConcurrentQueue<IncomingMessage>());
         private readonly IMessageChannel _messageChannel;
         private readonly IMessageHandlerFactory _messageHandlerFactory;
+        private readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private Task _consumerTask;
+        private Task _producerTask;
 
         public MessageHub(IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory)
         {
@@ -29,43 +32,42 @@ namespace HelloHome.Central.Hub
 
         public long LeftToProcess => _incomingMessages.Count;
 
-        public async Task Process(CancellationToken token)
+        public void Start()
         {
+            var token = cts.Token;
             //Consumer
-            var consumerTask = Task.Run(async () =>
+            _consumerTask = Task.Run(async () =>
             {
                 while (!_incomingMessages.IsCompleted || _incomingMessages.Count > 0)
                 {
-                    IncomingMessage msg;
-                    if (_incomingMessages.TryTake(out msg, 1000))
+                    if (!_incomingMessages.TryTake(out var msg, 1000))
+                        continue;
+                    Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in queue");
+                    try
                     {
-                        Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in queue");
-                        try
-                        {
-                            var responses = await ProcessOne(msg, token);
-                            foreach(var response in responses)
-                                await _messageChannel.SendAsync(response, CancellationToken.None);
+                        var responses = await ProcessOne(msg, token);
+                        foreach(var response in responses)
+                            _messageChannel.Send(response);
 
-                        }
-                        catch (Exception e)
-                        {
-                            Logger.Error(e, () => $"Exception during processing of {msg.GetType().ShortDisplayName()} : {e.Message}");
-                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e, () => $"Exception during processing of {msg.GetType().ShortDisplayName()} : {e.Message}");
                     }
                 }
-            });
+            }, token);
 
             //Producer
-            var producerTask = Task.Run(async () =>            
+            _producerTask = Task.Run(() =>            
             {
                 while (!token.IsCancellationRequested)
                 {
                     try
                     {
-                        var msg = await _messageChannel.TryReadNextAsync(token);
+                        var msg = _messageChannel.TryReadNext();
                         if (msg == null) continue;
                         Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
-                        _incomingMessages.Add(msg);
+                        _incomingMessages.Add(msg, token);
 
                     }
                     catch (Exception e)
@@ -74,11 +76,24 @@ namespace HelloHome.Central.Hub
                     }
                 }
                 _incomingMessages.CompleteAdding();
-            });
-            
-            await Task.WhenAll(consumerTask, producerTask);
+            }, token);            
         }
-        
+
+        public void Stop()
+        {
+            cts.Cancel();
+            _messageChannel.Close();
+            var l = LeftToProcess;
+            while (l > 0)
+            {
+                Console.WriteLine($"{LeftToProcess} message(s) left to process...");
+                while (l == LeftToProcess) ;
+                Thread.Sleep(100);
+                l = LeftToProcess;
+            }
+            
+        }
+
         public async Task<IList<OutgoingMessage>> ProcessOne(IncomingMessage msg, CancellationToken token)
         {
             var handler = _messageHandlerFactory.Create(msg);

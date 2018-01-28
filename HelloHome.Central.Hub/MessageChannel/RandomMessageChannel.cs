@@ -11,10 +11,10 @@ namespace HelloHome.Central.Hub.MessageChannel
     {
         private readonly Random _rnd = new Random();
 
-        public async Task<IncomingMessage> TryReadNextAsync(CancellationToken cancellationToken)
+        public IncomingMessage TryReadNext()
         {
             var d = DateTime.Now.AddMilliseconds(1000);
-            while (!cancellationToken.IsCancellationRequested && DateTime.Now < d)
+            while (DateTime.Now < d)
             {
                 var next = _rnd.Next(10);
                 switch (next)
@@ -34,9 +34,14 @@ namespace HelloHome.Central.Hub.MessageChannel
             return null;
         }
 
-        public Task SendAsync(OutgoingMessage message, CancellationToken cancellationToken)
+        public void Send(OutgoingMessage message)
         {
             throw new NotImplementedException();
+        }
+
+        public void Close()
+        {
+            
         }
     }
 }

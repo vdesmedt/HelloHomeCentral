@@ -49,34 +49,19 @@ namespace HelloHome.Central.Hub
                 new DbContextInstaller(config.ConnectionString)
             );
 
-
             var hub = ioc.Resolve<MessageHub>();
-            var cts = new CancellationTokenSource();
-            var t = hub.Process(cts.Token);
+            hub.Start();
 
             var dbCtx = ioc.Resolve<IUnitOfWork>("TransientDbContext");
             var msgChannem = ioc.Resolve<IMessageChannel>();
-            new ConsoleApp.ConsoleApp(msgChannem, dbCtx).Run();
+            new ConsoleApp.ConsoleApp(msgChannem, dbCtx).Run();            
             
             Console.WriteLine("Stoping hub...");
-            cts.Cancel();
-
-            var l = hub.LeftToProcess;
-            while (l > 0)
-            {
-                Console.WriteLine($"{hub.LeftToProcess} message(s) left to process...");
-                while (l == hub.LeftToProcess) ;
-                Thread.Sleep(100);
-                l = hub.LeftToProcess;
-            }
-
-            Console.WriteLine("Processing last message before exiting....");
-
-            t.Wait();
+            hub.Stop();
+            ioc.Release(hub);
 
             Console.WriteLine("Done ! Press any key....");
             Console.ReadKey();
-            ioc.Release(hub);
         }
     }
 }

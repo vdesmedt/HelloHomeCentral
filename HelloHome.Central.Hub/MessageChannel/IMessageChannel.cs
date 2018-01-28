@@ -6,7 +6,8 @@ namespace HelloHome.Central.Hub.MessageChannel
 {
     public interface IMessageChannel
     {
-        Task<IncomingMessage> TryReadNextAsync(CancellationToken cancellationToken);
-        Task SendAsync(OutgoingMessage message, CancellationToken cancellationToken);
+        IncomingMessage TryReadNext();
+        void Send(OutgoingMessage message);
+        void Close();
     }
 }

@@ -40,8 +40,7 @@ namespace HelloHome.Central.Hub.ConsoleApp.CommWithNodes
                 }
                 else
                 {
-                    _msgChannel.SendAsync(new RestartCommand {ToRfAddress = dbNode.RfAddress}, CancellationToken.None)
-                        .GetAwaiter().GetResult();
+                    _msgChannel.Send(new RestartCommand {ToRfAddress = dbNode.RfAddress});
                     Output.WriteLine(ConsoleColor.Blue, "Restart sent");
                 }
             }

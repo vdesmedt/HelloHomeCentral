@@ -14,8 +14,6 @@ namespace HelloHome.Central.Hub.ConsoleApp
             {
                 if(Input.ReadString("Confirm exit ? (Y/N)") != "Y")
                     program.NavigateHome();
-                else
-                    Output.WriteLine(ConsoleColor.Red, "[End]");
             })
             )
         {

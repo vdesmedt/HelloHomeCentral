@@ -19,36 +19,21 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             _port.Open();            
         }
 
-        public async Task<int> ReadAsync(byte[] buffer, int offset, int cout, CancellationToken cToken)
+        public int Read(byte[] buffer, int offset, int cout)
         {
-            try
-            {
-                return await _port.ReadAsync(buffer, offset, cout, cToken);
-
-            }
-            catch (Exception e)
-            {
-                return 0;
-            }
+            return _port.Read(buffer, offset, cout);
         }
 
-        public int? ReadByteAsync(CancellationToken cToken)
+
+        public void Write(byte[] buffer, int offset, int cout)
         {
-            try
-            {
-                return _port.ReadByte();
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            _port.Write(buffer, offset, cout);
         }
 
-        public async Task WriteAsync(byte[] buffer, int offset, int cout, CancellationToken cToken)
+        public void Close()
         {
-            await _port.WriteAsync(buffer, offset, cout, cToken);
+            _port.Close();
         }
-
 
         public void Dispose()
         {
