@@ -1,5 +1,6 @@
 ﻿using HelloHome.Central.Domain;
 using HelloHome.Central.Hub.ConsoleApp.CommWithNodes;
+using HelloHome.Central.Hub.ConsoleApp.LoggingConfig;
 using HelloHome.Central.Hub.MessageChannel;
 
 namespace HelloHome.Central.Hub.ConsoleApp
@@ -11,6 +12,7 @@ namespace HelloHome.Central.Hub.ConsoleApp
             AddPage(new MainPage(this));
             AddPage(new CommWithNodePage(this));
             AddPage(new SendRestartPage(this, msgChannel, unitOfWork));
+            AddPage(new SetDefaultLogLevelPage(this));
             SetPage<MainPage>();
         }
     }
