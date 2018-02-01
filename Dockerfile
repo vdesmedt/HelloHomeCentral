@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN dotnet publish -r linux-arm
 
-FROM resin/resinHhGtw
+FROM resin/armv7hf-debian
 
 WORKDIR /usr/src/app
 
