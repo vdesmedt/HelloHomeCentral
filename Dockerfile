@@ -17,7 +17,7 @@ WORKDIR /usr/src/app
 # Install dependencies listed at https://github.com/dotnet/core/blob/master/Documentation/prereqs.md
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-    libunwind8 gettext libicu57 liblttng-ust0 libcurl3 libssl1.0.2 libuuid1 unzip && \
+    libunwind8 gettext liblttng-ust0 libcurl3  libuuid1 unzip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy the standalone application
