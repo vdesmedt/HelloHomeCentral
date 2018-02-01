@@ -22,5 +22,3 @@ RUN apt-get update && \
 
 # Copy the standalone application
 COPY --from=build /usr/src/app/bin/Debug/netcoreapp2.0/linux-arm/publish /usr/src/app
-
-CMD /usr/src/app/resin-dotnet-hello-world
