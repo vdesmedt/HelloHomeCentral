@@ -16,7 +16,7 @@ deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file_glob: true
-  file: ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz
+  file: ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/publish/HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz
   skip_cleanup: true
   on:
     tags: true
