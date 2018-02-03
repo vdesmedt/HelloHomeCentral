@@ -17,6 +17,8 @@
     <PackageReference Include="SerialPortStream" Version="2.1.2" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="appconfig.json" CopyToOutputDirectory="Always" />
+    <None Include="appconfig.HelloNetCoreGtw.json" CopyToOutputDirectory="Always" />
     <None Include="nlog.config" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
