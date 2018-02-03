@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Repositor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Tests", "HelloHome.Central.Tests\HelloHome.Central.Tests.csproj", "{1AFC0B2F-0713-499F-88C0-8E539F7E8669}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Update", "HelloHome.Central.Update\HelloHome.Central.Update.csproj", "{1E70C1C9-25F3-4729-A807-FAA5AAFC6B1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1AFC0B2F-0713-499F-88C0-8E539F7E8669}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AFC0B2F-0713-499F-88C0-8E539F7E8669}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AFC0B2F-0713-499F-88C0-8E539F7E8669}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E70C1C9-25F3-4729-A807-FAA5AAFC6B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E70C1C9-25F3-4729-A807-FAA5AAFC6B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E70C1C9-25F3-4729-A807-FAA5AAFC6B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E70C1C9-25F3-4729-A807-FAA5AAFC6B1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
