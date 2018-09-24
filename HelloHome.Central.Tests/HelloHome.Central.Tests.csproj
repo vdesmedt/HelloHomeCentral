@@ -5,18 +5,16 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Moq" Version="4.8.0" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HelloHome.Central.Hub\HelloHome.Central.Hub.csproj">
-      <Project>{F54BB2C6-DEF6-4C29-8D3F-6C23FF9682C9}</Project>
-      <Name>HelloHome.Central.Hub</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
