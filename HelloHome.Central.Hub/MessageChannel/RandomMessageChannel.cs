@@ -39,6 +39,11 @@ namespace HelloHome.Central.Hub.MessageChannel
             throw new NotImplementedException();
         }
 
+        public void Open()
+        {
+
+        }
+
         public void Close()
         {
             

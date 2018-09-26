@@ -34,6 +34,7 @@ namespace HelloHome.Central.Hub
 
         public void Start()
         {
+            _messageChannel.Open();
             var token = cts.Token;
             //Consumer
             _consumerTask = Task.Run(async () =>

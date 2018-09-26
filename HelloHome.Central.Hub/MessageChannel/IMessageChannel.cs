@@ -6,6 +6,7 @@ namespace HelloHome.Central.Hub.MessageChannel
 {
     public interface IMessageChannel
     {
+        void Open();
         IncomingMessage TryReadNext();
         void Send(OutgoingMessage message);
         void Close();

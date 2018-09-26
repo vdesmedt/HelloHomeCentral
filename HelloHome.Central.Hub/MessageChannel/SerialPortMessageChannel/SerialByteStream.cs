@@ -14,13 +14,17 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 
         public SerialByteStream(SerialConfig config)
         {
-            Logger.Info(() => $"Opening serial port {config.Port} with baudRate {config.BaudRate} (8N1)");
             _port = new SerialPortStream(config.Port, config.BaudRate, 8, Parity.None, StopBits.One)
             {
                 ReadTimeout = config.TimeOut
             };
+        }
+
+        public void Open()
+        {
+            Logger.Info(() => $"Opening serial port {_port.PortName} with baudRate {_port.BaudRate} (8N1)");
             _port.Open();
-            Logger.Info(() => $"Serial port {config.Port} opened");
+            Logger.Info(() => $"Port {_port.PortName} opened");
         }
 
         public int Read(byte[] buffer, int offset, int cout)

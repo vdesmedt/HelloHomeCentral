@@ -26,6 +26,11 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             _messageEncoderFactory = messageEncoderFactoryFactory;
         }
 
+        public void Open()
+        {
+            _byteStream.Open();
+        }
+
 
         public void Send(OutgoingMessage message)
         {
