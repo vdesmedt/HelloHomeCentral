@@ -19,6 +19,11 @@
   <ItemGroup>
     <None Remove="appconfig.HelloNetCoreGtw.json" />
     <None Remove="nlog.config" />
+    <None Remove="appconfig.DESKTOP-1H8BLHA.json" />
+    <None Remove="appconfig.json" />
+    <None Remove="libnserial.so.1" />
+    <None Remove="nlog-internal.log" />
+    <None Remove="2018-09-26.log" />
   </ItemGroup>
   <ItemGroup>
     <None Include="appconfig.json" CopyToOutputDirectory="Always" />
@@ -35,6 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MessageChannel\Messages" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appconfig.MacBook-Pro.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appconfig.HelloNetCoreGtw.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
