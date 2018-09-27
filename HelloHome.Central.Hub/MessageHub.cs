@@ -15,9 +15,10 @@ namespace HelloHome.Central.Hub
 {
     public class MessageHub
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly BlockingCollection<IncomingMessage> _incomingMessages = new BlockingCollection<IncomingMessage>(new ConcurrentQueue<IncomingMessage>());
+        private readonly BlockingCollection<OutgoingMessage> _outgoingMessages = new BlockingCollection<OutgoingMessage>(new ConcurrentQueue<OutgoingMessage>());
         private readonly IMessageChannel _messageChannel;
         private readonly IMessageHandlerFactory _messageHandlerFactory;
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
@@ -36,40 +37,53 @@ namespace HelloHome.Central.Hub
         {
             _messageChannel.Open();
             var token = cts.Token;
-            //Consumer
+
+            //Processing
             _consumerTask = Task.Run(async () =>
             {
                 while (!_incomingMessages.IsCompleted || _incomingMessages.Count > 0)
                 {
-                    if (!_incomingMessages.TryTake(out var msg, 1000))
+                    if (!_incomingMessages.TryTake(out var inMsg, 1000))
                         continue;
-                    Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in queue");
+                    Logger.Debug(() => $"Message of type {inMsg.GetType().ShortDisplayName()} found in queue");
                     try
                     {
-                        var responses = await ProcessOne(msg, token);
-                        foreach(var response in responses)
-                            _messageChannel.Send(response);
+                        var responses = await ProcessOne(inMsg, token);
+                        foreach (var response in responses)
+                            _outgoingMessages.Add(response);
 
                     }
                     catch (Exception e)
                     {
-                        Logger.Error(e, () => $"Exception during processing of {msg.GetType().ShortDisplayName()} : {e.Message}");
+                        Logger.Error(e, () => $"Exception during processing of {inMsg.GetType().ShortDisplayName()} : {e.Message}");
                     }
                 }
             }, token);
 
-            //Producer
+            //Communicate through channel
             _producerTask = Task.Run(() =>            
             {
                 while (!token.IsCancellationRequested)
                 {
                     try
                     {
-                        var msg = _messageChannel.TryReadNext();
-                        if (msg == null) continue;
-                        Logger.Debug(() => $"Message of type {msg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
-                        _incomingMessages.Add(msg, token);
-
+                        //Read everything that can be
+                        var inMsg = _messageChannel.TryReadNext();
+                        while (inMsg != null) 
+                        {
+                            Logger.Debug(() => $"Message of type {inMsg.GetType().ShortDisplayName()} found in channel. Will enqueue.");
+                            _incomingMessages.Add(inMsg, token);
+                            inMsg = _messageChannel.TryReadNext();
+                        }
+                        //Write any left message from outgoingQueue
+                        while (!_outgoingMessages.IsCompleted && _outgoingMessages.Count > 0)
+                        {
+                            if(_outgoingMessages.TryTake(out var outMsg, 100))
+                            {
+                                Logger.Debug(() => $"Message of type {outMsg.GetType().ShortDisplayName()} found in queue. Will send.");
+                                _messageChannel.Send(outMsg);
+                            }
+                        }
                     }
                     catch (Exception e)
                     {

@@ -74,7 +74,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                 }
 
                 if (eofMatchCharCount != eof.Length)
-                    continue;
+                    return null;
 
                 //Copy buffer to msgBytes
                 var msgBytes = new byte[_currentBufferIndex - byteCount];

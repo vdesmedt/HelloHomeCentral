@@ -19,4 +19,9 @@
     <Folder Include="Migrations" />
     <Folder Include="Migrations\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\20180927164447_InitialCreate.cs" />
+    <Compile Remove="Migrations\HhDbContextModelSnapshot.cs" />
+    <Compile Remove="Migrations\20180927164447_InitialCreate.Designer.cs" />
+  </ItemGroup>
 </Project>
