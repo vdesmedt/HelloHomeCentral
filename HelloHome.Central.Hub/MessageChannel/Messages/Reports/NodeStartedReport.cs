@@ -7,11 +7,12 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 	{
 		public string Version { get; set; }
 		public long Signature { get; set; }
-		public NodeType NodeType { get; set; }
+        public int StartCount { get; set; }
+        public NodeType NodeType { get; set; }
 
 		public override string ToString ()
 		{
-			return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}, Type={NodeType}]";
+            return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}, Type={NodeType}, StartCount={StartCount}]";
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 
 	    public IncomingMessage Parse (byte[] record)
 	    {
-		    var expectedLenght = 17 + 3 + 2;
+		    var expectedLenght = 20 + 3 + 2;
 			if(record.Length != expectedLenght)
 				throw new ArgumentException($"{nameof(NodeStartedReport)} should be {expectedLenght} bytes long (was {record.Length})");
             return new NodeStartedReport {
@@ -21,7 +21,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
                 Rssi = (int)BitConverter.ToInt16 (record, 1),
 	            NodeType = (NodeType)record[4],
                 Signature = BitConverter.ToInt64 (record, 5),
-	            Version = Encoding.ASCII.GetString(record, 13, 7),
+	            Version = Encoding.ASCII.GetString(record, 13, 8),
+                StartCount = BitConverter.ToUInt16(record, 21)
             };
 		}
 

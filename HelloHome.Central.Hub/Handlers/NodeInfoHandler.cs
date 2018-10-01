@@ -39,7 +39,6 @@ namespace HelloHome.Central.Hub.Handlers
             _touchNode.Touch(node, request.Rssi);
 
             node.AggregatedData.SendErrorCount = request.SendErrorCount;
-            node.AggregatedData.NodeStartCount = request.StartCount;
             node.AggregatedData.VIn = request.Voltage;
 
             var nodeHealthHistory = new NodeHealthHistory

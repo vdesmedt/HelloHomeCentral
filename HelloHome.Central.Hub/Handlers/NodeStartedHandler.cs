@@ -53,7 +53,8 @@ namespace HelloHome.Central.Hub.Handlers
 
 			node.AddLog("STRT");
 			node.Metadata.Version = request.Version;
-			node.AggregatedData.StartupTime = _timeProvider.UtcNow;
+            node.AggregatedData.NodeStartCount = request.StartCount;
+            node.AggregatedData.StartupTime = _timeProvider.UtcNow;
 		    _touchNode.Touch (node, request.Rssi);
 			
 			outgoingMessages.Add(new NodeConfigCommand

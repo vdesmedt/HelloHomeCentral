@@ -3,12 +3,11 @@
 	public class NodeInfoReport : IncomingMessage
 	{
 		public int SendErrorCount { get; set; }
-		public int StartCount { get; set; }
 		public float? Voltage { get; set; }
 
 		public override string ToString ()
 		{
-			return $"[NodeInfoReport: NodeId={FromRfAddress}, SendErrorCount={SendErrorCount}, StartCount={StartCount}, Voltage={Voltage}]";
+			return $"[NodeInfoReport: NodeId={FromRfAddress}, SendErrorCount={SendErrorCount}, Voltage={Voltage}]";
 		}
 	}
 }
