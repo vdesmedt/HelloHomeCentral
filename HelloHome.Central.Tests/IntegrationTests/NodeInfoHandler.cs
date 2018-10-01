@@ -28,7 +28,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
             var config = outMsgs.Cast<NodeConfigCommand>().Single();
             
             //NodeInfo
-            await Hub.ProcessOne(new NodeInfoReport { FromRfAddress = config.NewRfAddress, SendErrorCount = 34, Voltage = 3.7f, StartCount = 2}, _cts.Token);
+            await Hub.ProcessOne(new NodeInfoReport { FromRfAddress = config.NewRfAddress, SendErrorCount = 34, Voltage = 3.7f}, _cts.Token);
 
             var dbNode = dBctx.Nodes.Include(_ => _.AggregatedData).Single(_ => _.RfAddress == config.NewRfAddress);
             
