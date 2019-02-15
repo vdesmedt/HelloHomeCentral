@@ -5,8 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.3.1" />
-    <PackageReference Include="Castle.FactorySupportFacility" Version="4.1.1" />
-    <PackageReference Include="Castle.Windsor" Version="4.1.1" />
+    <PackageReference Include="Castle.Windsor" Version="5.0.0" />
     <PackageReference Include="EasyConsole" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
