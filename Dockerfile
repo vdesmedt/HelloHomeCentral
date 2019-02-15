@@ -21,4 +21,4 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy the standalone application
-COPY --from=build /usr/src/app/HelloHome.Central.Hub/bin/Debug/netcoreapp2.0/linux-arm/publish /usr/src/app
+COPY --from=build /usr/src/app/HelloHome.Central.Hub/bin/Debug/netcoreapp2.1/linux-arm/publish /usr/src/app
