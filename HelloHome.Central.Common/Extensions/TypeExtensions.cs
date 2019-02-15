@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace HelloHome.Central.Common.Extensions
 {
@@ -16,5 +17,14 @@ namespace HelloHome.Central.Common.Extensions
             return false;
         }
 
+        public static string GetShortName(this Type type){
+            var parts = type.FullName.Split('.').Skip(2);
+            var shortParts =
+                parts
+                    .Take(parts.Count() - 1)
+                    .Select(x => new string(x.Where(y => y >= 65 && y <= 91).ToArray())).ToList();
+            shortParts.Add(parts.Last());
+            return string.Join('.', shortParts);
+        }
     }
 }
