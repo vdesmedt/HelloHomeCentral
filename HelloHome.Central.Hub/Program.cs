@@ -16,6 +16,9 @@ using Castle.Windsor.Installer;
 using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
+using HelloHome.Central.Hub.WebAPI;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using NLog;
 
 namespace HelloHome.Central.Hub
@@ -26,42 +29,32 @@ namespace HelloHome.Central.Hub
 
         public static void Main(string[] args)
         {
+
             Logger.Info("Starting on machine name : {0}", Environment.MachineName);
             Logger.Info($"Current Dir : {Directory.GetCurrentDirectory()}");
-            var configRoot = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appconfig.json", optional:false, reloadOnChange:true)
-                .AddJsonFile($"appconfig.{Environment.MachineName}.json", optional:true, reloadOnChange:true)
-                .AddEnvironmentVariables()
-                .Build();
-            var config = new HhConfig();
-            configRoot.Bind(config);            
-            
-            var ioc = new WindsorContainer();
-            ioc.Install(                
-                new ConfigInstaller(config),
-                new FacilityInstaller(),
-                new HubInstaller(),
-                new HandlerInstaller(),
-                new BusinessLogicInstaller(),
-                new CommandAndQueriesInstaller(),
-                new MessageChannelInstaller(),
-                new DbContextInstaller(config.ConnectionString)
-            );
-
-            var hub = ioc.Resolve<MessageHub>();
+                       
+            var webHostTask = CreateWebHostBuilder(args).Build().RunAsync();
+            webHostTask.Wait();
+                        
+            var hub = Startup.IoCContainer.Resolve<MessageHub>();
             hub.Start();
-
-            var dbCtx = ioc.Resolve<IUnitOfWork>("TransientDbContext");
-            var msgChannem = ioc.Resolve<IMessageChannel>();
-            new ConsoleApp.ConsoleApp(msgChannem, dbCtx).Run();            
             
-            Console.WriteLine("Stoping hub...");
+            var webApiTask = CreateWebHostBuilder(args).Build().RunAsync();
+            webApiTask.Wait();            
+
+            var dbCtx = Startup.IoCContainer.Resolve<IUnitOfWork>("TransientDbContext");
+            var msgChannel = Startup.IoCContainer.Resolve<IMessageChannel>();
+            new ConsoleApp.ConsoleApp(msgChannel, dbCtx).Run();            
+            
+            Console.WriteLine("Stopping hub...");
             hub.Stop();
-            ioc.Release(hub);
+            Startup.IoCContainer.Release(hub);
 
             Console.WriteLine("Done ! Press any key....");
             Console.ReadKey();
         }
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
     }
 }
