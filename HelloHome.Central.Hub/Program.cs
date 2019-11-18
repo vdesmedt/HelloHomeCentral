@@ -20,41 +20,58 @@ using HelloHome.Central.Hub.WebAPI;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using NLog;
+using NLog.Web;
 
 namespace HelloHome.Central.Hub
 {
     public static class Program
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
+        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();		
 
         public static void Main(string[] args)
         {
 
             Logger.Info("Starting on machine name : {0}", Environment.MachineName);
             Logger.Info($"Current Dir : {Directory.GetCurrentDirectory()}");
-                       
-            var webHostTask = CreateWebHostBuilder(args).Build().RunAsync();
-            webHostTask.Wait();
-                        
-            var hub = Startup.IoCContainer.Resolve<MessageHub>();
-            hub.Start();
-            
-            var webApiTask = CreateWebHostBuilder(args).Build().RunAsync();
-            webApiTask.Wait();            
 
-            var dbCtx = Startup.IoCContainer.Resolve<IUnitOfWork>("TransientDbContext");
-            var msgChannel = Startup.IoCContainer.Resolve<IMessageChannel>();
-            new ConsoleApp.ConsoleApp(msgChannel, dbCtx).Run();            
-            
-            Console.WriteLine("Stopping hub...");
-            hub.Stop();
-            Startup.IoCContainer.Release(hub);
+            try
+            {
+                var webApiTask = CreateWebHostBuilder(args).Build().RunAsync();
 
-            Console.WriteLine("Done ! Press any key....");
-            Console.ReadKey();
+                var hub = Startup.IoCContainer.Resolve<MessageHub>();
+                hub.Start();
+                webApiTask.Wait();            
+
+                var dbCtx = Startup.IoCContainer.Resolve<IUnitOfWork>("TransientDbContext");
+                var msgChannel = Startup.IoCContainer.Resolve<IMessageChannel>();
+                new ConsoleApp.ConsoleApp(msgChannel, dbCtx).Run();            
+            
+                Console.WriteLine("Stopping hub...");
+                hub.Stop();
+                Startup.IoCContainer.Release(hub);
+
+                Console.WriteLine("Done ! Press any key....");
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Stopped program because of an exception.");
+            }
+            finally
+            {
+                NLog.LogManager.Shutdown();
+            }                                   
         }
+
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .ConfigureLogging(l =>
+                {
+                    l.ClearProviders();
+                    l.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
+                .UseNLog();
+
     }
 }
