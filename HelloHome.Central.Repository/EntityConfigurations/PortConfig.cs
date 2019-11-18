@@ -24,7 +24,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SensorPort> builder)
         {
             builder.HasBaseType<Port>();
-            builder.ToTable("Port");
             builder.HasMany(x => x.Triggers).WithOne(x => x.SensorPort);
         }
     }
@@ -34,7 +33,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PulseSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.ToTable("Port");
             builder.HasMany(x => x.PulseHistory).WithOne(x => x.PulseSensorPort).HasForeignKey(x => x.PulseSensorPortId);
         }
     }
@@ -44,7 +42,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PushSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.ToTable("Port");
         }
     }
     
@@ -53,7 +50,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SwitchSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.ToTable("Port");
         }
     }
     
@@ -62,7 +58,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<VarioSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.ToTable("Port");
         }
     }
     
@@ -72,7 +67,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
        public void Configure(EntityTypeBuilder<ActuatorPort> builder)
        {
            builder.HasBaseType<Port>();
-           builder.ToTable("Port");
        }
    }
     
@@ -81,7 +75,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<RelayActuatorPort> builder)
         {
             builder.HasBaseType<ActuatorPort>();
-            builder.ToTable("Port");
         }
     }
 }

@@ -11,8 +11,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             builder.ToTable("Action");
             builder.HasDiscriminator<int>("Type")
                 .HasValue<ScheduleAction>(1)
-                .HasValue<TurnOnAction>(2)
-                .HasValue<TurnOffAction>(3);
+                .HasValue<ActuatorAction>(10)
+                .HasValue<RelayAction>(100)
+                .HasValue<TurnOnAction>(101)
+                .HasValue<TurnOffAction>(102);
         }
     }
     
@@ -21,7 +23,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<ScheduleAction> builder)
         {
             builder.HasBaseType<Action>();
-            builder.ToTable("Action");            
             builder.HasOne(x => x.ScheduledAction);
         }
     }
@@ -31,7 +32,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<ActuatorAction> builder)
         {
             builder.HasBaseType<Action>();
-            builder.ToTable("Action");
         }
     }
     
@@ -40,7 +40,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<RelayAction> builder)
         {
             builder.HasBaseType<ActuatorAction>();
-            builder.ToTable("Action");
         }
     }
 
@@ -49,7 +48,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<TurnOnAction> builder)
         {
             builder.HasBaseType<RelayAction>();
-            builder.ToTable("Action");
         }
     }
 
@@ -58,7 +56,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<TurnOffAction> builder)
         {
             builder.HasBaseType<RelayAction>();
-            builder.ToTable("Action");
         }
     }
 

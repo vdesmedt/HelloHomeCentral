@@ -21,7 +21,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<CronTrigger> builder)
         {
-            builder.ToTable("Trigger");
             builder.Property(x => x.CronExpression).HasMaxLength(20);
         }
     }
@@ -31,7 +30,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SensorTrigger> builder)
         {
             builder.HasBaseType<Trigger>();
-            builder.ToTable("Trigger");
             builder.HasOne(x => x.SensorPort).WithMany(x => x.Triggers);
         }
     }
@@ -41,7 +39,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PushTrigger> builder)
         {
             builder.HasBaseType<SensorTrigger>();
-            builder.ToTable("Trigger");
         }
     }
 }

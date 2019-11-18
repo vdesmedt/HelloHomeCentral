@@ -46,7 +46,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
             _windsorContainer.Register(
                 Component.For<TMock>()
                     .Instance(mock.Object)
-                    .Named($"IntTest_{typeof(TMock).ShortDisplayName()}_Override")
+                    .Named($"IntTest_{typeof(TMock).Name}_Override")
                     .IsDefault()
             );
             return mock;

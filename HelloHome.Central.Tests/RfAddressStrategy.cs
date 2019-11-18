@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,11 +61,15 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void ThreadSafe()
         {
-            var existingAddresses = new List<byte> {1, 2, 5, 12, 15};
+            var existingAddresses = new ConcurrentBag<byte> {1, 2, 5, 12, 15};
             var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 15};
             var adr = new byte[10];
-            Parallel.For(0, 10, x => adr[x] = sut.FindAvailableRfAddress());
-            existingAddresses.AddRange(adr);
+            Parallel.For(0, 10, x =>
+            {
+                adr[x] = sut.FindAvailableRfAddress();
+                existingAddresses.Add (adr[x]);
+            });
+            
             Assert.Equal("123456789101112131415", existingAddresses.OrderBy(x => x).Aggregate(new StringBuilder(), (x, a) => x.Append(a), x => x.ToString()));
         }
     }
