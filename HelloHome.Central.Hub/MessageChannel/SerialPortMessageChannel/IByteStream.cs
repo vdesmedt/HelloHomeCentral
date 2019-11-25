@@ -9,5 +9,6 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         int Read(byte[] buffer, int offset, int cout);
         void Close();
         void Open();
+        int ByteAvailable();
     }
 }

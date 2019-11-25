@@ -1,49 +1,14 @@
-﻿using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using HelloHome.Central.Domain;
-using HelloHome.Central.Hub.Handlers;
+﻿using HelloHome.Central.Domain;
 using HelloHome.Central.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Lamar;
 
 namespace HelloHome.Central.Hub.IoC.Installers
 {
-    public class DbContextInstaller : IWindsorInstaller
+    public class DbContextInstaller : ServiceRegistry
     {
-        private readonly string _connectionString;
-
-        public DbContextInstaller(string connectionString)
+        public DbContextInstaller()
         {
-            _connectionString = connectionString;
-        }
-
-        public void Install(IWindsorContainer container, IConfigurationStore store)
-        {
-            var dbCOntextOptionsBuilder = new DbContextOptionsBuilder<HhDbContext>();
-
-            var loggerFactory = new LoggerFactory();
-            //loggerFactory.AddConsole();
-
-            dbCOntextOptionsBuilder
-                .UseMySql(_connectionString)
-                .UseLoggerFactory(loggerFactory);
-
-            container.Register(
-                Component.For<IUnitOfWork>()
-                    .ImplementedBy<HhDbContext>()
-                    .LifestyleBoundTo<IMessageHandler>(),
-                Component.For<DbContextOptions<HhDbContext>>()
-                    .Instance(dbCOntextOptionsBuilder.Options)
-            );
-
-            container.Register(
-                Component.For<IUnitOfWork>()
-                    .ImplementedBy<HhDbContext>()
-                    .LifestyleTransient()
-                    .Named("TransientDbContext")
-            );
+            For<IUnitOfWork>().Use<HhDbContext>().Scoped();
         }
     }
 }

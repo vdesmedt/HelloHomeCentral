@@ -29,10 +29,10 @@ namespace HelloHome.Central.Tests.IntegrationTests
             
             //NodeInfo
             await Hub.ProcessOne(new NodeInfoReport { FromRfAddress = config.NewRfAddress, SendErrorCount = 34, Voltage = 3.7f}, _cts.Token);
-
             
-            var dbNode = dBctx.Nodes.Include(_ => _.AggregatedData).Single(_ => _.RfAddress == config.NewRfAddress);
+            var dbNode = dBctx.Nodes.Include(_ => _.AggregatedData).SingleOrDefault(_ => _.RfAddress == config.NewRfAddress);
             
+            Assert.NotNull(dbNode);
             Assert.Equal(34, dbNode.AggregatedData.SendErrorCount);
             Assert.Equal(3.7f, dbNode.AggregatedData.VIn);
             

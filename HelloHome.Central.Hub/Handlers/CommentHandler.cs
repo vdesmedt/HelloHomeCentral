@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain;
+using HelloHome.Central.Hub.Handlers.Base;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using NLog;

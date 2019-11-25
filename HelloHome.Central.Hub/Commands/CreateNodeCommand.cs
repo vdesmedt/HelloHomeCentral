@@ -18,14 +18,14 @@ namespace HelloHome.Central.Hub.Commands
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
 
         private readonly IUnitOfWork _ctx;
-		readonly ITimeProvider _timeProvider;
+        private readonly INodeLogger _nodeLogger;
 
-		public CreateNodeCommand(
+        public CreateNodeCommand(
 		    IUnitOfWork ctx, 
-			ITimeProvider timeProvider)
+            INodeLogger nodeLogger)
         {
-			_timeProvider = timeProvider;
-			_ctx = ctx;
+            _ctx = ctx;
+            _nodeLogger = nodeLogger;
         }
 
         public  Task<Node> ExecuteAsync(long signature, byte rfId, NodeType nodeType)
@@ -46,8 +46,7 @@ namespace HelloHome.Central.Hub.Commands
                 }
             };
             _ctx.Nodes.Add(node);
-            node.AddLog("CRTD");
-
+            _nodeLogger.Log(node, "CRTD");
             return Task.FromResult(node);
         }
     }

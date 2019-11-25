@@ -1,14 +1,12 @@
-﻿using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
+﻿using Lamar;
 
 namespace HelloHome.Central.Hub.IoC.Installers
 {
-    public class HubInstaller : IWindsorInstaller
+    public class HubInstaller : ServiceRegistry
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public HubInstaller()
         {
-            container.Register(Component.For<MessageHub>());
+            ForConcreteType<MessageHub>();
         }
     }
 }

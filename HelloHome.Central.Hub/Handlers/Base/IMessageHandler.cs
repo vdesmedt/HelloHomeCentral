@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 
-namespace HelloHome.Central.Hub.Handlers
+namespace HelloHome.Central.Hub.Handlers.Base
 {
     public interface IMessageHandler
     {

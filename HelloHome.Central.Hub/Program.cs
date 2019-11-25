@@ -1,26 +1,13 @@
-﻿using Castle.Windsor;
-using Castle.MicroKernel.Registration;
-using HelloHome.Central.Domain;
-using HelloHome.Central.Repository;
+﻿using HelloHome.Central.Domain;
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using HelloHome.Central.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Castle.Windsor.Installer;
-using HelloHome.Central.Common.Configuration;
+using HelloHome.Central.Common;
 using HelloHome.Central.Hub.IoC.Installers;
+using HelloHome.Central.Hub.Logic;
 using HelloHome.Central.Hub.MessageChannel;
-using HelloHome.Central.Hub.WebAPI;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+using Lamar;
 using NLog;
-using NLog.Web;
 
 namespace HelloHome.Central.Hub
 {
@@ -30,25 +17,23 @@ namespace HelloHome.Central.Hub
 
         public static void Main(string[] args)
         {
+            var container = Container.For<HubServiceRegistry>();
+            Console.WriteLine(container.WhatDoIHave());
 
             Logger.Info("Starting on machine name : {0}", Environment.MachineName);
             Logger.Info($"Current Dir : {Directory.GetCurrentDirectory()}");
 
             try
             {
-                var webApiTask = CreateWebHostBuilder(args).Build().RunAsync();
-
-                var hub = Startup.IoCContainer.Resolve<MessageHub>();
+                var hub = container.GetInstance<MessageHub>();
                 hub.Start();
-                webApiTask.Wait();            
 
-                var dbCtx = Startup.IoCContainer.Resolve<IUnitOfWork>("TransientDbContext");
-                var msgChannel = Startup.IoCContainer.Resolve<IMessageChannel>();
+                var dbCtx = container.GetInstance<IUnitOfWork>();
+                var msgChannel = container.GetInstance<IMessageChannel>();
                 new ConsoleApp.ConsoleApp(msgChannel, dbCtx).Run();            
             
                 Console.WriteLine("Stopping hub...");
                 hub.Stop();
-                Startup.IoCContainer.Release(hub);
 
                 Console.WriteLine("Done ! Press any key....");
                 Console.ReadKey();
@@ -62,16 +47,5 @@ namespace HelloHome.Central.Hub
                 NLog.LogManager.Shutdown();
             }                                   
         }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureLogging(l =>
-                {
-                    l.ClearProviders();
-                    l.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                })
-                .UseNLog();
-
     }
 }

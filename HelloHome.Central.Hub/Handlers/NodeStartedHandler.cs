@@ -6,6 +6,7 @@ using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Hub.Commands;
+using HelloHome.Central.Hub.Handlers.Base;
 using HelloHome.Central.Hub.Logic;
 using HelloHome.Central.Hub.Logic.RfAddressStrategy;
 using HelloHome.Central.Hub.MessageChannel.Messages;
@@ -24,6 +25,7 @@ namespace HelloHome.Central.Hub.Handlers
 		private readonly ICreateNodeCommand _createNodeCommand;
 		private readonly ITouchNode _touchNode;
 	    private readonly IRfAddressStrategy _rfIdGenerationStrategy;
+	    private readonly INodeLogger _nodeLogger;
 	    private readonly ITimeProvider _timeProvider;
 
 		public NodeStartedHandler (
@@ -32,6 +34,7 @@ namespace HelloHome.Central.Hub.Handlers
 			ICreateNodeCommand createNodeCommand,
 			ITouchNode touchNode,
 			IRfAddressStrategy rfIdGenerationStrategy,
+			INodeLogger nodeLogger,
 			ITimeProvider timeProvider)
 			: base (dbCtx)
 		{
@@ -40,6 +43,7 @@ namespace HelloHome.Central.Hub.Handlers
 			_createNodeCommand = createNodeCommand;
 			_touchNode = touchNode;
 		    _rfIdGenerationStrategy = rfIdGenerationStrategy;
+		    _nodeLogger = nodeLogger;
 		}
 
 		protected override async Task HandleAsync (NodeStartedReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
@@ -51,7 +55,7 @@ namespace HelloHome.Central.Hub.Handlers
 				node = await _createNodeCommand.ExecuteAsync (request.Signature, rfId, request.NodeType);
 			}
 
-			node.AddLog("STRT");
+		    _nodeLogger.Log(node, "STRT");
 			node.Metadata.Version = request.Version;
             node.AggregatedData.NodeStartCount = request.StartCount;
             node.AggregatedData.StartupTime = _timeProvider.UtcNow;

@@ -6,7 +6,7 @@ using HelloHome.Central.Domain;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using NLog;
 
-namespace HelloHome.Central.Hub.Handlers
+namespace HelloHome.Central.Hub.Handlers.Base
 {
     public abstract class MessageHandler<T> : IMessageHandler where T : IncomingMessage
     {

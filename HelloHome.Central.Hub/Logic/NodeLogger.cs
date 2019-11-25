@@ -5,17 +5,24 @@ using HelloHome.Central.Domain.Entities;
 
 namespace HelloHome.Central.Hub.Logic
 {
-    public static class NodeLogger
-    {           
-        public static ITimeProviderFactory TimeProviderFactory { private get; set; }
-        
-        public static void AddLog(this Node node, string type, string data = null)
+    public interface INodeLogger
+    {
+        void Log(Node node, string type, string data = null);
+    }
+
+    public class NodeLogger : INodeLogger
+    {
+        private readonly ITimeProvider _timeProvider;
+
+        public NodeLogger(ITimeProvider timeProvider)
         {
-            var timeProvider = TimeProviderFactory.Create();
+            _timeProvider = timeProvider;
+        }
+        public void Log(Node node, string type, string data = null)
+        {
             if(node.Logs == null)
                 node.Logs = new List<NodeLog>();
-            node.Logs.Add(new NodeLog { Time = timeProvider.UtcNow, NodeId = node.Id, Type = type, Data = data });
-            TimeProviderFactory.Release(timeProvider);
-        }                  
+            node.Logs.Add(new NodeLog { Time = _timeProvider.UtcNow, NodeId = node.Id, Type = type, Data = data });
+        }
     }
 }

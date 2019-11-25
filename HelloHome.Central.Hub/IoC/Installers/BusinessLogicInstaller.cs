@@ -1,31 +1,18 @@
-﻿using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using HelloHome.Central.Common;
+﻿using HelloHome.Central.Common;
 using HelloHome.Central.Hub.Commands;
-using HelloHome.Central.Hub.Handlers;
 using HelloHome.Central.Hub.Logic;
 using HelloHome.Central.Hub.Logic.RfAddressStrategy;
+using Lamar;
 
 namespace HelloHome.Central.Hub.IoC.Installers
 {
-    public class BusinessLogicInstaller : IWindsorInstaller
+    public class BusinessLogicInstaller : ServiceRegistry 
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public BusinessLogicInstaller()
         {
-            container.Register(
-                Component.For<ITimeProviderFactory>()
-                    .AsFactory(),
-                Component.For<ITimeProvider>()
-                    .ImplementedBy<TimeProvider>(),
-                Component.For<IRfAddressStrategy>()
-                    .ImplementedBy<FillHolesRfAddressStrategy>()
-                    .LifestyleBoundTo<IMessageHandler>(),
-                Component.For<ITouchNode>().ImplementedBy<TouchNode>()
-            );
-
-            NodeLogger.TimeProviderFactory = container.Resolve<ITimeProviderFactory>();
+            For<ITimeProvider>().Use<TimeProvider>().Singleton();
+            For<IRfAddressStrategy>().Use<FillHolesRfAddressStrategy>().Scoped();
+            For<INodeLogger>().Use<NodeLogger>().Singleton();
         }
     }
 }

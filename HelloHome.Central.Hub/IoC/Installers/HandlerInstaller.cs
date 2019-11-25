@@ -1,33 +1,22 @@
-﻿using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using HelloHome.Central.Common;
-using HelloHome.Central.Hub.Commands;
-using HelloHome.Central.Hub.Handlers;
-using HelloHome.Central.Hub.Handlers.Factory;
-using HelloHome.Central.Hub.IoC.FactoryComponentSelector;
-using HelloHome.Central.Hub.Logic;
-using HelloHome.Central.Hub.Logic.RfAddressStrategy;
-using HelloHome.Central.Hub.Queries;
+﻿using System.Linq;
+using HelloHome.Central.Hub.Handlers.Base;
+using HelloHome.Central.Hub.IoC.Factories;
+using Lamar;
+
 
 namespace HelloHome.Central.Hub.IoC.Installers
 {
-    public class HandlerInstaller : IWindsorInstaller
+    public class HandlerInstaller : ServiceRegistry
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public HandlerInstaller()
         {
-            //MessageHandlers
-            container.Register(
-                Classes.FromAssemblyContaining<IMessageHandler>()
-                    .BasedOn(typeof(MessageHandler<>))
-                    .WithServiceSelf()
-                    .LifestyleTransient(),
-                Component.For<MessageHandlerComponentSelector>()
-                    .LifestyleSingleton(),
-                Component.For<IMessageHandlerFactory>()
-                    .AsFactory(typeof(MessageHandlerComponentSelector))
-            );
+            For<IMessageHandlerFactory>().Use<MessageHandlerFactory>().Ctor<Container>().Is(c => (Container)c).Singleton();
+            Scan(scanner =>
+            {
+                scanner.AssemblyContainingType<IMessageHandler>();
+                scanner.Include(_ => _.GetInterfaces().Contains(typeof(IMessageHandler)));
+                scanner.Convention<WithAllInterfacesRegistrationConvention>();
+            });
         }
     }
 }

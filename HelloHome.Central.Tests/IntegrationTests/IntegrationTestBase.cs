@@ -1,33 +1,30 @@
-﻿using Castle.Windsor;
-using Castle.MicroKernel.Registration;
+﻿using System;
+using System.Diagnostics;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Hub;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Repository;
+using Lamar;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 
 namespace HelloHome.Central.Tests.IntegrationTests
 {
     public abstract class IntegrationTestBase
     {
-        private readonly WindsorContainer _windsorContainer;
+        protected readonly Container _container;
 
         protected IntegrationTestBase()
         {
-            _windsorContainer = new WindsorContainer();
-            _windsorContainer.Install(
-                new FacilityInstaller(),
-                new HandlerInstaller(),
-                new BusinessLogicInstaller(),
-                new CommandAndQueriesInstaller(),
-                new HubInstaller()
-            );
+            _container = Container.For<HubServiceRegistry>();
 
-            _windsorContainer.Register(Component.For<IMessageChannel>().Instance(MsgChannelMoq.Object));
-            Hub = _windsorContainer.Resolve<MessageHub>();
+            _container.Configure(c =>
+            {
+                c.AddSingleton<IMessageChannel>(p => MsgChannelMoq.Object);
+            });
         }
 
         protected HhDbContext RegisterDbContext(string inMemoryDbName)
@@ -36,23 +33,23 @@ namespace HelloHome.Central.Tests.IntegrationTests
                 .UseInMemoryDatabase(databaseName: inMemoryDbName)
                 .Options;
             var dbCtx = new HhDbContext(options);
-            _windsorContainer.Register(Component.For<IUnitOfWork>().Instance(dbCtx));
+            _container.Configure(c =>
+            {
+                c.Replace(ServiceDescriptor.Singleton<IUnitOfWork>(dbCtx));
+            });
             return dbCtx;
         }
 
-        public Mock<TMock> RegisterMock<TMock>() where TMock : class
+        protected Mock<TMock> RegisterMock<TMock>() where TMock : class
         {
             var mock = new Mock<TMock>();
-            _windsorContainer.Register(
-                Component.For<TMock>()
-                    .Instance(mock.Object)
-                    .Named($"IntTest_{typeof(TMock).Name}_Override")
-                    .IsDefault()
-            );
+            _container.Configure(c => { c.AddSingleton<TMock>(mock.Object); });
             return mock;
         }
 
-        public Mock<IMessageChannel> MsgChannelMoq { get; } = new Mock<IMessageChannel>();
-        public MessageHub Hub { get; private set; }
+        private Mock<IMessageChannel> MsgChannelMoq { get; } = new Mock<IMessageChannel>();
+        
+        private MessageHub _hub;
+        protected MessageHub Hub => _hub ??= _container.GetInstance<MessageHub>();
     }
 }
