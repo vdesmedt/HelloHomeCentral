@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Hub.IoC.Factories;
@@ -107,10 +108,13 @@ namespace HelloHome.Central.Hub
 
         public async Task<IList<OutgoingMessage>> ProcessOne(IncomingMessage msg, CancellationToken token)
         {
+            var ts = Stopwatch.StartNew();
             using var scopedHandler = _messageHandlerFactory.BuildInNestedScope(msg);
             Logger.Debug(() => $"{scopedHandler.Handler.GetType().Name} will be used to handle {msg.GetType().Name}");
-            var responses = await scopedHandler.Handler.HandleAsync(msg, token);
-            Logger.Debug(() => $"{scopedHandler.Handler.GetType().Name} has finnish handling {msg.GetType().Name}");
+            var responses = await scopedHandler.Handler.HandleAsync(msg, token);    
+            ts.Stop();
+            Logger.Debug(() => $"{scopedHandler.Handler.GetType().Name} has finnish handling {msg.GetType().Name} in {ts.ElapsedMilliseconds} ms.");
+            
             return responses;
         }
 
