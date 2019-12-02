@@ -6,7 +6,7 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 {
 	public interface IRfAddressStrategy
 	{
-		byte FindAvailableRfAddress ();
+		int FindAvailableRfAddress ();
 	}
 }
 

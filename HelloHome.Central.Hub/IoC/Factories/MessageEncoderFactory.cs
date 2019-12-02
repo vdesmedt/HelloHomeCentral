@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base;
 using Lamar;
 
 namespace HelloHome.Central.Hub.IoC.Factories

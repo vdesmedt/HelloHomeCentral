@@ -1,5 +1,6 @@
 ﻿using HelloHome.Central.Domain;
 using System;
+using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using HelloHome.Central.Common;
@@ -17,12 +18,16 @@ namespace HelloHome.Central.Hub
 
         public static void Main(string[] args)
         {
+            var s = Stopwatch.StartNew(); 
             var container = Container.For<HubServiceRegistry>();
-            Console.WriteLine(container.WhatDoIHave());
+            //Console.WriteLine(container.WhatDoIHave());
+            s.Stop();
+            
+            Logger.Debug($"Initializing the contaner took {s.ElapsedMilliseconds} ms.");
 
             Logger.Info("Starting on machine name : {0}", Environment.MachineName);
             Logger.Info($"Current Dir : {Directory.GetCurrentDirectory()}");
-
+            
             try
             {
                 var hub = container.GetInstance<MessageHub>();

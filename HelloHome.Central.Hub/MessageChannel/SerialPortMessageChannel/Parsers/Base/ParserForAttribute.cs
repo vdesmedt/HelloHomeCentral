@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
+namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ParserForAttribute : Attribute

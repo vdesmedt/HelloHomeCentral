@@ -1,31 +1,36 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Repository;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog;
 
 namespace HelloHome.Central.Hub.IoC.Installers
 {
     public class ConfigInstaller : ServiceRegistry    
     {
+        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();		
+
         public ConfigInstaller()
         {
             //Config
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{Environment.MachineName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
+            var s = Stopwatch.StartNew();
+            var configBuilder = new ConfigurationBuilder();
+            Logger.Debug($"Config builder created after {s.ElapsedMilliseconds} ms");
+            configBuilder.SetBasePath(Directory.GetCurrentDirectory());
+            configBuilder.AddJsonFile($"appsettings.json", false,  true);
+            configBuilder.AddJsonFile($"appsettings.{Environment.MachineName}.json", true,  true);
+            configBuilder.AddEnvironmentVariables();
+            var config = configBuilder.Build();
+            
             For<IConfiguration>().Use(config);
             For<SerialConfig>().Use(config.GetSection("Serial").Get<SerialConfig>()).Singleton();
             For<EmonCmsConfig>().Use(config.GetSection("EmonCms").Get<EmonCmsConfig>()).Singleton();
-
+            
             //DbContextOption
             var cnString = config.GetValue<string>("ConnectionString");
             var dbCtxOptionBuilder = new DbContextOptionsBuilder<HhDbContext>();

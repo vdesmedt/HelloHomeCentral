@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel.Messages;
+using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using NLog;
 
 
@@ -34,11 +35,10 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         {
             var encoder = _messageEncoderFactory.Build(message);
             var bytes = encoder.Encode(message);
-            _byteStream.Write(new[] {message.ToRfAddress}, 0, 1);
             _byteStream.Write(bytes, 0, bytes.Length);
             _byteStream.Write(new byte[] {0x0D, 0x0A}, 0, 2);
             Logger.Debug(() =>
-                $"sent to Rfm2Pi : {message} -> {BitConverter.ToString(new byte[] {message.ToRfAddress})}-{BitConverter.ToString(bytes)}-0D-0A");
+                $"sent to Rfm2Pi : {message} -> {BitConverter.ToString(bytes)}-0D-0A");
         }
 
 
@@ -53,7 +53,10 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         public IncomingMessage TryReadNext()
         {
             if (_byteStream.ByteAvailable() == 0)
+            {
+                Thread.Sleep(50); //Simulate timeout to avoid 100% CPU
                 return null;
+            }
             
             // at start, some left overs might still be at the beginning of the buffer,
             // currentIndex can therefore be greater than 0
@@ -64,11 +67,11 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             {
                 if (_byteStream.ByteAvailable() == 0)
                 {
-                    Thread.Sleep(50);
+                    Thread.Sleep(50); //Simulate timeout to avoid 100% CPU
                     continue;
                 }
                 var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, BufferSize - _currentBufferIndex);
-                Logger.Debug($"Found {byteCount} bytes in UART");
+                Logger.Debug($"Found {byteCount} bytes in UART. Copying to channel buffer");
                 _currentBufferIndex += byteCount;
                 //Looking for EOF
                 while (eofMatchCharCount < eof.Length && byteCount > 0)
@@ -85,7 +88,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                     Logger.Debug("EOF not found.. yet");
                     return null;
                 }
-                Logger.Debug("EOF Found...  Will extract from start to EOF from Buffer (remaining bytes shifted left in buffer)");
+                Logger.Debug("EOF Found...  Will extract 0..EOF from channel Buffer (remaining bytes shifted left in channel buffer)");
                 
                 //Copy buffer to msgBytes
                 var msgBytes = new byte[_currentBufferIndex - byteCount];
@@ -97,10 +100,12 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                     _buffer[i] = _buffer[_currentBufferIndex - byteCount + i];
                 _currentBufferIndex = byteCount;
 
-                Logger.Debug(() => $"Found message in buffer : {BitConverter.ToString(msgBytes)}");
+                Logger.Debug(() => $"Found message in channel buffer : {BitConverter.ToString(msgBytes)}");
                 var parser = _messageParserFactory.Build(msgBytes);
                 var msg = parser.Parse(msgBytes);
                 Logger.Info(() => $"Incoming message parsed to {msg}");
+                if (msg is CommentReport)
+                    return null;
                 return msg;
             }
 

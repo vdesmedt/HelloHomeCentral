@@ -2,9 +2,11 @@
 using System.Text;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 {
+	[NonDiscriminatedParser]
 	public class CommentParser : IMessageParser
 	{
 		private readonly Encoding _encoding = Encoding.ASCII;

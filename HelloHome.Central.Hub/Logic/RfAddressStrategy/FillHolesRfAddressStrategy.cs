@@ -11,10 +11,11 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 	{
 		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
 
-		private readonly SortedSet<byte> _exisitingRfAddresses;
+		private readonly SortedSet<int> _exisitingRfAddresses;
 		private readonly Random _rnd;
 
-		public int RfAddressUpperBound { get; set; } = 250;
+		public int RfAddressLowerBound { get; set; } = 10;
+		public int RfAddressUpperBound { get; set; } = (2^10)-1;
 
 		private FillHolesRfAddressStrategy()
 		{
@@ -23,20 +24,20 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 
 		public FillHolesRfAddressStrategy (IListRfIdsQuery listRfAddressesQuery): this()
 		{
-			_exisitingRfAddresses = new SortedSet<byte>(listRfAddressesQuery.Execute());
+			_exisitingRfAddresses = new SortedSet<int>(listRfAddressesQuery.Execute());
 		}
 
-		public FillHolesRfAddressStrategy (IEnumerable<byte> existingRfAddresses) : this()
+		public FillHolesRfAddressStrategy (IEnumerable<int> existingRfAddresses) : this()
 		{
-			_exisitingRfAddresses = new SortedSet<byte>(existingRfAddresses);
+			_exisitingRfAddresses = new SortedSet<int>(existingRfAddresses);
 		}
 
 		#region IRfNodeIdGeneratorStrategy implementation
 
-		private byte FindRfAddressInternal ()
+		private int FindRfAddressInternal ()
 		{
 			if (!_exisitingRfAddresses.Any ())
-				return 1;
+				return RfAddressLowerBound;
 			var maxExisting = _exisitingRfAddresses.Max ();
 			var holes = Enumerable.Range(1, maxExisting).Select(i => (byte)i).Where (i => !_exisitingRfAddresses.Contains(i)).ToList ();
 			if (holes.Any()) 
@@ -46,13 +47,13 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 
 	    #endregion
 
-		public byte FindAvailableRfAddress()
+		public int FindAvailableRfAddress()
 		{
 			if(_exisitingRfAddresses.Count == RfAddressUpperBound)
 				throw new NoAvailableRfAddressException(false);
 			var findValidCandidate = false;
 			var iteration = 0;
-			byte candidate = 0;
+			int candidate = 0;
 			
 			while (!findValidCandidate && iteration < 5)
 			{

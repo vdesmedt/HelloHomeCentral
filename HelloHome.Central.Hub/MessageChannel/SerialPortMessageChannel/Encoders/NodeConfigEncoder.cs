@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base;
+using Constants = HelloHome.Central.Common.Constants;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 {
@@ -13,16 +15,15 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 			this._pinConfigEncoder = pinConfigEncoder;			
 		}
 
-		protected override byte[] EncodeInternal (NodeConfigCommand message)
+		protected override void EncodeBody (NodeConfigCommand message, List<byte> bytes)
 		{
-			var bytes = new List<byte> {2 + (0 << 2)};
 			bytes.AddRange(BitConverter.GetBytes((long)message.Signature));
-			bytes.Add(message.NewRfAddress);
+			bytes.AddRange(BitConverter.GetBytes(message.NewRfAddress));
 			bytes.AddRange(BitConverter.GetBytes((short)message.ExtraFeatures));
 		    bytes.Add(message.NodeInfoFreq);
 		    bytes.Add(message.EnvironmentFreq);
-			return bytes.ToArray ();
 		}
+		protected override byte Discriminator => Constants.Message.Command.NodeConfigCommand;
 	}
 }
 

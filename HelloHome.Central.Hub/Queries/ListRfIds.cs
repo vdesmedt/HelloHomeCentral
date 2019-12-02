@@ -9,9 +9,9 @@ namespace HelloHome.Central.Hub.Queries
 {
     public interface IListRfIdsQuery : IQuery
     {
-        Task<IList<byte>> ExecuteAsync(CancellationToken cToken);
-        Task<IList<byte>> ExecuteAsync(byte network, CancellationToken cToken);
-        IList<byte> Execute();
+        Task<IList<int>> ExecuteAsync(CancellationToken cToken);
+        Task<IList<int>> ExecuteAsync(byte network, CancellationToken cToken);
+        IList<int> Execute();
     }
 
     public class ListRfIdsQuery : IListRfIdsQuery
@@ -23,20 +23,20 @@ namespace HelloHome.Central.Hub.Queries
             _ctx = ctx;
         }
 
-        public async Task<IList<byte>> ExecuteAsync(CancellationToken cToken)
+        public async Task<IList<int>> ExecuteAsync(CancellationToken cToken)
         {
-            return await _ctx.Nodes.Select(x => (byte)x.RfAddress).ToListAsync(cToken);
+            return await _ctx.Nodes.Select(x => x.RfAddress).ToListAsync(cToken);
         }
-        public IList<byte> Execute()
+        public IList<int> Execute()
         {
-            return _ctx.Nodes.Select(x => (byte)x.RfAddress).ToList();
+            return _ctx.Nodes.Select(x => x.RfAddress).ToList();
         }
 
-        public async Task<IList<byte>> ExecuteAsync(byte network, CancellationToken cToken)
+        public async Task<IList<int>> ExecuteAsync(byte network, CancellationToken cToken)
         {
             return await _ctx.Nodes
                 .Where(x => x.RfAddress == network)
-                .Select(x => (byte)x.RfAddress)
+                .Select(x => x.RfAddress)
                 .ToListAsync(cToken);
         }
     }

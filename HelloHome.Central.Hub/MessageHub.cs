@@ -2,11 +2,14 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages;
+using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using NLog;
 
 namespace HelloHome.Central.Hub
@@ -35,7 +38,53 @@ namespace HelloHome.Central.Hub
         {
             _messageChannel.Open();
             var token = cts.Token;
+            
+            //Communicate through channel
+            _producerTask = Task.Run(() =>
+            {
+                var waitForConfirmList = new Dictionary<int, OutgoingMessage>();
+                while (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        //Read everything that can be
+                        var inMsg = _messageChannel.TryReadNext();
+                        while (inMsg != null) 
+                        {
+                            if (inMsg is SendingStatusReport sc)
+                            {
+                                Logger.Debug(() => $"Sending report for msg {sc.MessageId} found in channel with status {(sc.Success?"OK":"NOK")}.");
+                                if (!sc.Success)
+                                    _outgoingMessages.Add(waitForConfirmList[sc.MessageId], token);
+                                waitForConfirmList.Remove(sc.MessageId);
+                            }
+                            else
+                            {
+                                Logger.Debug(() => $"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
+                                _incomingMessages.Add(inMsg, token);
+                            } 
 
+                            inMsg = _messageChannel.TryReadNext();
+                        }
+                        //Write any left message from outgoingQueue
+                        while (!_outgoingMessages.IsCompleted && _outgoingMessages.Count > 0)
+                        {
+                            if(_outgoingMessages.TryTake(out var outMsg, 100))
+                            {
+                                Logger.Debug(() => $"Message of type {outMsg.GetType().Name} with id {outMsg.MessageId} found in queue. Will send.");
+                                _messageChannel.Send(outMsg);
+                                waitForConfirmList[outMsg.MessageId] = outMsg;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e, $"Exception from channel : {e.Message}");
+                    }
+                }
+                _incomingMessages.CompleteAdding();
+            }, token);    
+            
             //Processing
             _consumerTask = Task.Run(async () =>
             {
@@ -48,7 +97,7 @@ namespace HelloHome.Central.Hub
                     {
                         var responses = await ProcessOne(inMsg, token);
                         foreach (var response in responses)
-                            _outgoingMessages.Add(response);
+                            _outgoingMessages.Add(response, token);
 
                     }
                     catch (Exception e)
@@ -57,39 +106,6 @@ namespace HelloHome.Central.Hub
                     }
                 }
             }, token);
-
-            //Communicate through channel
-            _producerTask = Task.Run(() =>            
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    try
-                    {
-                        //Read everything that can be
-                        var inMsg = _messageChannel.TryReadNext();
-                        while (inMsg != null) 
-                        {
-                            Logger.Debug(() => $"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
-                            _incomingMessages.Add(inMsg, token);
-                            inMsg = _messageChannel.TryReadNext();
-                        }
-                        //Write any left message from outgoingQueue
-                        while (!_outgoingMessages.IsCompleted && _outgoingMessages.Count > 0)
-                        {
-                            if(_outgoingMessages.TryTake(out var outMsg, 100))
-                            {
-                                Logger.Debug(() => $"Message of type {outMsg.GetType().Name} found in queue. Will send.");
-                                _messageChannel.Send(outMsg);
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.Error(e, $"Exception from channel : {e.Message}");
-                    }
-                }
-                _incomingMessages.CompleteAdding();
-            }, token);            
         }
 
         public void Stop()

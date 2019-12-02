@@ -4,7 +4,9 @@ using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
 using Lamar;
 using Microsoft.Extensions.Options;
 

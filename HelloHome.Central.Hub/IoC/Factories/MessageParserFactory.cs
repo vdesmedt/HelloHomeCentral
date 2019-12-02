@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
 using Lamar;
 using LamarCodeGeneration.Util;
 
@@ -23,7 +24,7 @@ namespace HelloHome.Central.Hub.IoC.Factories
         {
             _container = container;
             var handlerTypes = container.Model.AllInstances
-                .Where(_ => _.ServiceType == typeof(IMessageParser) && _.ImplementationType.HasAttribute<ParserForAttribute>())
+                .Where(_ => _.ServiceType == typeof(IMessageParser) && _.ImplementationType.HasAttribute<ParserForAttribute>() && ! _.ImplementationType.HasAttribute<NonDiscriminatedParserAttribute>())
                 .Select(_ => _.ImplementationType)
                 .Distinct();
 
@@ -37,7 +38,7 @@ namespace HelloHome.Central.Hub.IoC.Factories
             if (rawBytes[0] == '/' && rawBytes[1] == '/')
                 return _container.GetInstance<CommentParser>();
 
-            var type = _typeMap.TryGetValue(rawBytes[3], out var parserType) ? parserType : typeof(ParseAllParser);
+            var type = _typeMap.TryGetValue(rawBytes[4], out var parserType) ? parserType : typeof(ParseAllParser);
             return (IMessageParser)_container.GetInstance(type);
         }
         

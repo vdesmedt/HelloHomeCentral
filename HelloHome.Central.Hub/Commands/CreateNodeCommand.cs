@@ -10,7 +10,7 @@ namespace HelloHome.Central.Hub.Commands
 {
     public interface ICreateNodeCommand : ICommand
     {
-        Task<Node> ExecuteAsync(long signature, byte rfId, NodeType nodeType);
+        Task<Node> ExecuteAsync(long signature, int rfId, NodeType nodeType);
     }
 
     public class CreateNodeCommand : ICreateNodeCommand
@@ -28,7 +28,7 @@ namespace HelloHome.Central.Hub.Commands
             _nodeLogger = nodeLogger;
         }
 
-        public  Task<Node> ExecuteAsync(long signature, byte rfId, NodeType nodeType)
+        public  Task<Node> ExecuteAsync(long signature, int rfId, NodeType nodeType)
         {
             var node = new Node
             {

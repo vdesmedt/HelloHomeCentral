@@ -14,7 +14,7 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void FirstCallPass()
         {
-            var sut = new FillHolesRfAddressStrategy(new List<byte>());
+            var sut = new FillHolesRfAddressStrategy(new List<int>());
             var rfa = sut.FindAvailableRfAddress();
             Assert.InRange(rfa, 1, 250);
         }
@@ -22,7 +22,7 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void ReturnHoleIfAny()
         {
-            var existingAddresses = new List<byte> {1, 3};
+            var existingAddresses = new List<int> {1, 3};
             var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 5};
 
             var rfa = sut.FindAvailableRfAddress();
@@ -32,7 +32,7 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void ReturnIfNoHole()
         {
-            var existingAddresses = new List<byte> {1, 2};
+            var existingAddresses = new List<int> {1, 2};
             var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 5};
 
             var rfa = sut.FindAvailableRfAddress();
@@ -42,7 +42,7 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void ThrowIfNoneAvailable()
         {
-            var existingAddresses = new List<byte> {1, 2, 3};
+            var existingAddresses = new List<int> {1, 2, 3};
             var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 3};
 
             Assert.Throws<NoAvailableRfAddressException>(() => sut.FindAvailableRfAddress());
@@ -51,7 +51,7 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void FindAllAvailable()
         {
-            var existingAddresses = new List<byte> {1, 2, 5, 12, 15};
+            var existingAddresses = new List<int> {1, 2, 5, 12, 15};
             var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 15};
             for (var i = 0; i < 10; i++)
                 existingAddresses.Add(sut.FindAvailableRfAddress());
@@ -61,9 +61,9 @@ namespace HelloHome.Central.Tests
         [Fact]
         public void ThreadSafe()
         {
-            var existingAddresses = new ConcurrentBag<byte> {1, 2, 5, 12, 15};
+            var existingAddresses = new ConcurrentBag<int> {1, 2, 5, 12, 15};
             var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 15};
-            var adr = new byte[10];
+            var adr = new int[10];
             Parallel.For(0, 10, x =>
             {
                 adr[x] = sut.FindAvailableRfAddress();

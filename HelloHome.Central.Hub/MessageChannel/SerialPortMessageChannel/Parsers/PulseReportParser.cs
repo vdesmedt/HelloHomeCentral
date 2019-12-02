@@ -1,10 +1,12 @@
 ﻿using System;
+using HelloHome.Central.Common;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 {
-    [ParserFor(ParserForAttribute.MessageType.Report, 1)]
+    [ParserFor(Constants.Message.Report.PulseReport)]
     public class PulseReportParser : IMessageParser
 	{
 		#region IReportParser implementation

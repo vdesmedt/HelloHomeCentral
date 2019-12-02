@@ -17,7 +17,7 @@ namespace HelloHome.Central.Domain.Entities
 
         public byte RfNetwork { get; set; }
 
-        public byte RfAddress { get; set; }
+        public int RfAddress { get; set; }
 
         public DateTime LastSeen { get; set; }
 

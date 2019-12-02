@@ -17,7 +17,7 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 			var sb = new StringBuilder (Bytes.Length * 2);
 			foreach (var b in Bytes)
 				sb.Append(b.ToString("X2"));
-					return $"[RawMessage: Bytes={sb}]";
+			return $"[RawMessage: Bytes={sb}]";
 		}
 	}
 }
