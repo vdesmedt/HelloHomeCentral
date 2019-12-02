@@ -36,9 +36,6 @@
     <ProjectReference Include="..\HelloHome.Central.Repository\HelloHome.Central.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MessageChannel\Messages" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="appconfig.MacBook-Pro.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

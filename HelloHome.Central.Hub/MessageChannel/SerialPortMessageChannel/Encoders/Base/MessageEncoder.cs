@@ -15,8 +15,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 			EncodeBody (message as TMessage, coreMessageBytes);
 
 			var bytes = new List<byte>();
-			bytes.AddRange(BitConverter.GetBytes(message.MessageId));
-			bytes.AddRange(BitConverter.GetBytes(message.ToRfAddress));
+			bytes.AddRange(BitConverter.GetBytes((UInt16)message.MessageId));
+			bytes.AddRange(BitConverter.GetBytes((UInt16)message.ToRfAddress));
 			bytes.Add((byte)coreMessageBytes.Count);
 			bytes.AddRange(coreMessageBytes);
 			return bytes.ToArray();

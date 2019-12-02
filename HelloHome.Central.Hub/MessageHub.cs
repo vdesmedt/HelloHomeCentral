@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using HelloHome.Central.Common;
 using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages;
@@ -22,14 +23,16 @@ namespace HelloHome.Central.Hub
         private readonly BlockingCollection<OutgoingMessage> _outgoingMessages = new BlockingCollection<OutgoingMessage>(new ConcurrentQueue<OutgoingMessage>());
         private readonly IMessageChannel _messageChannel;
         private readonly IMessageHandlerFactory _messageHandlerFactory;
+        private readonly ITimeProvider _timeProvider;
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
         private Task _consumerTask;
         private Task _producerTask;
 
-        public MessageHub(IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory)
+        public MessageHub(IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory, ITimeProvider timeProvider)
         {
             _messageChannel = messageChannel;
             _messageHandlerFactory = messageHandlerFactory;
+            _timeProvider = timeProvider;
         }
 
         public long LeftToProcess => _incomingMessages.Count;
@@ -42,7 +45,7 @@ namespace HelloHome.Central.Hub
             //Communicate through channel
             _producerTask = Task.Run(() =>
             {
-                var waitForConfirmList = new Dictionary<int, OutgoingMessage>();
+                var retryList = new Dictionary<int, RetryOutgoingMessage>();
                 while (!token.IsCancellationRequested)
                 {
                     try
@@ -51,13 +54,24 @@ namespace HelloHome.Central.Hub
                         var inMsg = _messageChannel.TryReadNext();
                         while (inMsg != null) 
                         {
+                            //Process SendingStatus
                             if (inMsg is SendingStatusReport sc)
                             {
                                 Logger.Debug(() => $"Sending report for msg {sc.MessageId} found in channel with status {(sc.Success?"OK":"NOK")}.");
-                                if (!sc.Success)
-                                    _outgoingMessages.Add(waitForConfirmList[sc.MessageId], token);
-                                waitForConfirmList.Remove(sc.MessageId);
+                                if (sc.Success)
+                                    retryList.Remove(sc.MessageId);
+                                else if(retryList[sc.MessageId].RetryCount >= retryList[sc.MessageId].MaxRetry)
+                                {
+                                    retryList.Remove(sc.MessageId);
+                                    Logger.Warn(() => $"Last try failed for message with id {sc.MessageId}. Removed from retryQueue.");
+                                }
+                                else
+                                {
+                                    retryList[sc.MessageId].NextTry = _timeProvider.UtcNow.AddMilliseconds(1000);
+                                    retryList[sc.MessageId].ReadyForRetry = true;
+                                }
                             }
+                            //Process other incoming messages
                             else
                             {
                                 Logger.Debug(() => $"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
@@ -66,6 +80,7 @@ namespace HelloHome.Central.Hub
 
                             inMsg = _messageChannel.TryReadNext();
                         }
+                        
                         //Write any left message from outgoingQueue
                         while (!_outgoingMessages.IsCompleted && _outgoingMessages.Count > 0)
                         {
@@ -73,7 +88,20 @@ namespace HelloHome.Central.Hub
                             {
                                 Logger.Debug(() => $"Message of type {outMsg.GetType().Name} with id {outMsg.MessageId} found in queue. Will send.");
                                 _messageChannel.Send(outMsg);
-                                waitForConfirmList[outMsg.MessageId] = outMsg;
+                                retryList.Add(outMsg.MessageId, new RetryOutgoingMessage(outMsg));
+                            }
+                        }
+                        
+                        //Retry
+                        var pivot = _timeProvider.UtcNow;
+                        foreach (var retryMsg in retryList.Values)
+                        {
+                            if (retryMsg.ReadyForRetry && retryMsg.NextTry < pivot)
+                            {
+                                Logger.Debug(() => $"Will retry messageId {retryMsg.Message.MessageId} ({retryMsg.Message.GetType().Name})");
+                                _messageChannel.Send(retryMsg.Message);
+                                retryMsg.ReadyForRetry = false;
+                                retryMsg.RetryCount++;
                             }
                         }
                     }
@@ -90,7 +118,7 @@ namespace HelloHome.Central.Hub
             {
                 while (!_incomingMessages.IsCompleted || _incomingMessages.Count > 0)
                 {
-                    if (!_incomingMessages.TryTake(out var inMsg, 1000))
+                    if (!_incomingMessages.TryTake(out var inMsg, 1000)) 
                         continue;
                     Logger.Debug(() => $"Message of type {inMsg.GetType().Name} found in queue");
                     try
