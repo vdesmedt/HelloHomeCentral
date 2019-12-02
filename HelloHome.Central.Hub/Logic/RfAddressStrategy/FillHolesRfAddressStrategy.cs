@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HelloHome.Central.Common.Exceptions;
-using HelloHome.Central.Hub.Queries;
+using HelloHome.Central.Hub.CmdQrys;
 using NLog;
 
 namespace HelloHome.Central.Hub.Logic.RfAddressStrategy

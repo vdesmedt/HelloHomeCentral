@@ -10,7 +10,6 @@ using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Hub.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
-using HelloHome.Central.Hub.Queries;
 using Moq;
 using NLog.Time;
 using Xunit;

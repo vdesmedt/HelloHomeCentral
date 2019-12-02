@@ -5,6 +5,7 @@ using HelloHome.Central.Common;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
+using HelloHome.Central.Hub.CmdQrys;
 using HelloHome.Central.Hub.Commands;
 using HelloHome.Central.Hub.Handlers.Base;
 using HelloHome.Central.Hub.Logic;
@@ -12,7 +13,6 @@ using HelloHome.Central.Hub.Logic.RfAddressStrategy;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
-using HelloHome.Central.Hub.Queries;
 using NLog;
 
 namespace HelloHome.Central.Hub.Handlers

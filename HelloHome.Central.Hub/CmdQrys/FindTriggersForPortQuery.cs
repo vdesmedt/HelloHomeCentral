@@ -5,8 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
+using HelloHome.Central.Hub.CmdQrys.Base;
 
-namespace HelloHome.Central.Hub.Queries
+namespace HelloHome.Central.Hub.CmdQrys
 {
     public class FindTriggersForPortQuery : IQuery
     {

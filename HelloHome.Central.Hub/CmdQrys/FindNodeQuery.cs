@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
+using HelloHome.Central.Hub.CmdQrys.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloHome.Central.Hub.Queries
+namespace HelloHome.Central.Hub.CmdQrys
 {
     public interface IFindNodeQuery : IQuery
     {

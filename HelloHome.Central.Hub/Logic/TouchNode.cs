@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain.Entities;
+using HelloHome.Central.Hub.CmdQrys.Base;
 using NLog;
 
 namespace HelloHome.Central.Hub.Commands

@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
+using HelloHome.Central.Hub.CmdQrys.Base;
 using HelloHome.Central.Hub.Logic;
 using NLog;
 
-namespace HelloHome.Central.Hub.Commands
+namespace HelloHome.Central.Hub.CmdQrys
 {
     public interface ICreateNodeCommand : ICommand
     {
