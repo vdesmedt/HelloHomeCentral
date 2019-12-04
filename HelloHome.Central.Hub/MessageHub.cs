@@ -17,7 +17,7 @@ namespace HelloHome.Central.Hub
 {
     public class MessageHub
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(MessageHub));
 
         private readonly BlockingCollection<IncomingMessage> _incomingMessages = new BlockingCollection<IncomingMessage>(new ConcurrentQueue<IncomingMessage>());
         private readonly BlockingCollection<OutgoingMessage> _outgoingMessages = new BlockingCollection<OutgoingMessage>(new ConcurrentQueue<OutgoingMessage>());

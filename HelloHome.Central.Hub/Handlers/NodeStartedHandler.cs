@@ -19,7 +19,7 @@ namespace HelloHome.Central.Hub.Handlers
 {
 	public class NodeStartedHandler : MessageHandler<NodeStartedReport>
 	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
+		private static readonly Logger Logger = LogManager.GetLogger(nameof(NodeStartedHandler));
 
 		private readonly IFindNodeQuery _findNodeQuery;
 		private readonly ICreateNodeCommand _createNodeCommand;

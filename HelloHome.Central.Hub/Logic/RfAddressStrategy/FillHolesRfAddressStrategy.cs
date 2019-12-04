@@ -9,7 +9,7 @@ namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
 {
 	public class FillHolesRfAddressStrategy : IRfAddressStrategy
 	{
-		private static readonly Logger Logger = LogManager.GetCurrentClassLogger();		
+		private static readonly Logger Logger = LogManager.GetLogger(nameof(FillHolesRfAddressStrategy));		
 
 		private readonly SortedSet<int> _exisitingRfAddresses;
 		private readonly Random _rnd;

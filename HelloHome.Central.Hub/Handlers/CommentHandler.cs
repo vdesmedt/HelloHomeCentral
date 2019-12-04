@@ -11,7 +11,7 @@ namespace HelloHome.Central.Hub.Handlers
 {
     public class CommentHandler : MessageHandler<CommentReport>
     {		
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(CommentHandler));
    
 		public CommentHandler (IUnitOfWork dbCtx) : base(dbCtx)
 		{

@@ -14,7 +14,7 @@ namespace HelloHome.Central.Hub.Commands
 
     public class TouchNode : ITouchNode
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(TouchNode));
 
         private readonly ITimeProvider _timeProvider;
 

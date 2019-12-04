@@ -10,7 +10,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 {
     public class SerialByteStream : IByteStream, IDisposable
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(SerialByteStream));
         private readonly SerialPort _port;
 
         public SerialByteStream(SerialConfig config)

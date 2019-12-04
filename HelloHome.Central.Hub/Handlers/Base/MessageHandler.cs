@@ -11,9 +11,7 @@ namespace HelloHome.Central.Hub.Handlers.Base
     public abstract class MessageHandler<T> : IMessageHandler where T : IncomingMessage
     {
 		readonly IUnitOfWork _dbCtx;
-
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
-
+        
         protected MessageHandler (IUnitOfWork dbCtx)
 		{
 			_dbCtx = dbCtx;

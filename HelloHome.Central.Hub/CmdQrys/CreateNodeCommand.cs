@@ -16,7 +16,7 @@ namespace HelloHome.Central.Hub.CmdQrys
 
     public class CreateNodeCommand : ICreateNodeCommand
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger ();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(CreateNodeCommand));
 
         private readonly IUnitOfWork _ctx;
         private readonly INodeLogger _nodeLogger;

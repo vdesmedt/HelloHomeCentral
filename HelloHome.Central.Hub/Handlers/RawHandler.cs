@@ -12,7 +12,7 @@ namespace HelloHome.Central.Hub.Handlers
 {
     public class RawHandler : MessageHandler<RawReport>
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(RawHandler));
         
         public RawHandler(IUnitOfWork dbCtx) : base(dbCtx)
         {

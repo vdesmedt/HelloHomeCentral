@@ -13,7 +13,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
 {
     public class ConfigInstaller : ServiceRegistry    
     {
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();		
+        private static readonly Logger Logger = NLog.LogManager.GetLogger(nameof(ConfigInstaller));		
 
         public ConfigInstaller()
         {

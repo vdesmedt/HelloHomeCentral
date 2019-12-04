@@ -6,7 +6,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
 {
     public class HubServiceRegistry : ServiceRegistry
     {
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();		
+        private static readonly Logger Logger = NLog.LogManager.GetLogger(nameof(HubServiceRegistry));		
         public HubServiceRegistry()
         {
             IncludeRegistry<ConfigInstaller>();

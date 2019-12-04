@@ -17,7 +17,7 @@ namespace HelloHome.Central.Hub.Handlers
 {
     public class NodeInfoHandler : MessageHandler<NodeInfoReport>
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(NodeInfoHandler));
 
         private readonly IFindNodeQuery _findNodeQuery;
         private readonly ITouchNode _touchNode;

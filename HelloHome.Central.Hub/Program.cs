@@ -14,7 +14,7 @@ namespace HelloHome.Central.Hub
 {
     public static class Program
     {
-        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();		
+        private static readonly Logger Logger = NLog.LogManager.GetLogger(nameof(Program));		
 
         public static void Main(string[] args)
         {
