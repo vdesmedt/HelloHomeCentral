@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
+using HelloHome.Central.Hub.Commands;
 using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
@@ -11,7 +13,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 {
     public class SerialPortMessageChannel : IMessageChannel
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetLogger(nameof(SerialPortMessageChannel));
 
         private readonly IByteStream _byteStream;
         private readonly IMessageParserFactory _messageParserFactory;
@@ -42,9 +44,14 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         }
 
 
-        private const int BufferSize = 100;
-        readonly byte[] _buffer = new byte[BufferSize];
-        int _currentBufferIndex = 0;
+        private static readonly byte[] Eof = {0x0D, 0x0A};
+        private const int BufSize = 100;
+        private const int MaxMsgSize = 64;
+        private const int Timeout = 500;
+        private readonly byte[] _buffer = new byte[BufSize];
+        private int _currentBufferIndex = 0;
+        private int _eofMatchCharCount = 0;
+        private int _eofSeekIndex = 0;
 
         /// <summary>
         /// Return a message or null if timeout passes without a complete message ending with Eof can be found
@@ -52,61 +59,63 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         /// <returns></returns>
         public IncomingMessage TryReadNext()
         {
-            if (_byteStream.ByteAvailable() == 0)
-            {
-                Thread.Sleep(50); //Simulate timeout to avoid 100% CPU
-                return null;
-            }
-            
             // at start, some left overs might still be at the beginning of the buffer,
             // currentIndex can therefore be greater than 0
-            byte[] eof = {0x0D, 0x0A};
-
-            var eofMatchCharCount = 0;
-            while (eofMatchCharCount < eof.Length)
+            var sw = Stopwatch.StartNew();
+            while (_currentBufferIndex < MaxMsgSize && sw.ElapsedMilliseconds < Timeout)
             {
-                if (_byteStream.ByteAvailable() == 0)
+                //Copy all bytes that can be from stream
+                try
                 {
-                    Thread.Sleep(50); //Simulate timeout to avoid 100% CPU
-                    continue;
+                    var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, BufSize - _currentBufferIndex);
+                    Logger.Debug($"Found {byteCount} bytes in UART. Copied to channel buffer starting at {_currentBufferIndex}");
+                    _currentBufferIndex += byteCount;
                 }
-                var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, BufferSize - _currentBufferIndex);
-                Logger.Debug($"Found {byteCount} bytes in UART. Copying to channel buffer");
-                _currentBufferIndex += byteCount;
-                //Looking for EOF
-                while (eofMatchCharCount < eof.Length && byteCount > 0)
+                catch (TimeoutException)
                 {
-                    if (_buffer[_currentBufferIndex - byteCount] == eof[eofMatchCharCount])
-                        eofMatchCharCount++;
+                    Logger.Debug($"Timeout when reading from UART.");
+                }
+
+                //Looking for EOF in the last byteCount of the buffer starting at previous _currentBufferIndex
+                while (_eofMatchCharCount < Eof.Length && _eofSeekIndex < _currentBufferIndex)
+                {
+                    if (_buffer[_eofSeekIndex] == Eof[_eofMatchCharCount])
+                        _eofMatchCharCount++;
                     else
-                        eofMatchCharCount = 0;
-                    byteCount--;
+                        _eofMatchCharCount = 0;
+                    _eofSeekIndex++;
                 }
 
-                if (eofMatchCharCount != eof.Length)
+                if (_eofMatchCharCount == Eof.Length)
                 {
-                    Logger.Debug("EOF not found.. yet");
-                    return null;
+                    Logger.Debug("EOF Found...  Will extract 0..EOF from channel Buffer (remaining bytes shifted left in channel buffer)");
+                    _eofMatchCharCount = 0;
+                    
+                    //Copy buffer to msgBytes
+                    var msgBytes = new byte[_eofSeekIndex];
+                    for (var i = 0; i < _eofSeekIndex; i++)
+                        msgBytes[i] = _buffer[i];
+
+                    //Remove msgbytes from buffer and shift bytes left
+                    for (var i = 0; i <_currentBufferIndex-_eofSeekIndex; i++)
+                        _buffer[i] = _buffer[_eofSeekIndex + i];
+                    _currentBufferIndex = _currentBufferIndex-_eofSeekIndex;
+                    _eofSeekIndex = 0;
+
+                    Logger.Debug(() => $"Found message in channel buffer : {BitConverter.ToString(msgBytes)}");
+                    var parser = _messageParserFactory.Build(msgBytes);
+                    var msg = parser.Parse(msgBytes);
+                    Logger.Info(() => $"Incoming message parsed to {msg}");
+                    return msg;
                 }
-                Logger.Debug("EOF Found...  Will extract 0..EOF from channel Buffer (remaining bytes shifted left in channel buffer)");
-                
-                //Copy buffer to msgBytes
-                var msgBytes = new byte[_currentBufferIndex - byteCount];
-                for (var i = 0; i < _currentBufferIndex - byteCount; i++)
-                    msgBytes[i] = _buffer[i];
+                Logger.Debug("EOF not found.. yet");
+            }
 
-                //Remove msgbytes from buffer and shift bytes left
-                for (var i = 0; i < byteCount; i++)
-                    _buffer[i] = _buffer[_currentBufferIndex - byteCount + i];
-                _currentBufferIndex = byteCount;
-
-                Logger.Debug(() => $"Found message in channel buffer : {BitConverter.ToString(msgBytes)}");
-                var parser = _messageParserFactory.Build(msgBytes);
-                var msg = parser.Parse(msgBytes);
-                Logger.Info(() => $"Incoming message parsed to {msg}");
-                if (msg is CommentReport)
-                    return null;
-                return msg;
+            if (_currentBufferIndex >= MaxMsgSize) //Drop first 64 bytes and shift left in buffer
+            {
+                for (int i = 0; i < BufSize - MaxMsgSize; i++)
+                    _buffer[i] = _buffer[MaxMsgSize + i];
+                _currentBufferIndex = _eofSeekIndex = _eofMatchCharCount = 0;
             }
 
             return null;
