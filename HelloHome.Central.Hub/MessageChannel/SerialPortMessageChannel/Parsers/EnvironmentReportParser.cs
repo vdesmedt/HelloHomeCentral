@@ -15,11 +15,11 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 		{
 			return new EnvironmentalReport 
 			{
-				FromRfAddress = record[0],
-				Rssi = (int)BitConverter.ToInt16(record,1),
-				Temperature = ((float)BitConverter.ToInt16(record, 4))/100.0f,
-				Humidity = (float)BitConverter.ToInt16(record, 6),
-				Pressure = (int)BitConverter.ToInt16(record, 8),
+				FromRfAddress = BitConverter.ToUInt16(record, 0),
+				Rssi = BitConverter.ToInt16 (record, 2),
+				Temperature = ((float)BitConverter.ToInt16(record, 5))/100.0f,
+				Humidity = (float)BitConverter.ToInt16(record, 7),
+				Pressure = (int)BitConverter.ToInt16(record, 9),
 			};
 		}
 
