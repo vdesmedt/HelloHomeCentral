@@ -18,10 +18,10 @@ namespace HelloHome.Central.Hub.Handlers
 
 		}
 
-		protected override async Task HandleAsync(CommentReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
+		protected override Task HandleAsync(CommentReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
         {
             Logger.Info(request.Comment);
-            await Task.Yield();
+            return Task.CompletedTask;
         }
     }
 }
