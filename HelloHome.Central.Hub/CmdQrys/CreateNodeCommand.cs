@@ -35,7 +35,6 @@ namespace HelloHome.Central.Hub.CmdQrys
             {
                 Signature = signature,
                 RfAddress = rfId,
-                RfNetwork = Constants.NetworkId,
                 Metadata = new NodeMetadata
                 {
                     Name = "Newly created",

@@ -2,8 +2,6 @@
 {
     public static class Constants
     {
-        public const byte NetworkId = 250;
-
         public static class Message
         {
             public static class Report

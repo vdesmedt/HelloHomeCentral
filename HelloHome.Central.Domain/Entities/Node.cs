@@ -14,9 +14,7 @@ namespace HelloHome.Central.Domain.Entities
         public int Id { get; set; }
 
         public long Signature { get; set; }
-
-        public byte RfNetwork { get; set; }
-
+        
         public int RfAddress { get; set; }
 
         public DateTime LastSeen { get; set; }
