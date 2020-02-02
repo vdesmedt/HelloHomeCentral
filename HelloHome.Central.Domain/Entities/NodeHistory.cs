@@ -32,6 +32,6 @@ namespace HelloHome.Central.Domain.Entities
 	{
 		public float? Temperature { get; set; }
 		public float? Humidity { get; set; }
-		public int? Pressure { get; set; }
+		public float? Pressure { get; set; }
 	}
 }

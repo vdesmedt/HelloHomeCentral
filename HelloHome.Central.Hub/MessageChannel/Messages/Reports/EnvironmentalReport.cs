@@ -6,7 +6,7 @@
 
 		public float Humidity { get; set; }
 
-		public int Pressure { get; set; }
+		public float Pressure { get; set; }
 
 		public override string ToString ()
 		{

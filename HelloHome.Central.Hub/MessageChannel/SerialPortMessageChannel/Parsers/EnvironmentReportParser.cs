@@ -18,8 +18,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 				FromRfAddress = BitConverter.ToUInt16(record, 0),
 				Rssi = BitConverter.ToInt16 (record, 2),
 				Temperature = ((float)BitConverter.ToInt16(record, 5))/100.0f,
-				Humidity = (float)BitConverter.ToInt16(record, 7),
-				Pressure = (int)BitConverter.ToInt16(record, 9),
+				Humidity = (float)BitConverter.ToInt16(record, 7)/100.0f,
+				Pressure = (float)BitConverter.ToInt16(record, 9)/10,
 			};
 		}
 
