@@ -35,7 +35,16 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 
         public int Read(byte[] buffer, int offset, int cout)
         {
-            return _port.Read(buffer, offset, cout);
+            try
+            {
+                if(!_port.IsOpen)
+                    _port.Open();
+                return _port.Read(buffer, offset, cout);
+            }
+            catch (TimeoutException)
+            {
+                return 0;
+            }
         }
 
 

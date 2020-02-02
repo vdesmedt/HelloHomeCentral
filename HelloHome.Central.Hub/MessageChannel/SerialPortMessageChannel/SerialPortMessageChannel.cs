@@ -65,16 +65,10 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             while (_currentBufferIndex < MaxMsgSize && sw.ElapsedMilliseconds < Timeout)
             {
                 //Copy all bytes that can be from stream
-                try
-                {
-                    var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, BufSize - _currentBufferIndex);
+                var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, BufSize - _currentBufferIndex);
+                if(byteCount > 0) 
                     Logger.Debug($"Found {byteCount} bytes in UART. Copied to channel buffer starting at {_currentBufferIndex}");
-                    _currentBufferIndex += byteCount;
-                }
-                catch (TimeoutException)
-                {
-                    Logger.Debug($"Timeout when reading from UART.");
-                }
+                _currentBufferIndex += byteCount;
 
                 //Looking for EOF in the last byteCount of the buffer starting at previous _currentBufferIndex
                 while (_eofMatchCharCount < Eof.Length && _eofSeekIndex < _currentBufferIndex)
@@ -108,7 +102,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                     Logger.Info(() => $"Incoming message parsed to {msg}");
                     return msg;
                 }
-                Logger.Debug("EOF not found.. yet");
+                if(byteCount > 0) 
+                    Logger.Debug("EOF not found.. yet");
             }
 
             if (_currentBufferIndex >= MaxMsgSize) //Drop first 64 bytes and shift left in buffer
