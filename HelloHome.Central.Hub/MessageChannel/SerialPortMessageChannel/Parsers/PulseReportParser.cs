@@ -14,10 +14,11 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 	    public IncomingMessage Parse (byte[] record)
 		{
 			return new PulseReport {
-				FromRfAddress = record [0],
-				Rssi = (int)BitConverter.ToInt16(record,1),
-				SubNode = record [4],
-				NewPulses = BitConverter.ToUInt16(record, 5),
+				FromRfAddress = BitConverter.ToUInt16(record, 0),
+				Rssi = BitConverter.ToInt16 (record, 2),
+				NewPulse1 = BitConverter.ToUInt16(record, 5),
+				NewPulse2 = BitConverter.ToUInt16(record, 7),
+				NewPulse3 = BitConverter.ToUInt16(record, 9),
 			};
 		}
 

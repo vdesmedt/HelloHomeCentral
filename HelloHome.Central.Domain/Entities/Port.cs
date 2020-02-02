@@ -9,6 +9,8 @@ namespace HelloHome.Central.Domain.Entities
         public int Id { get; set; }
         public Node Node { get; set; }
         public int NodeId { get; set; }
+
+        public byte PortNumber { get; set; }
         public string Name { get; set; }        
     }
 

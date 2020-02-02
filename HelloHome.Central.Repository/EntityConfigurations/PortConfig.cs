@@ -10,6 +10,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         {
             builder.ToTable("Port");
             builder.Property(x => x.Name).HasMaxLength(50);
+            builder.Property(x => x.PortNumber);
             builder.HasDiscriminator<int>("Type")
                 .HasValue<PulseSensorPort>(1)
                 .HasValue<PushSensorPort>(2)
