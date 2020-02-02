@@ -11,15 +11,15 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.
             Command = 2,
         }
 
-        public byte RawDiscrimator { get; }
+        public byte RawDiscriminator { get; }
 
-        public ParserForAttribute(byte rawDiscrimator)
+        public ParserForAttribute(byte rawDiscriminator)
         {
-            RawDiscrimator = rawDiscrimator;
+            RawDiscriminator = rawDiscriminator;
         }
         public ParserForAttribute(MessageType type, byte discriminator)
         {
-            RawDiscrimator = (byte)((byte)type + discriminator << 2);
+            RawDiscriminator = (byte)((byte)type + discriminator << 2);
         }
     }
 }

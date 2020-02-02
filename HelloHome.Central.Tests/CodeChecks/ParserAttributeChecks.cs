@@ -26,8 +26,8 @@ namespace HelloHome.Central.Tests.CodeChecks
             Assert.All(parsers, p =>
                 Assert.True(p.GetCustomAttribute<ParserForAttribute>(true) is NonDiscriminatedParserAttribute
                             || parsers.Count(q =>
-                                q.GetCustomAttribute<ParserForAttribute>().RawDiscrimator ==
-                                p.GetCustomAttribute<ParserForAttribute>().RawDiscrimator) == 1));
+                                q.GetCustomAttribute<ParserForAttribute>().RawDiscriminator ==
+                                p.GetCustomAttribute<ParserForAttribute>().RawDiscriminator) == 1));
         }
     }
 }

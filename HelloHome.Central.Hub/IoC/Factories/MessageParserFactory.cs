@@ -28,7 +28,7 @@ namespace HelloHome.Central.Hub.IoC.Factories
                 .Select(_ => _.ImplementationType)
                 .Distinct();
 
-            byte discriminatorOf(Type parser) => parser.GetCustomAttribute<ParserForAttribute>().RawDiscrimator;
+            byte discriminatorOf(Type parser) => parser.GetCustomAttribute<ParserForAttribute>().RawDiscriminator;
 
             _typeMap = new ConcurrentDictionary<byte, Type>(handlerTypes.Select(t => new KeyValuePair<byte, Type>(discriminatorOf(t), t)));
         }
