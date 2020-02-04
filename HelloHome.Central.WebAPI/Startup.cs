@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HelloHome.Central.Domain;
+using HelloHome.Central.Repository;
+using HelloHome.Central.WebAPI.IoC;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +28,8 @@ namespace HelloHome.Central.WebAPI
 
         public void ConfigureContainer(ServiceRegistry services)
         {
+            services.For<IUnitOfWork>().Use<HhDbContext>();
+            services.IncludeRegistry<ConfigInstaller>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
