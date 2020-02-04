@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain.Entities;
 
-namespace HelloHome.Central.Hub.Logic
+namespace HelloHome.Central.Domain.Logic
 {
     public interface INodeLogger
     {

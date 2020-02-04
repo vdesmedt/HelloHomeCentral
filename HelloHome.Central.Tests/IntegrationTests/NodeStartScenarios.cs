@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
-using HelloHome.Central.Hub.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using Moq;

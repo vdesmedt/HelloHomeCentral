@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Threading.Tasks;
 using HelloHome.Central.Common;
+using HelloHome.Central.Domain.CmdQrys.Base;
 using HelloHome.Central.Domain.Entities;
-using HelloHome.Central.Hub.CmdQrys.Base;
 using NLog;
 
-namespace HelloHome.Central.Hub.Commands
+namespace HelloHome.Central.Domain.Logic
 {
     public interface ITouchNode : ICommand
     {

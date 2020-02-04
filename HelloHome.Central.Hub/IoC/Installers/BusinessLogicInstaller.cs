@@ -1,7 +1,6 @@
 ﻿using HelloHome.Central.Common;
-using HelloHome.Central.Hub.Commands;
-using HelloHome.Central.Hub.Logic;
-using HelloHome.Central.Hub.Logic.RfAddressStrategy;
+using HelloHome.Central.Domain.Logic;
+using HelloHome.Central.Domain.Logic.RfAddressStrategy;
 using Lamar;
 
 namespace HelloHome.Central.Hub.IoC.Installers

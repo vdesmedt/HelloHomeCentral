@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HelloHome.Central.Common.Exceptions;
-using HelloHome.Central.Hub.Logic.RfAddressStrategy;
+using HelloHome.Central.Domain.Logic.RfAddressStrategy;
 using Xunit;
 
 namespace HelloHome.Central.Tests

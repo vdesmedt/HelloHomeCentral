@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using HelloHome.Central.Domain;
-using HelloHome.Central.Hub.CmdQrys.Base;
+using HelloHome.Central.Domain.CmdQrys.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace HelloHome.Central.Hub.CmdQrys
+namespace HelloHome.Central.Domain.CmdQrys
 {
     public interface IListRfIdsQuery : IQuery
     {

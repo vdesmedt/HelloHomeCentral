@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
-using HelloHome.Central.Hub.Commands;
 using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;

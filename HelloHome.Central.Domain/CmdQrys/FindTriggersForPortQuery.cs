@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using HelloHome.Central.Domain;
+using HelloHome.Central.Domain.CmdQrys.Base;
 using HelloHome.Central.Domain.Entities;
-using HelloHome.Central.Hub.CmdQrys.Base;
 
-namespace HelloHome.Central.Hub.CmdQrys
+namespace HelloHome.Central.Domain.CmdQrys
 {
     public class FindTriggersForPortQuery : IQuery
     {

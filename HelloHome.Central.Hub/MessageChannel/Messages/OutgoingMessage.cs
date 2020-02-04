@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading;
 using HelloHome.Central.Common;
-using HelloHome.Central.Hub.Commands;
 
 namespace HelloHome.Central.Hub.MessageChannel.Messages
 {

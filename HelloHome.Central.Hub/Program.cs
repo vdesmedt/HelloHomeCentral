@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using HelloHome.Central.Common;
 using HelloHome.Central.Hub.IoC.Installers;
-using HelloHome.Central.Hub.Logic;
 using HelloHome.Central.Hub.MessageChannel;
 using Lamar;
 using NLog;

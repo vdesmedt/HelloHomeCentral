@@ -1,5 +1,4 @@
-﻿using HelloHome.Central.Hub.CmdQrys.Base;
-using HelloHome.Central.Hub.Commands;
+﻿using HelloHome.Central.Domain.CmdQrys.Base;
 using Lamar;
 
 namespace HelloHome.Central.Hub.IoC.Installers

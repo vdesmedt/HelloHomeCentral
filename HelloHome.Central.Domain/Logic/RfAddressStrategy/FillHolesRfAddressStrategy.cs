@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using HelloHome.Central.Common.Exceptions;
-using HelloHome.Central.Hub.CmdQrys;
+using HelloHome.Central.Domain.CmdQrys;
 using NLog;
 
-namespace HelloHome.Central.Hub.Logic.RfAddressStrategy
+namespace HelloHome.Central.Domain.Logic.RfAddressStrategy
 {
 	public class FillHolesRfAddressStrategy : IRfAddressStrategy
 	{
