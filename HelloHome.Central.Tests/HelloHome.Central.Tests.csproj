@@ -5,9 +5,9 @@
     <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Lamar" Version="4.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.0.0" />
+    <PackageReference Include="Lamar" Version="4.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
