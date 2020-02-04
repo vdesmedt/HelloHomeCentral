@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="4.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HelloHome.Central.Common\HelloHome.Central.Common.csproj" />
+      <ProjectReference Include="..\HelloHome.Central.Domain\HelloHome.Central.Domain.csproj" />
+      <ProjectReference Include="..\HelloHome.Central.Repository\HelloHome.Central.Repository.csproj" />
+    </ItemGroup>
+
+
+</Project>
