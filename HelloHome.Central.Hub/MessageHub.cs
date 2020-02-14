@@ -36,7 +36,7 @@ namespace HelloHome.Central.Hub
         }
 
         public long LeftToProcess => _incomingMessages.Count;
-
+    
         public void Start()
         {
             _messageChannel.Open();

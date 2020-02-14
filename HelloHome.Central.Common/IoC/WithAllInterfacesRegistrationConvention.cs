@@ -4,7 +4,7 @@ using BaselineTypeDiscovery;
 using Lamar;
 using Lamar.Scanning.Conventions;
 
-namespace HelloHome.Central.Hub.IoC.Installers
+namespace HelloHome.Central.Common.IoC
 {
         public class WithAllInterfacesRegistrationConvention : IRegistrationConvention
         {

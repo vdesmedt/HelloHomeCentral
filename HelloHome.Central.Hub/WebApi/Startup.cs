@@ -1,21 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HelloHome.Central.Domain;
-using HelloHome.Central.Repository;
-using HelloHome.Central.WebAPI.IoC;
+using HelloHome.Central.Hub.IoC.Installers;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace HelloHome.Central.WebAPI
+namespace HelloHome.Central.Hub.WebApi
 {
     public class Startup
     {

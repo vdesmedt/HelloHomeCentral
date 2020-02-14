@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using HelloHome.Central.Common.IoC;
 using HelloHome.Central.Hub.Handlers.Base;
 using HelloHome.Central.Hub.IoC.Factories;
 using Lamar;

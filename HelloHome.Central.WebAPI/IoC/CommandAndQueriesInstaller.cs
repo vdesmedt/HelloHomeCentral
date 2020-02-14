@@ -2,7 +2,7 @@
 using HelloHome.Central.Domain.CmdQrys.Base;
 using Lamar;
 
-namespace HelloHome.Central.Hub.IoC.Installers
+namespace HelloHome.Central.WebAPI.IoC
 {
     public partial class CommandAndQueriesInstaller : ServiceRegistry
     {

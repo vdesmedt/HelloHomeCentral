@@ -6,7 +6,11 @@ using System.IO;
 using HelloHome.Central.Common;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
+using HelloHome.Central.Hub.WebApi;
 using Lamar;
+using Lamar.Microsoft.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using NLog;
 
 namespace HelloHome.Central.Hub
@@ -32,6 +36,8 @@ namespace HelloHome.Central.Hub
                 var hub = container.GetInstance<MessageHub>();
                 hub.Start();
 
+                var webApiTask = CreateHostBuilder(args).Build().RunAsync();
+
                 var dbCtx = container.GetInstance<IUnitOfWork>();
                 var msgChannel = container.GetInstance<IMessageChannel>();
                 new ConsoleApp.ConsoleApp(msgChannel, dbCtx).Run();            
@@ -51,5 +57,14 @@ namespace HelloHome.Central.Hub
                 NLog.LogManager.Shutdown();
             }                                   
         }
+        
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseLamar()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+        
     }
 }
