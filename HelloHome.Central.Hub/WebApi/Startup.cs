@@ -10,21 +10,6 @@ namespace HelloHome.Central.Hub.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        public void ConfigureContainer(ServiceRegistry services)
-        {
-            services.IncludeRegistry<ConfigInstaller>();
-            services.IncludeRegistry<DbContextInstaller>();
-            services.IncludeRegistry<BusinessLogicInstaller>();
-            services.IncludeRegistry<CommandAndQueriesInstaller>();
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {

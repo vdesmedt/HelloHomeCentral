@@ -14,7 +14,7 @@ namespace HelloHome.Central.Hub.IoC.Installers
             IncludeRegistry<CommandAndQueriesInstaller>();
             IncludeRegistry<DbContextInstaller>();
             IncludeRegistry<HandlerInstaller>();
-            IncludeRegistry<HubInstaller>();
+            IncludeRegistry<NodeBridgeInstaller>();
             IncludeRegistry<MessageChannelInstaller>();
         }
     }

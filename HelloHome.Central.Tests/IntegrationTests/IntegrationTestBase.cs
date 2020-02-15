@@ -4,6 +4,7 @@ using HelloHome.Central.Domain;
 using HelloHome.Central.Hub;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
+using HelloHome.Central.Hub.NodeBridge;
 using HelloHome.Central.Repository;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
 
         private Mock<IMessageChannel> MsgChannelMoq { get; } = new Mock<IMessageChannel>();
         
-        private MessageHub _hub;
-        protected MessageHub Hub => _hub ??= _container.GetInstance<MessageHub>();
+        private NodeBridge _hub;
+        protected NodeBridge Hub => _hub ??= _container.GetInstance<NodeBridge>();
     }
 }
