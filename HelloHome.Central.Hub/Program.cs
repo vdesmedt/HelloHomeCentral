@@ -70,15 +70,7 @@ namespace HelloHome.Central.Hub
                 .UseConsoleLifetime()
                 .Build();
 
-            Logger.Trace("Trace");
-            Logger.Debug("Debug");
-            Logger.Info("Info");
-            Logger.Warn("Warning");
-            Logger.Error("Error");
-            Logger.Fatal("Fatal");
-            
             await host.RunAsync();
-                                 
         }
     }
 }
