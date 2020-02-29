@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HelloHome.Central.Repository.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,25 +15,24 @@ namespace HelloHome.Central.Repository.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Signature = table.Column<long>(nullable: false),
-                    RfNetwork = table.Column<byte>(nullable: false),
-                    RfAddress = table.Column<byte>(nullable: false),
+                    RfAddress = table.Column<int>(nullable: false),
                     LastSeen = table.Column<DateTime>(nullable: false),
-                    NodeType = table.Column<int>(nullable: false),
+                    NodeType = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     EmonCmsNodeId = table.Column<int>(nullable: true),
-                    ExtraFeatures = table.Column<short>(nullable: false),
-                    NodeInfoFrequency = table.Column<byte>(nullable: false),
-                    EnvironmentFrequency = table.Column<byte>(nullable: false),
+                    ExtraFeatures = table.Column<short>(nullable: true),
+                    NodeInfoFrequency = table.Column<byte>(nullable: true),
+                    EnvironmentFrequency = table.Column<byte>(nullable: true),
                     Version = table.Column<string>(maxLength: 10, nullable: true),
                     VIn = table.Column<float>(nullable: true),
-                    SendErrorCount = table.Column<int>(nullable: false),
+                    SendErrorCount = table.Column<int>(nullable: true),
                     Temperature = table.Column<float>(nullable: true),
                     Humidity = table.Column<float>(nullable: true),
                     AtmosphericPressure = table.Column<float>(nullable: true),
-                    Rssi = table.Column<int>(nullable: false),
-                    NodeStartCount = table.Column<int>(nullable: false),
-                    StartupTime = table.Column<DateTime>(nullable: false),
-                    MaxUpTimeRaw = table.Column<float>(nullable: false)
+                    Rssi = table.Column<int>(nullable: true),
+                    NodeStartCount = table.Column<int>(nullable: true),
+                    StartupTime = table.Column<DateTime>(nullable: true),
+                    MaxUpTimeRaw = table.Column<float>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,6 +68,7 @@ namespace HelloHome.Central.Repository.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NodeId = table.Column<int>(nullable: false),
+                    PortNumber = table.Column<byte>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     Type = table.Column<int>(nullable: false),
                     PulseCount = table.Column<int>(nullable: true),
@@ -98,7 +98,7 @@ namespace HelloHome.Central.Repository.Migrations
                     Discr = table.Column<int>(nullable: false),
                     Temperature = table.Column<float>(nullable: true),
                     Humidity = table.Column<float>(nullable: true),
-                    Pressure = table.Column<int>(nullable: true),
+                    Pressure = table.Column<float>(nullable: true),
                     VIn = table.Column<float>(nullable: true),
                     SendErrorCount = table.Column<int>(nullable: true),
                     PulseSensorPortId = table.Column<int>(nullable: true),

@@ -52,6 +52,7 @@ namespace HelloHome.Central.Hub.NodeBridge
         {
             return Task.Run(() =>
             {
+                _messageChannel.Open();
                 var retryList = new Dictionary<int, RetryOutgoingMessage>();
                 while (!cancellationToken.IsCancellationRequested)
                 {
@@ -124,6 +125,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                 }
 
                 _incomingMessages.CompleteAdding();
+                _messageChannel.Close();
             }, cancellationToken);
         }
 

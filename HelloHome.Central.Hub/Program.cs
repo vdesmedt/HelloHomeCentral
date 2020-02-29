@@ -6,16 +6,21 @@ using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using HelloHome.Central.Common;
+using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.WebApi;
+using HelloHome.Central.Repository;
 using Lamar;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace HelloHome.Central.Hub
@@ -26,6 +31,7 @@ namespace HelloHome.Central.Hub
 
         public static async Task Main(string[] args)
         {
+            Logger.Debug("Starting...");
             var host = new HostBuilder()
                 .UseLamar((context, registry) =>
                 {
@@ -39,21 +45,38 @@ namespace HelloHome.Central.Hub
                 .ConfigureAppConfiguration((hostContext, configApp) =>
                 {
                     configApp.SetBasePath(Directory.GetCurrentDirectory());
-                    configApp.AddJsonFile(
-                        $"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
-                        optional: true);
-                    configApp.AddCommandLine(args);
+                    configApp.AddJsonFile($"appsettings.json", false,  true);
+                    configApp.AddJsonFile($"appsettings.{Environment.MachineName}.json", true,  true);
+                    configApp.AddEnvironmentVariables();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Debug));
                     services.AddHostedService<NodeBridge.NodeBridgeApp>();
+                    services.AddDbContext<HhDbContext>(builder =>
+                    {
+                        builder.UseMySql(hostContext.Configuration.GetConnectionString("local"));
+                        builder.UseLoggerFactory(new NLogLoggerFactory(new NLogLoggerProvider()));
+                    });
+                    services.Configure<SerialConfig>(hostContext.Configuration.GetSection("Serial"));
+                    services.Configure<EmonCmsConfig>(hostContext.Configuration.GetSection("EmonCms"));
                 })
                 .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
-                .ConfigureLogging((hostContext, configLogging) => { configLogging.AddConsole(); })
+                .ConfigureLogging((hostContext, configLogging) =>
+                {
+                    configLogging.ClearProviders();
+                    configLogging.SetMinimumLevel(LogLevel.Trace);
+                })
+                .UseNLog()
                 .UseConsoleLifetime()
                 .Build();
 
+            Logger.Trace("Trace");
+            Logger.Debug("Debug");
+            Logger.Info("Info");
+            Logger.Warn("Warning");
+            Logger.Error("Error");
+            Logger.Fatal("Fatal");
+            
             await host.RunAsync();
                                  
         }

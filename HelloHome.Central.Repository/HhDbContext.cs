@@ -14,6 +14,7 @@ namespace HelloHome.Central.Repository
             : base(options) { }
 
         public DbSet<Node> Nodes { get; set; }
+        public DbSet<NodeHistory> NodeHistory { get; set; }
         public DbSet<Trigger> Triggers { get; set; }
         public DbSet<NodeLog> NodeLogs { get; set; }
 

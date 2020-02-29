@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Common.Extensions;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace HelloHome.Central.Hub.Agents.EmonCms
@@ -15,9 +16,9 @@ namespace HelloHome.Central.Hub.Agents.EmonCms
 
 		EmonCmsConfig config;
 
-		public EmonCmsAgent (EmonCmsConfig config)
+		public EmonCmsAgent (IOptionsMonitor<EmonCmsConfig> config)
 		{
-			this.config = config;
+			this.config = config.CurrentValue;
 			
 		}
 

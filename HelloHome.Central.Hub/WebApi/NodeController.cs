@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
+using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloHome.Central.Hub.WebApi
 {
@@ -24,13 +26,28 @@ namespace HelloHome.Central.Hub.WebApi
         [HttpGet]
         public IEnumerable<Node> Get()
         {
-            return _unitOfWork.Nodes.ToList();
+            var nodes = _unitOfWork.Nodes.Include(NodeInclude.Metadata).ToList();
+            foreach (var n in nodes)
+            {
+                n.Metadata.Node = null;
+            }
+
+            return nodes;
         }
 
         [HttpGet("{id}")]
         public Node Get(int id)
         {
-            return _unitOfWork.Nodes.Single(_ => _.Id == id);
+            var node =  _unitOfWork.Nodes.Include(NodeInclude.Metadata).Include(NodeInclude.AggregatedData).Single(_ => _.Id == id);
+            node.Metadata.Node = null;
+            node.AggregatedData.Node = null;
+            return node;
+        }
+
+        [HttpGet("{id}/history-env")]
+        public IEnumerable<NodeHistory> GetHistory(int id)
+        {
+            return _unitOfWork.NodeHistory.OfType<EnvironmentDataHistory>().Where(_ => _.NodeId == id).ToList();
         }
 
         [HttpGet("{id}/restart")]
