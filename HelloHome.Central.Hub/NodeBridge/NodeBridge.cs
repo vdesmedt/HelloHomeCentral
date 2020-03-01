@@ -18,7 +18,7 @@ namespace HelloHome.Central.Hub.NodeBridge
     {
         private static int instanceCount = 0;
         private int _instanceId = 0;
-        
+
         private static readonly Logger Logger = LogManager.GetLogger(nameof(NodeBridge));
 
         private readonly BlockingCollection<IncomingMessage> _incomingMessages =
@@ -30,7 +30,7 @@ namespace HelloHome.Central.Hub.NodeBridge
         private readonly IMessageChannel _messageChannel;
         private readonly IMessageHandlerFactory _messageHandlerFactory;
         private readonly ITimeProvider _timeProvider;
-        
+
         public NodeBridge(IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory,
             ITimeProvider timeProvider)
         {
@@ -52,11 +52,11 @@ namespace HelloHome.Central.Hub.NodeBridge
         {
             return Task.Run(() =>
             {
-                _messageChannel.Open();
-                var retryList = new Dictionary<int, RetryOutgoingMessage>();
-                while (!cancellationToken.IsCancellationRequested)
+                try
                 {
-                    try
+                    _messageChannel.Open();
+                    var retryList = new Dictionary<int, RetryOutgoingMessage>();
+                    while (!cancellationToken.IsCancellationRequested)
                     {
                         //Read everything that can be
                         var inMsg = _messageChannel.TryReadNext();
@@ -118,14 +118,14 @@ namespace HelloHome.Central.Hub.NodeBridge
                             }
                         }
                     }
-                    catch (Exception e)
-                    {
-                        Logger.Error(e, $"Exception from channel : {e.Message}");
-                    }
+                    _incomingMessages.CompleteAdding();
+                    _messageChannel.Close();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, $"Exception in Communication Task : {e.Message}");
                 }
 
-                _incomingMessages.CompleteAdding();
-                _messageChannel.Close();
             }, cancellationToken);
         }
 
