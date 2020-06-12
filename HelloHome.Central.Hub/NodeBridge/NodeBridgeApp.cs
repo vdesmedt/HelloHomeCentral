@@ -27,7 +27,7 @@ namespace HelloHome.Central.Hub.NodeBridge
             _commTask = _nodeBridge.Communication(_commCts.Token);
             _processCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             _processTask = _nodeBridge.Processing(_processCts.Token);
-            return Task.WhenAny(_processTask, _commTask);
+            return Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
