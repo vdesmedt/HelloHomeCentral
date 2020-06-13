@@ -23,10 +23,10 @@ namespace HelloHome.Central.Repository
             var configurationTypes = Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(x =>
-                    IntrospectionExtensions.GetTypeInfo(x).IsClass == true 
-                    && IntrospectionExtensions.GetTypeInfo(x).IsAbstract == false 
+                    x.GetTypeInfo().IsClass
+                    && x.GetTypeInfo().IsAbstract == false 
                     && x.GetInterfaces().Any(y => 
-                        IntrospectionExtensions.GetTypeInfo(y).IsGenericType == true
+                        y.GetTypeInfo().IsGenericType == true
                         && y.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>)
                     )
                 );

@@ -23,7 +23,7 @@ namespace HelloHome.Central.Tests
         [Fact, Trait("skip", "ci")]
         public void EfTests()
         {
-            var ctx = new DesignTimeFactory().CreateDbContext(null);
+            var ctx = new DesignTimeFactoryDev().CreateDbContext(null);
             ctx.Nodes.Add(new Node
             {
                 AggregatedData =  new NodeAggregatedData(),
