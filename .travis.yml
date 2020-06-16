@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 3.0
+dotnet: 3.1
 install:
  - dotnet restore
 script:
@@ -9,14 +9,14 @@ script:
  - dotnet test HelloHome.Central.Tests/HelloHome.Central.Tests.csproj --filter skip!=ci
 before_deploy:
  - dotnet publish HelloHome.Central.Hub/HelloHome.Central.Hub.csproj --version-suffix ${shash}
- - cd ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp3.0/publish/
+ - cd ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp3.1/publish/
  - echo ${TRAVIS_COMMIT} > version.txt
  - tar -zcf HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz *.*
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file_glob: true
-  file: ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp3.0/publish/HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz
+  file: ${TRAVIS_BUILD_DIR}/HelloHome.Central.Hub/bin/Debug/netcoreapp3.1/publish/HelloHome.Central-${TRAVIS_TAG}-${TRAVIS_COMMIT}-${TRAVIS_BUILD_NUMBER}.tar.gz
   skip_cleanup: true
   on:
     tags: true
