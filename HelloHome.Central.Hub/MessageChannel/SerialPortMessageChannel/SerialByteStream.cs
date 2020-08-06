@@ -34,13 +34,13 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             return _port.BytesToRead;
         }
 
-        public int Read(byte[] buffer, int offset, int cout)
+        public int Read(byte[] buffer, int offset, int count)
         {
             try
             {
                 if(!_port.IsOpen)
                     _port.Open();
-                return _port.Read(buffer, offset, cout);
+                return _port.Read(buffer, offset, count);
             }
             catch (TimeoutException)
             {
