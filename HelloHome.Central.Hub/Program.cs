@@ -37,6 +37,12 @@ namespace HelloHome.Central.Hub
                 {
                     registry.IncludeRegistry<HubServiceRegistry>();
                 })
+                .ConfigureLogging((hostContext, configLogging) =>
+                {
+                    configLogging.ClearProviders();
+                    configLogging.SetMinimumLevel(LogLevel.Trace);
+                })
+                .UseNLog()
                 .ConfigureHostConfiguration(configHost =>
                 {
                     configHost.SetBasePath(Directory.GetCurrentDirectory());
@@ -61,12 +67,6 @@ namespace HelloHome.Central.Hub
                     services.Configure<EmonCmsConfig>(hostContext.Configuration.GetSection("EmonCms"));
                 })
                 .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
-                .ConfigureLogging((hostContext, configLogging) =>
-                {
-                    configLogging.ClearProviders();
-                    configLogging.SetMinimumLevel(LogLevel.Trace);
-                })
-                .UseNLog()
                 .UseConsoleLifetime()
                 .Build();
 
