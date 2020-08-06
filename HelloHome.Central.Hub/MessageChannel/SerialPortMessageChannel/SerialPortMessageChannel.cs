@@ -97,7 +97,17 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 
                     Logger.Debug(() => $"Found message in channel buffer : {BitConverter.ToString(msgBytes)}");
                     var parser = _messageParserFactory.Build(msgBytes);
-                    var msg = parser.Parse(msgBytes);
+                    IncomingMessage msg = null;
+                    try
+                    {
+                        msg = parser.Parse(msgBytes);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Logger.Error(e);
+                        return null;
+                    }
+
                     Logger.Info(() => $"Incoming message parsed to {msg}");
                     return msg;
                 }
