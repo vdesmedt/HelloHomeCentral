@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,18 +68,25 @@ namespace HelloHome.Central.Hub.NodeBridge
                             {
                                 Logger.Debug(() =>
                                     $"Sending report for msg {sc.MessageId} found in channel with status {(sc.Success ? "OK" : "NOK")}.");
-                                if (sc.Success)
-                                    retryList.Remove(sc.MessageId);
-                                else if (retryList[sc.MessageId].RetryCount >= retryList[sc.MessageId].MaxRetry)
+                                if (!retryList.ContainsKey(sc.MessageId))
                                 {
-                                    retryList.Remove(sc.MessageId);
-                                    Logger.Warn(() =>
-                                        $"Last try failed for message with id {sc.MessageId}. Removed from retryQueue.");
+                                    Logger.Warn($"MessageId {sc.MessageId} not found in retry list. Ignoring");
                                 }
                                 else
                                 {
-                                    retryList[sc.MessageId].NextTry = _timeProvider.UtcNow.AddMilliseconds(1000);
-                                    retryList[sc.MessageId].ReadyForRetry = true;
+                                    if (sc.Success)
+                                        retryList.Remove(sc.MessageId);
+                                    else if (retryList[sc.MessageId].RetryCount >= retryList[sc.MessageId].MaxRetry)
+                                    {
+                                        retryList.Remove(sc.MessageId);
+                                        Logger.Warn(() =>
+                                            $"Last try failed for message with id {sc.MessageId}. Removed from retryQueue.");
+                                    }
+                                    else
+                                    {
+                                        retryList[sc.MessageId].NextTry = _timeProvider.UtcNow.AddMilliseconds(1000);
+                                        retryList[sc.MessageId].ReadyForRetry = true;
+                                    }
                                 }
                             }
                             //Process other incoming messages
