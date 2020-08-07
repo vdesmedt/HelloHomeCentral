@@ -16,9 +16,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 			return new PulseReport {
 				FromRfAddress = BitConverter.ToUInt16(record, 0),
 				Rssi = BitConverter.ToInt16 (record, 2),
-				NewPulse1 = BitConverter.ToUInt16(record, 5),
-				NewPulse2 = BitConverter.ToUInt16(record, 7),
-				NewPulse3 = BitConverter.ToUInt16(record, 9),
+				PortNumber = record[5],
+				NewPulse = BitConverter.ToUInt16(record, 6),
 			};
 		}
 

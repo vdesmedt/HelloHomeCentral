@@ -40,32 +40,26 @@ namespace HelloHome.Central.Hub.Handlers
                 throw new NodeNotFoundException(request.FromRfAddress);
             _touchNode.Touch(node, request.Rssi);
 
-            for (byte i = 0; i < 3; i++)
-            {
-                if (request.NewPulses[i] > 0)
+            var port = node.Ports.OfType<PulseSensorPort>().SingleOrDefault(_ => _.PortNumber == request.PortNumber);
+            if (port == null)
+                node.Ports.Add(port = new PulseSensorPort()
                 {
-                    var port = node.Ports.OfType<PulseSensorPort>().SingleOrDefault(_ => _.PortNumber == i);
-                    if (port == null)
-                        node.Ports.Add(port = new PulseSensorPort()
-                        {
-                            Node = node,
-                            PortNumber = i,
-                            PulseCount = 0,
-                        });
-                    port.PulseCount += request.NewPulses[i];
-                    port.PulseHistory = new List<PulseHistory>
-                    {
-                        new PulseHistory
-                        {
-                            Node = node,
-                            Timestamp = _timeProvider.UtcNow,
-                            Rssi = request.Rssi,
-                            NewPulses = request.NewPulses[i],
-                            Total = port.PulseCount,
-                        }
-                    };
+                    Node = node,
+                    PortNumber = request.PortNumber,
+                    PulseCount = 0,
+                });
+            port.PulseCount += request.NewPulse;
+            port.PulseHistory = new List<PulseHistory>
+            {
+                new PulseHistory
+                {
+                    Node = node,
+                    Timestamp = _timeProvider.UtcNow,
+                    Rssi = request.Rssi,
+                    NewPulses = request.NewPulse,
+                    Total = port.PulseCount,
                 }
-            }
+            };
         }
     }
 }
