@@ -10,6 +10,7 @@ using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 
@@ -60,6 +61,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         //Read everything that can be
+                        Logger.Trace(() => "Try read from channel");
                         var inMsg = _messageChannel.TryReadNext();
                         while (inMsg != null)
                         {
@@ -101,9 +103,10 @@ namespace HelloHome.Central.Hub.NodeBridge
                         }
 
                         //Write any left message from outgoingQueue
+                        Logger.Trace(() => "Try read from Queue");
                         while (!_outgoingMessages.IsCompleted && _outgoingMessages.Count > 0)
                         {
-                            if (_outgoingMessages.TryTake(out var outMsg, 100))
+                            if (_outgoingMessages.TryTake(out var outMsg, 10))
                             {
                                 Logger.Debug(() =>
                                     $"Message of type {outMsg.GetType().Name} with id {outMsg.MessageId} found in queue. Will send.");
@@ -113,6 +116,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                         }
 
                         //Retry
+                        Logger.Trace(() => "Retry sendings");
                         var pivot = _timeProvider.UtcNow;
                         foreach (var retryMsg in retryList.Values)
                         {
@@ -151,7 +155,10 @@ namespace HelloHome.Central.Hub.NodeBridge
                     {
                         var responses = await ProcessOne(inMsg, cancellationToken);
                         foreach (var response in responses)
+                        {
+                            Logger.Debug(() => $"Enqueuing response {response}");
                             _outgoingMessages.Add(response, cancellationToken);
+                        }
                     }
                     catch (Exception e)
                     {

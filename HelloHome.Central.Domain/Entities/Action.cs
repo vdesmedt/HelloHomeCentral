@@ -6,9 +6,8 @@ namespace HelloHome.Central.Domain.Entities
     public abstract class Action
     {
         public int Id { get; set; }
-        public int TriggerId { get; set; }
+        public int? TriggerId { get; set; }
         public Trigger Trigger { get; set; }
-        public int Sequence { get; set; }
     }
 
     public class ScheduleAction : Action
@@ -17,12 +16,14 @@ namespace HelloHome.Central.Domain.Entities
         public Action ScheduledAction { get; set; }
     }
 
-    public abstract class ActuatorAction : Action {
+    public abstract class ActuatorAction : Action 
+    {
         public ActuatorPort Actuator { get; set; }
     }
 
     public abstract class RelayAction : ActuatorAction
     {
+        public RelayActuatorPort Relay => (RelayActuatorPort)Actuator;
     }
 
     public class TurnOnAction : RelayAction

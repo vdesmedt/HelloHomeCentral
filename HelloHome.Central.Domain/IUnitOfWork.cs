@@ -10,10 +10,10 @@ namespace HelloHome.Central.Domain
     public interface IUnitOfWork
     {
         DbSet<Node> Nodes { get; set; }
-        DbSet<NodeHistory> NodeHistory { get; set; }
+        DbSet<PortHistory> PortHistory { get; set; }
         DbSet<Trigger> Triggers { get; set; }
         DbSet<NodeLog> NodeLogs { get; set; }
-
+        DbSet<Script> Scripts { get; set; }
         int Commit();
         Task<int> CommitAsync();
     }

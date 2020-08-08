@@ -13,6 +13,9 @@ namespace HelloHome.Central.Domain.Entities
         
         public int Id { get; set; }
 
+        /// <summary>
+        /// UniqueId of the Flash chip
+        /// </summary>
         public long Signature { get; set; }
         
         public int RfAddress { get; set; }
@@ -26,7 +29,5 @@ namespace HelloHome.Central.Domain.Entities
         public IList<Port> Ports { get; set; }
         
         public IList<NodeLog> Logs { get; set; }
-
-        public IList<NodeHistory> NodeHistory { get; set; }       
     }
 }

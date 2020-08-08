@@ -20,7 +20,6 @@ namespace HelloHome.Central.Hub.Handlers
         readonly IFindNodeQuery _findNodeQuery;
         readonly ITouchNode _touchNode;
         private readonly ITimeProvider _timeProvider;
-        private readonly string[] _portNames = new string[] {"???", "HAL1", "HAL2", "DRY"};
 
 
         public PulseHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery, ITouchNode touchNode,
@@ -49,11 +48,10 @@ namespace HelloHome.Central.Hub.Handlers
                     PulseCount = 0,
                 });
             port.PulseCount += request.NewPulse;
-            port.PulseHistory = new List<PulseHistory>
+            port.History = new List<PulseHistory>
             {
                 new PulseHistory
                 {
-                    Node = node,
                     Timestamp = _timeProvider.UtcNow,
                     Rssi = request.Rssi,
                     NewPulses = request.NewPulse,

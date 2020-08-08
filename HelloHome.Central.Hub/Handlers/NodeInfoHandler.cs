@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Common;
@@ -34,22 +35,35 @@ namespace HelloHome.Central.Hub.Handlers
         protected override async Task HandleAsync(NodeInfoReport request, IList<OutgoingMessage> outgoingMessages,
             CancellationToken cToken)
         {
-            var node = await _findNodeQuery.ByRfIdAsync(request.FromRfAddress, NodeInclude.AggregatedData);
+            var node = await _findNodeQuery.ByRfIdAsync(request.FromRfAddress,
+                NodeInclude.AggregatedData | NodeInclude.Ports);
             if (node == null)
                 throw new NodeNotFoundException(request.FromRfAddress);
             _touchNode.Touch(node, request.Rssi);
+            var healthPort = node.Ports.OfType<NodeHealthSensorPort>().SingleOrDefault();
+            if (healthPort == null)
+            {
+                healthPort = new NodeHealthSensorPort
+                {
+                    PortNumber = (byte) ReservedPortNumber.NodeHealth,
+                    Name = "Health",
+                    UpdateFrequency = 1,
+                };
+                node.Ports.Add(healthPort);
+            }
 
+            healthPort.History = new List<NodeHealthHistory>
+            {
+                new NodeHealthHistory
+                {
+                    Timestamp = _timeProvider.UtcNow,
+                    Rssi = request.Rssi,
+                    SendErrorCount = request.SendErrorCount,
+                    VIn = request.Voltage,
+                }
+            };
             node.AggregatedData.SendErrorCount = request.SendErrorCount;
             node.AggregatedData.VIn = request.Voltage;
-
-            var nodeHealthHistory = new NodeHealthHistory
-            {
-                Timestamp = _timeProvider.UtcNow,
-                Rssi = request.Rssi,
-                SendErrorCount = request.SendErrorCount,
-                VIn = request.Voltage,
-            };
-            node.NodeHistory = new List<NodeHistory> {nodeHealthHistory};
         }
     }
 }

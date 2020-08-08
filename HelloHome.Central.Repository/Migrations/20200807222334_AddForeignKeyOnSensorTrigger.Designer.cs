@@ -3,14 +3,16 @@ using System;
 using HelloHome.Central.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HelloHome.Central.Repository.Migrations
 {
     [DbContext(typeof(HhDbContext))]
-    partial class HhDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200807222334_AddForeignKeyOnSensorTrigger")]
+    partial class AddForeignKeyOnSensorTrigger
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -465,10 +467,6 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.ActuatorPort");
 
-                    b.Property<int>("RelayState")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
-
                     b.HasDiscriminator().HasValue(7);
                 });
 
@@ -545,10 +543,6 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
-                    b.Property<int>("LastPressStyle")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
-
                     b.HasDiscriminator().HasValue(4);
                 });
 
@@ -556,8 +550,7 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
-                    b.Property<int>("SwitchState")
-                        .HasColumnName("PortState")
+                    b.Property<int>("SensorState")
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(5);
@@ -568,7 +561,6 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
                     b.Property<int>("Level")
-                        .HasColumnName("PortState")
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(6);

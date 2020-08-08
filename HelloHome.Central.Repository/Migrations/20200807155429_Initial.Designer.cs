@@ -3,14 +3,16 @@ using System;
 using HelloHome.Central.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HelloHome.Central.Repository.Migrations
 {
     [DbContext(typeof(HhDbContext))]
-    partial class HhDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200807155429_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +25,10 @@ namespace HelloHome.Central.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("TriggerId")
+                    b.Property<int>("Sequence")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TriggerId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -203,48 +208,6 @@ namespace HelloHome.Central.Repository.Migrations
                     b.ToTable("PortHistory");
 
                     b.HasDiscriminator<int>("Discr");
-                });
-
-            modelBuilder.Entity("HelloHome.Central.Domain.Entities.Script", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<int?>("OnFinnishId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TriggerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OnFinnishId");
-
-                    b.HasIndex("TriggerId");
-
-                    b.ToTable("Script");
-                });
-
-            modelBuilder.Entity("HelloHome.Central.Domain.Entities.ScriptAction", b =>
-                {
-                    b.Property<int>("ScriptId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ActionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Sequence")
-                        .HasColumnType("int");
-
-                    b.HasKey("ScriptId", "ActionId");
-
-                    b.HasIndex("ActionId");
-
-                    b.ToTable("ScriptAction");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.Trigger", b =>
@@ -446,7 +409,7 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Trigger");
 
-                    b.Property<int>("SensorPortId")
+                    b.Property<int?>("SensorPortId")
                         .HasColumnType("int");
 
                     b.HasIndex("SensorPortId");
@@ -464,10 +427,6 @@ namespace HelloHome.Central.Repository.Migrations
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.RelayActuatorPort", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.ActuatorPort");
-
-                    b.Property<int>("RelayState")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(7);
                 });
@@ -545,10 +504,6 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
-                    b.Property<int>("LastPressStyle")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
-
                     b.HasDiscriminator().HasValue(4);
                 });
 
@@ -556,8 +511,7 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
-                    b.Property<int>("SwitchState")
-                        .HasColumnName("PortState")
+                    b.Property<int>("SensorState")
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(5);
@@ -568,7 +522,6 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
                     b.Property<int>("Level")
-                        .HasColumnName("PortState")
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(6);
@@ -577,9 +530,6 @@ namespace HelloHome.Central.Repository.Migrations
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PushTrigger", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorTrigger");
-
-                    b.Property<int?>("PressStyle")
-                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(2);
                 });
@@ -597,6 +547,9 @@ namespace HelloHome.Central.Repository.Migrations
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.VarioTrigger", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorTrigger");
+
+                    b.Property<int>("MinDelta")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(4);
                 });
@@ -619,7 +572,9 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasOne("HelloHome.Central.Domain.Entities.Trigger", "Trigger")
                         .WithMany("Actions")
-                        .HasForeignKey("TriggerId");
+                        .HasForeignKey("TriggerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeAggregatedData", b =>
@@ -654,34 +609,6 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasOne("HelloHome.Central.Domain.Entities.Node", "Node")
                         .WithMany("Ports")
                         .HasForeignKey("NodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("HelloHome.Central.Domain.Entities.Script", b =>
-                {
-                    b.HasOne("HelloHome.Central.Domain.Entities.Script", "OnFinnish")
-                        .WithMany()
-                        .HasForeignKey("OnFinnishId");
-
-                    b.HasOne("HelloHome.Central.Domain.Entities.Trigger", "Trigger")
-                        .WithMany("Scripts")
-                        .HasForeignKey("TriggerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("HelloHome.Central.Domain.Entities.ScriptAction", b =>
-                {
-                    b.HasOne("HelloHome.Central.Domain.Entities.Action", "Action")
-                        .WithMany()
-                        .HasForeignKey("ActionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HelloHome.Central.Domain.Entities.Script", "Script")
-                        .WithMany("Actions")
-                        .HasForeignKey("ScriptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -783,9 +710,7 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasOne("HelloHome.Central.Domain.Entities.SensorPort", "SensorPort")
                         .WithMany("Triggers")
-                        .HasForeignKey("SensorPortId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SensorPortId");
                 });
 #pragma warning restore 612, 618
         }

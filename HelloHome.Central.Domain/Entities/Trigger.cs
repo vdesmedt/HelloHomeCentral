@@ -6,10 +6,12 @@ namespace HelloHome.Central.Domain.Entities
     {
         public int Id { get; set; }
         public List<Action> Actions { get; set; }
+        public IList<Script> Scripts { get; set; }
     }
 
     public abstract class SensorTrigger : Trigger
     {
+        public int SensorPortId { get; set; }
         public SensorPort SensorPort { get; set; }
     }
 
@@ -20,6 +22,7 @@ namespace HelloHome.Central.Domain.Entities
 
     public class PushTrigger : SensorTrigger
     {
+        public PressStyle? PressStyle { get; set; }
     }
 
     public class SwitchTrigger : SensorTrigger
@@ -29,6 +32,5 @@ namespace HelloHome.Central.Domain.Entities
 
     public class VarioTrigger : SensorTrigger
     {
-        public int MinDelta { get; set; }
     }
 }

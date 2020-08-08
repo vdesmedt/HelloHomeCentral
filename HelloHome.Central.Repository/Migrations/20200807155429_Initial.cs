@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HelloHome.Central.Repository.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,10 +19,7 @@ namespace HelloHome.Central.Repository.Migrations
                     LastSeen = table.Column<DateTime>(nullable: false),
                     NodeType = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
-                    EmonCmsNodeId = table.Column<int>(nullable: true),
                     ExtraFeatures = table.Column<short>(nullable: true),
-                    NodeInfoFrequency = table.Column<byte>(nullable: true),
-                    EnvironmentFrequency = table.Column<byte>(nullable: true),
                     Version = table.Column<string>(maxLength: 10, nullable: true),
                     VIn = table.Column<float>(nullable: true),
                     SendErrorCount = table.Column<int>(nullable: true),
@@ -71,9 +68,18 @@ namespace HelloHome.Central.Repository.Migrations
                     PortNumber = table.Column<byte>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: true),
                     Type = table.Column<int>(nullable: false),
+                    FloatLogData = table.Column<float>(nullable: true),
+                    IntLogData = table.Column<int>(nullable: true),
+                    EnvUpdateFreq = table.Column<int>(nullable: true),
+                    Temperature = table.Column<float>(nullable: true),
+                    Humidity = table.Column<float>(nullable: true),
+                    AtmPressure = table.Column<float>(nullable: true),
+                    HealtUpdateFreq = table.Column<int>(nullable: true),
+                    SendError = table.Column<int>(nullable: true),
+                    VIn = table.Column<float>(nullable: true),
                     PulseCount = table.Column<int>(nullable: true),
-                    State = table.Column<bool>(nullable: true),
-                    Value = table.Column<int>(nullable: true)
+                    SensorState = table.Column<int>(nullable: true),
+                    Level = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,37 +93,77 @@ namespace HelloHome.Central.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NodeHistory",
+                name: "PortHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NodeId = table.Column<int>(nullable: false),
+                    PortId = table.Column<int>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     Rssi = table.Column<int>(nullable: false),
                     Discr = table.Column<int>(nullable: false),
                     Temperature = table.Column<float>(nullable: true),
                     Humidity = table.Column<float>(nullable: true),
                     Pressure = table.Column<float>(nullable: true),
+                    FloatLogData = table.Column<float>(nullable: true),
+                    IntLogData = table.Column<float>(nullable: true),
                     VIn = table.Column<float>(nullable: true),
                     SendErrorCount = table.Column<int>(nullable: true),
-                    PulseSensorPortId = table.Column<int>(nullable: true),
                     NewPulses = table.Column<int>(nullable: true),
                     Total = table.Column<int>(nullable: true),
-                    IsOffset = table.Column<bool>(nullable: true)
+                    IsOffset = table.Column<bool>(nullable: true),
+                    PressStyle = table.Column<int>(nullable: true),
+                    NewSensorState = table.Column<int>(nullable: true),
+                    NewLevel = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NodeHistory", x => x.Id);
+                    table.PrimaryKey("PK_PortHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NodeHistory_Node_NodeId",
-                        column: x => x.NodeId,
-                        principalTable: "Node",
+                        name: "FK_PortHistory_Port_PortId",
+                        column: x => x.PortId,
+                        principalTable: "Port",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_NodeHistory_Port_PulseSensorPortId",
-                        column: x => x.PulseSensorPortId,
+                        name: "FK_PortHistory_Port_PortId1",
+                        column: x => x.PortId,
+                        principalTable: "Port",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortHistory_Port_PortId2",
+                        column: x => x.PortId,
+                        principalTable: "Port",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortHistory_Port_PortId3",
+                        column: x => x.PortId,
+                        principalTable: "Port",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortHistory_Port_PortId4",
+                        column: x => x.PortId,
+                        principalTable: "Port",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortHistory_Port_PortId5",
+                        column: x => x.PortId,
+                        principalTable: "Port",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortHistory_Port_PortId6",
+                        column: x => x.PortId,
+                        principalTable: "Port",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PortHistory_Port_PortId7",
+                        column: x => x.PortId,
                         principalTable: "Port",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -204,16 +250,6 @@ namespace HelloHome.Central.Repository.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_NodeHistory_NodeId",
-                table: "NodeHistory",
-                column: "NodeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NodeHistory_PulseSensorPortId",
-                table: "NodeHistory",
-                column: "PulseSensorPortId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_nodelog_NodeId",
                 table: "nodelog",
                 column: "NodeId");
@@ -222,6 +258,46 @@ namespace HelloHome.Central.Repository.Migrations
                 name: "IX_Port_NodeId",
                 table: "Port",
                 column: "NodeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId1",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId2",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId3",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId4",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId5",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId6",
+                table: "PortHistory",
+                column: "PortId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortHistory_PortId7",
+                table: "PortHistory",
+                column: "PortId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trigger_SensorPortId",
@@ -235,10 +311,10 @@ namespace HelloHome.Central.Repository.Migrations
                 name: "Action");
 
             migrationBuilder.DropTable(
-                name: "NodeHistory");
+                name: "nodelog");
 
             migrationBuilder.DropTable(
-                name: "nodelog");
+                name: "PortHistory");
 
             migrationBuilder.DropTable(
                 name: "Trigger");

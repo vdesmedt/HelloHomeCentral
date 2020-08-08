@@ -15,6 +15,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
                 .HasValue<RelayAction>(100)
                 .HasValue<TurnOnAction>(101)
                 .HasValue<TurnOffAction>(102);
+            builder.HasOne(x => x.Trigger).WithMany(x=>x.Actions).HasForeignKey(x => x.TriggerId).IsRequired(false);
         }
     }
     

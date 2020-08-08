@@ -13,7 +13,7 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages
 		{
 			MessageId = _nextId++;
 		}
-	    public UInt16 MessageId { get; set; }
+	    public UInt16 MessageId { get; }
 	    public int ToRfAddress { get; set; }
 	}
 }

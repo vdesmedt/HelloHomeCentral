@@ -18,7 +18,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             builder.HasOne(x => x.AggregatedData).WithOne(x => x.Node).HasForeignKey<NodeAggregatedData>(x => x.Id);
             builder.HasMany(x => x.Ports).WithOne(x => x.Node).HasForeignKey(x => x.NodeId);
             builder.HasMany(x => x.Logs).WithOne().HasForeignKey(x => x.NodeId);
-            builder.HasMany(x => x.NodeHistory).WithOne(x=>x.Node).HasForeignKey(x => x.NodeId);
         }
     }
 

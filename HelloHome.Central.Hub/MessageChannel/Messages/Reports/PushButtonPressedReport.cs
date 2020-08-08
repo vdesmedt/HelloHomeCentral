@@ -1,7 +1,10 @@
-﻿namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
+﻿using HelloHome.Central.Domain.Entities;
+
+namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 {
     public class PushButtonPressedReport : IncomingMessage
     {
-        public byte PushSensorNumber { get; set; }
+        public byte PortNumber { get; set; }
+        public PressStyle PressStyle { get; set; }
     }
 }

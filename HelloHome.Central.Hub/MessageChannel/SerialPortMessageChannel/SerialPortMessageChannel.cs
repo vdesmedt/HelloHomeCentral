@@ -46,7 +46,6 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         private static readonly byte[] Eof = {0x0D, 0x0A};
         private const int BufSize = 100;
         private const int MaxMsgSize = 64;
-        private const int Timeout = 500;
         private readonly byte[] _buffer = new byte[BufSize];
         private int _currentBufferIndex = 0;
         private int _eofMatchCharCount = 0;
@@ -60,13 +59,14 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         {
             // at start, some left overs might still be at the beginning of the buffer,
             // currentIndex can therefore be greater than 0
-            var sw = Stopwatch.StartNew();
-            while (_currentBufferIndex < MaxMsgSize && sw.ElapsedMilliseconds < Timeout)
+            while (_currentBufferIndex < MaxMsgSize)
             {
                 //Copy all bytes that can be from stream
                 var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, BufSize - _currentBufferIndex);
                 if(byteCount > 0) 
                     Logger.Debug($"Found {byteCount} bytes in UART. Copied to channel buffer starting at {_currentBufferIndex}");
+                else
+                    return null;
                 _currentBufferIndex += byteCount;
 
                 //Looking for EOF in the last byteCount of the buffer starting at previous _currentBufferIndex

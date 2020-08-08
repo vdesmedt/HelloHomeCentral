@@ -30,7 +30,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SensorTrigger> builder)
         {
             builder.HasBaseType<Trigger>();
-            builder.HasOne(x => x.SensorPort).WithMany(x => x.Triggers);
+            builder.HasOne(x => x.SensorPort).WithMany(x => x.Triggers).HasForeignKey(x=>x.SensorPortId);
         }
     }
     

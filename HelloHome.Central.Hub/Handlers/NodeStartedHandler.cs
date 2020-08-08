@@ -65,8 +65,6 @@ namespace HelloHome.Central.Hub.Handlers
 				Signature = request.Signature,
 				ToRfAddress = request.FromRfAddress,
 				NewRfAddress = node.RfAddress,
-				EnvironmentFreq = node.Metadata.EnvironmentFrequency,
-				NodeInfoFreq = node.Metadata.NodeInfoFrequency,
 				ExtraFeatures = node.Metadata.ExtraFeatures				
 			});
 		}

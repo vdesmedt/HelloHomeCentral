@@ -5,10 +5,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain.CmdQrys.Base;
 using HelloHome.Central.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace HelloHome.Central.Domain.CmdQrys
 {
-    public class FindTriggersForPortQuery : IQuery
+    public interface IFindTriggersForPortQuery
+    {
+        Task<IList<TTrigger>>  ByPortIdAsync<TTrigger>(int portId, CancellationToken cToken) where TTrigger : SensorTrigger;
+    }
+
+    public class FindTriggersForPortQuery : IQuery, IFindTriggersForPortQuery
     {
         private readonly IUnitOfWork _ctx;
 
@@ -16,21 +22,15 @@ namespace HelloHome.Central.Domain.CmdQrys
         {
             _ctx = ctx;
         }
-
-        public Task<IList<Trigger>> ByRfAddressAndPortNumberAsync(byte rfNetwork, byte rfAddress, byte portNumber, CancellationToken cToken)
+        
+        public async Task<IList<TTrigger>>  ByPortIdAsync<TTrigger>(int portId, CancellationToken cToken) where TTrigger : SensorTrigger
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Trigger>> ByPortIdAsync(int portId, CancellationToken cToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IQueryable<Trigger> CreateQuery(Func<Trigger, bool> predicate)
-        {
-            return _ctx.Triggers
-                .Where(x => predicate(x));
+            return await _ctx.Triggers
+                .OfType<TTrigger>()
+                .Include(x=>x.Actions)
+                .ThenInclude(a => ((ActuatorAction)a).Actuator)
+                .ThenInclude(p=>p.Node)
+                .Where(x => x.SensorPortId == portId).ToListAsync(cToken);
         }
     }
 }

@@ -12,11 +12,15 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             builder.Property(x => x.Name).HasMaxLength(50);
             builder.Property(x => x.PortNumber);
             builder.HasDiscriminator<int>("Type")
-                .HasValue<PulseSensorPort>(1)
-                .HasValue<PushSensorPort>(2)
-                .HasValue<SwitchSensorPort>(3)
-                .HasValue<VarioSensorPort>(4)
-                .HasValue<RelayActuatorPort>(5);
+                .HasValue<NodeHealthSensorPort>(1)
+                .HasValue<EnvironmentSensorPort>(2)
+                .HasValue<PulseSensorPort>(3)
+                .HasValue<PushSensorPort>(4)
+                .HasValue<SwitchSensorPort>(5)
+                .HasValue<VarioSensorPort>(6)
+                .HasValue<RelayActuatorPort>(7)
+                .HasValue<FloatDataLogPort>(8)
+                .HasValue<IntDataLogPort>(9);
         }
     }
     
@@ -29,12 +33,32 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         }
     }
     
+    public class NodeHealthPortConfig : IEntityTypeConfiguration<NodeHealthSensorPort>
+    {
+        public void Configure(EntityTypeBuilder<NodeHealthSensorPort> builder)
+        {
+            builder.HasBaseType<SensorPort>();
+            builder.HasMany(x => x.History).WithOne(x => x.Port).HasForeignKey(x => x.PortId);
+            builder.Property(x => x.UpdateFrequency).HasColumnName("HealtUpdateFreq");
+        }
+    }
+    
+    public class EnvironmentPortConfig : IEntityTypeConfiguration<EnvironmentSensorPort>
+    {
+        public void Configure(EntityTypeBuilder<EnvironmentSensorPort> builder)
+        {
+            builder.HasBaseType<SensorPort>();
+            builder.HasMany(x => x.History).WithOne(x => x.Port).HasForeignKey(x => x.PortId);
+            builder.Property(x => x.UpdateFrequency).HasColumnName("EnvUpdateFreq");
+        }
+    }
+
     public class PulseSensorPortConfig : IEntityTypeConfiguration<PulseSensorPort>
     {
         public void Configure(EntityTypeBuilder<PulseSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.HasMany(x => x.PulseHistory).WithOne(x => x.PulseSensorPort).HasForeignKey(x => x.PulseSensorPortId);
+            builder.HasMany(x => x.History).WithOne(x => x.Port).HasForeignKey(x => x.PortId);
         }
     }
     
@@ -43,6 +67,8 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PushSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
+            builder.Property(x => x.LastPressStyle).HasColumnName("PortState");
+
         }
     }
     
@@ -51,6 +77,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SwitchSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
+            builder.Property(x => x.SwitchState).HasColumnName("PortState");
         }
     }
     
@@ -59,6 +86,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<VarioSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
+            builder.Property(x => x.Level).HasColumnName("PortState");
         }
     }
     
@@ -76,6 +104,32 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<RelayActuatorPort> builder)
         {
             builder.HasBaseType<ActuatorPort>();
+            builder.Property(x => x.RelayState).HasColumnName("PortState");
+        }
+    }
+
+    public class LoggingPortConfig : IEntityTypeConfiguration<LoggingPort>
+    {
+        public void Configure(EntityTypeBuilder<LoggingPort> builder)
+        {
+            builder.HasBaseType<Port>();
+        }
+    }
+
+    public class FloatDataLogPortConfig : IEntityTypeConfiguration<FloatDataLogPort>
+    {
+        public void Configure(EntityTypeBuilder<FloatDataLogPort> builder)
+        {
+            builder.HasBaseType<LoggingPort>();
+            builder.Property(x => x.Data).HasColumnName("FloatLogData");
+        }
+    }
+    public class IntDataLogPortConfig : IEntityTypeConfiguration<IntDataLogPort>
+    {
+        public void Configure(EntityTypeBuilder<IntDataLogPort> builder)
+        {
+            builder.HasBaseType<LoggingPort>();
+            builder.Property(x => x.Data).HasColumnName("IntLogData");
         }
     }
 }

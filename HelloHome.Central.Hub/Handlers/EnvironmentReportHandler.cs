@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Common;
@@ -34,14 +35,25 @@ namespace HelloHome.Central.Hub.Handlers
 
         protected override async Task HandleAsync(EnvironmentalReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
         {
-            var node = await _findNodeQuery.ByRfIdAsync(request.FromRfAddress, NodeInclude.AggregatedData);
+            var node = await _findNodeQuery.ByRfIdAsync(request.FromRfAddress, NodeInclude.AggregatedData | NodeInclude.Ports);
             if(node == null)
                 throw new NodeNotFoundException(request.FromRfAddress);
-            
             _touchNode.Touch(node, request.Rssi);
-            node.NodeHistory = new List<NodeHistory>
+            var envPort = node.Ports.OfType<EnvironmentSensorPort>().SingleOrDefault();
+            if (envPort == null)
             {
-                new EnvironmentDataHistory
+                envPort = new EnvironmentSensorPort
+                {
+                    PortNumber = (byte)ReservedPortNumber.Environment,
+                    Name = "Env",
+                    UpdateFrequency = 1,
+                };
+                node.Ports.Add(envPort);
+            }
+
+            envPort.History = new List<EnvironmentHistory>
+            {
+                new EnvironmentHistory
                 {
                     Humidity = request.Humidity,
                     Temperature = request.Temperature,

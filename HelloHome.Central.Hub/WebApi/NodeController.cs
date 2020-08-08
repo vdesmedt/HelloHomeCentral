@@ -45,9 +45,9 @@ namespace HelloHome.Central.Hub.WebApi
         }
 
         [HttpGet("{id}/history-env")]
-        public IEnumerable<NodeHistory> GetHistory(int id)
+        public IEnumerable<EnvironmentHistory> GetHistory(int id)
         {
-            return _unitOfWork.NodeHistory.OfType<EnvironmentDataHistory>().Where(_ => _.NodeId == id).ToList();
+            return _unitOfWork.PortHistory.OfType<EnvironmentHistory>().Where(_ => _.Port.NodeId == id).ToList();
         }
 
         [HttpGet("{id}/restart")]
