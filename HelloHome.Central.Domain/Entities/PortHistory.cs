@@ -54,6 +54,6 @@ namespace HelloHome.Central.Domain.Entities
     }
     public class IntDataLogPortHistory : PortHistory<IntDataLogPort>
     {
-        public float Data { get; set; }
+        public int Data { get; set; }
     }
 }
