@@ -27,9 +27,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PulseHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
-            builder.HasOne(x => x.Port)
-                .WithMany(x => x.History)
-                .HasForeignKey(x => x.PortId);
         }
     }
     
@@ -38,9 +35,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<NodeHealthHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
-            builder.HasOne(x => x.Port)
-                .WithMany(x => x.History)
-                .HasForeignKey(x => x.PortId);
         }
     }
     
@@ -49,9 +43,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<EnvironmentHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
-            builder.HasOne(x => x.Port)
-                .WithMany(x => x.History)
-                .HasForeignKey(x => x.PortId);
         }
     }
     public class PushButtonHistoryConfig : IEntityTypeConfiguration<PushButtonHistory>
@@ -59,9 +50,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PushButtonHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
-            builder.HasOne(x => x.Port)
-                .WithMany(x => x.History)
-                .HasForeignKey(x => x.PortId);
         }
     }
     public class SwitchPortHistoryConfig : IEntityTypeConfiguration<SwitchPortHistory>
@@ -69,9 +57,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SwitchPortHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
-            builder.HasOne(x => x.Port)
-                .WithMany(x => x.History)
-                .HasForeignKey(x => x.PortId);
         }
     }
 
@@ -80,9 +65,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<VarioButtonPortHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
-            builder.HasOne(x => x.Port)
-                .WithMany(x => x.History)
-                .HasForeignKey(x => x.PortId);
         }
 
         public class IntDataLogPortHistoryConfig : IEntityTypeConfiguration<IntDataLogPortHistory>
@@ -90,9 +72,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             public void Configure(EntityTypeBuilder<IntDataLogPortHistory> builder)
             {
                 builder.HasBaseType<PortHistory>();
-                builder.HasOne(x => x.Port)
-                    .WithMany(x => x.History)
-                    .HasForeignKey(x => x.PortId);
                 builder.Property(x => x.Data).HasColumnName("IntLogData");
             }
         }
@@ -102,9 +81,6 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             public void Configure(EntityTypeBuilder<FloatDataLogPortHistory> builder)
             {
                 builder.HasBaseType<PortHistory>();
-                builder.HasOne(x => x.Port)
-                    .WithMany(x => x.History)
-                    .HasForeignKey(x => x.PortId);
                 builder.Property(x => x.Data).HasColumnName("FloatLogData");
             }
         }

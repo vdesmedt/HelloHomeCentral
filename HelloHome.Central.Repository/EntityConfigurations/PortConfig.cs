@@ -38,7 +38,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<NodeHealthSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.HasMany(x => x.History).WithOne(x => x.Port).HasForeignKey(x => x.PortId);
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.UpdateFrequency).HasColumnName("HealtUpdateFreq");
         }
     }
@@ -48,7 +51,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<EnvironmentSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.HasMany(x => x.History).WithOne(x => x.Port).HasForeignKey(x => x.PortId);
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.UpdateFrequency).HasColumnName("EnvUpdateFreq");
         }
     }
@@ -58,7 +64,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PulseSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
-            builder.HasMany(x => x.History).WithOne(x => x.Port).HasForeignKey(x => x.PortId);
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
         }
     }
     
@@ -67,6 +76,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PushSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.LastPressStyle).HasColumnName("PortState");
 
         }
@@ -77,6 +90,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SwitchSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.SwitchState).HasColumnName("PortState");
         }
     }
@@ -86,6 +103,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<VarioSensorPort> builder)
         {
             builder.HasBaseType<SensorPort>();
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.Level).HasColumnName("PortState");
         }
     }
@@ -121,6 +142,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<FloatDataLogPort> builder)
         {
             builder.HasBaseType<LoggingPort>();
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.Data).HasColumnName("FloatLogData");
         }
     }
@@ -129,6 +154,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<IntDataLogPort> builder)
         {
             builder.HasBaseType<LoggingPort>();
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.Data).HasColumnName("IntLogData");
         }
     }
