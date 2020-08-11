@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace HelloHome.Central.Hub
@@ -60,7 +61,10 @@ namespace HelloHome.Central.Hub
                     services.AddHostedService<NodeBridge.NodeBridgeApp>();
                     services.AddDbContext<HhDbContext>(builder =>
                     {
-                        builder.UseMySql(hostContext.Configuration.GetConnectionString("local"));
+                        builder.UseMySql(hostContext.Configuration.GetConnectionString("local"), optionBuilder =>
+                        {
+                            optionBuilder.ServerVersion(new Version(10, 4, 11), ServerType.MariaDb);
+                        });
                         builder.UseLoggerFactory(new NLogLoggerFactory(new NLogLoggerProvider()));
                     });
                     services.Configure<SerialConfig>(hostContext.Configuration.GetSection("Serial"));

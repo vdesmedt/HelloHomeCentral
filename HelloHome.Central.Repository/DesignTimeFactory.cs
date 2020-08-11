@@ -11,6 +11,7 @@ using HelloHome.Central.Common.Extensions;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace HelloHome.Central.Repository
 {
@@ -27,7 +28,10 @@ namespace HelloHome.Central.Repository
             Console.WriteLine($"Environment being used:{env}");
             Console.WriteLine(configuration.GetConnectionString(env));
             var optionsBuilder = new DbContextOptionsBuilder<HhDbContext>();
-            optionsBuilder.UseMySql(configuration.GetConnectionString(env));
+            optionsBuilder.UseMySql(configuration.GetConnectionString(env), optionBuilder =>
+            {
+                optionBuilder.ServerVersion(new Version(10, 4, 11), ServerType.MariaDb);
+            });
 
             return new HhDbContext(optionsBuilder.Options);
         }
