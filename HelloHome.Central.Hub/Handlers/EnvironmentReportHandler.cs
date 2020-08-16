@@ -39,10 +39,10 @@ namespace HelloHome.Central.Hub.Handlers
             if(node == null)
                 throw new NodeNotFoundException(request.FromRfAddress);
             _touchNode.Touch(node, request.Rssi);
-            var envPort = node.Ports.OfType<EnvironmentSensorPort>().SingleOrDefault();
+            var envPort = node.Ports.OfType<EnvironmentSensor>().SingleOrDefault();
             if (envPort == null)
             {
-                envPort = new EnvironmentSensorPort
+                envPort = new EnvironmentSensor
                 {
                     PortNumber = (byte)ReservedPortNumber.Environment,
                     Name = "Env",

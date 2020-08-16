@@ -18,7 +18,7 @@ namespace HelloHome.Central.Domain.Entities
         public int PortId { get; set; }
     }
 
-    public abstract class RelayBasedCondition : PortBasedCondition<RelayActuatorPort>
+    public abstract class RelayBasedCondition : PortBasedCondition<RelayActuator>
     {
     }
 
@@ -38,7 +38,7 @@ namespace HelloHome.Central.Domain.Entities
         }
     }
 
-    public abstract class SwitchBasedCondition : PortBasedCondition<SwitchSensorPort>
+    public abstract class SwitchBasedCondition : PortBasedCondition<SwitchSensor>
     {
     }
 
@@ -58,7 +58,7 @@ namespace HelloHome.Central.Domain.Entities
         }
     }
 
-    public abstract class EnvironmentBasedCondition : PortBasedCondition<EnvironmentSensorPort>
+    public abstract class EnvironmentBasedCondition : PortBasedCondition<EnvironmentSensor>
     {
     }
 

@@ -15,10 +15,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
                 .HasValue<NodeHealthHistory>(2)
                 .HasValue<EnvironmentHistory>(3)
                 .HasValue<PushButtonHistory>(4)
-                .HasValue<SwitchPortHistory>(5)
-                .HasValue<VarioButtonPortHistory>(6)
-                .HasValue<IntDataLogPortHistory>(7)
-                .HasValue<FloatDataLogPortHistory>(8)
+                .HasValue<SwitchHistory>(5)
+                .HasValue<VarioHistory>(6)
+                .HasValue<IntLoggerHistory>(7)
+                .HasValue<FloatLoggerHistory>(8)
                 .HasValue<RelayHistory>(9);
         }
     }
@@ -54,35 +54,35 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             builder.Property(v => v.PressStyle).HasColumnName("NewSensorState");
         }
     }
-    public class SwitchPortHistoryConfig : IEntityTypeConfiguration<SwitchPortHistory>
+    public class SwitchPortHistoryConfig : IEntityTypeConfiguration<SwitchHistory>
     {
-        public void Configure(EntityTypeBuilder<SwitchPortHistory> builder)
+        public void Configure(EntityTypeBuilder<SwitchHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
             builder.Property(v => v.NewSensorState).HasColumnName("NewSensorState");
         }
     }
 
-    public class VarioButtonPortHistoryConfig : IEntityTypeConfiguration<VarioButtonPortHistory>
+    public class VarioButtonPortHistoryConfig : IEntityTypeConfiguration<VarioHistory>
     {
-        public void Configure(EntityTypeBuilder<VarioButtonPortHistory> builder)
+        public void Configure(EntityTypeBuilder<VarioHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
             builder.Property(v => v.NewLevel).HasColumnName("NewSensorState");
         }
 
-        public class IntDataLogPortHistoryConfig : IEntityTypeConfiguration<IntDataLogPortHistory>
+        public class IntDataLogPortHistoryConfig : IEntityTypeConfiguration<IntLoggerHistory>
         {
-            public void Configure(EntityTypeBuilder<IntDataLogPortHistory> builder)
+            public void Configure(EntityTypeBuilder<IntLoggerHistory> builder)
             {
                 builder.HasBaseType<PortHistory>();
                 builder.Property(x => x.Data).HasColumnName("IntLogData");
             }
         }
 
-        public class FloatDataLogPortHistoryConfig : IEntityTypeConfiguration<FloatDataLogPortHistory>
+        public class FloatDataLogPortHistoryConfig : IEntityTypeConfiguration<FloatLoggerHistory>
         {
-            public void Configure(EntityTypeBuilder<FloatDataLogPortHistory> builder)
+            public void Configure(EntityTypeBuilder<FloatLoggerHistory> builder)
             {
                 builder.HasBaseType<PortHistory>();
                 builder.Property(x => x.Data).HasColumnName("FloatLogData");

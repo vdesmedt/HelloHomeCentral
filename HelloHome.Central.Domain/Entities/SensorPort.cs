@@ -2,31 +2,31 @@ using System.Collections.Generic;
 
 namespace HelloHome.Central.Domain.Entities
 {
-    public class VarioSensorPort : SensorPort
+    public class VarioSensor : SensorPort
     {
         public int Level { get; set; }
-        public IList<VarioButtonPortHistory> History { get; set; }
+        public IList<VarioHistory> History { get; set; }
     }
 
-    public class SwitchSensorPort : SensorPort
+    public class SwitchSensor : SensorPort
     {
         public OnOffState SwitchState { get; set; }
-        public IList<SwitchPortHistory> History { get; set; }
+        public IList<SwitchHistory> History { get; set; }
     }
 
-    public class PushSensorPort : SensorPort
+    public class PushButtonSensor : SensorPort
     {
         public IList<PushButtonHistory> History { get; set; }
         public PressStyle LastPressStyle { get; set; }
     }
 
-    public class PulseSensorPort : SensorPort
+    public class PulseSensor : SensorPort
     {
         public int PulseCount { get; set; }
         public IList<PulseHistory> History { get; set; }
     }
 
-    public class EnvironmentSensorPort : SensorPort
+    public class EnvironmentSensor : SensorPort
     {
         public int UpdateFrequency { get; set; }
         public float Temperature { get; set; }
@@ -35,7 +35,7 @@ namespace HelloHome.Central.Domain.Entities
         public IList<EnvironmentHistory> History { get; set; }
     }
 
-    public class NodeHealthSensorPort : SensorPort
+    public class NodeHealthSensor : SensorPort
     {
         public int UpdateFrequency { get; set; }
         public int SendError { get; set; }

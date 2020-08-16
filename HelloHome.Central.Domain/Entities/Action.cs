@@ -23,7 +23,7 @@ namespace HelloHome.Central.Domain.Entities
 
     public abstract class RelayAction : ActuatorAction
     {
-        public RelayActuatorPort Relay => (RelayActuatorPort)Actuator;
+        public RelayActuator Relay => (RelayActuator)Actuator;
     }
 
     public class TurnOnAction : RelayAction

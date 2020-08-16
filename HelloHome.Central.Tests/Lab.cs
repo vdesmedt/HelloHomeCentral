@@ -31,7 +31,7 @@ namespace HelloHome.Central.Tests
                 RfAddress = 1,
                 Ports = new List<Port>
                 {
-                    new PushSensorPort
+                    new PushButtonSensor
                     {
                         Name = "My first push button"
                     }

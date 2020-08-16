@@ -40,10 +40,10 @@ namespace HelloHome.Central.Hub.Handlers
             if (node == null)
                 throw new NodeNotFoundException(request.FromRfAddress);
             _touchNode.Touch(node, request.Rssi);
-            var healthPort = node.Ports.OfType<NodeHealthSensorPort>().SingleOrDefault();
+            var healthPort = node.Ports.OfType<NodeHealthSensor>().SingleOrDefault();
             if (healthPort == null)
             {
-                healthPort = new NodeHealthSensorPort
+                healthPort = new NodeHealthSensor
                 {
                     PortNumber = (byte) ReservedPortNumber.NodeHealth,
                     Name = "Health",

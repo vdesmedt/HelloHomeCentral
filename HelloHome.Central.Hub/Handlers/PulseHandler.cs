@@ -39,9 +39,9 @@ namespace HelloHome.Central.Hub.Handlers
                 throw new NodeNotFoundException(request.FromRfAddress);
             _touchNode.Touch(node, request.Rssi);
 
-            var port = node.Ports.OfType<PulseSensorPort>().SingleOrDefault(_ => _.PortNumber == request.PortNumber);
+            var port = node.Ports.OfType<PulseSensor>().SingleOrDefault(_ => _.PortNumber == request.PortNumber);
             if (port == null)
-                node.Ports.Add(port = new PulseSensorPort()
+                node.Ports.Add(port = new PulseSensor()
                 {
                     Node = node,
                     PortNumber = request.PortNumber,

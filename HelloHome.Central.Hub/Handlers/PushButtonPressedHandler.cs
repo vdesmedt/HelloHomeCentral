@@ -49,14 +49,14 @@ namespace HelloHome.Central.Hub.Handlers
                 throw new NodeNotFoundException(request.FromRfAddress);
             _touchNode.Touch(node, request.Rssi);
 
-            var port = node.Ports.OfType<PushSensorPort>().SingleOrDefault(_ => _.PortNumber == request.PortNumber);
+            var port = node.Ports.OfType<PushButtonSensor>().SingleOrDefault(_ => _.PortNumber == request.PortNumber);
             if (port == null)
             {
                 if (request.PortNumber < (byte) ReservedPortNumber.Last)
                     throw new ArgumentException($"PortNumber {request.PortNumber} is reserved.");
                 if (node.Ports.Any(x => x.PortNumber == request.PortNumber))
                     throw new ArgumentException("A port already exist with that number that is not of type PushButton");
-                node.Ports.Add(port = new PushSensorPort()
+                node.Ports.Add(port = new PushButtonSensor()
                 {
                     Node = node,
                     PortNumber = request.PortNumber,

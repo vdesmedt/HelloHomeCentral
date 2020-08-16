@@ -25,7 +25,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<RelayOnCondition> builder)
         {
-            builder.HasBaseType<PortBasedCondition<RelayActuatorPort>>();
+            builder.HasBaseType<PortBasedCondition<RelayActuator>>();
             builder.Property(c => c.PortId).HasColumnName("PortId");
             builder.HasOne(c => c.Port)
                 .WithMany()
@@ -38,7 +38,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<RelayOffCondition> builder)
         {
-            builder.HasBaseType<PortBasedCondition<RelayActuatorPort>>();
+            builder.HasBaseType<PortBasedCondition<RelayActuator>>();
             builder.Property(c => c.PortId).HasColumnName("PortId");
             builder.HasOne(c => c.Port)
                 .WithMany()
@@ -51,7 +51,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<SwitchOnCondition> builder)
         {
-            builder.HasBaseType<PortBasedCondition<SwitchSensorPort>>();
+            builder.HasBaseType<PortBasedCondition<SwitchSensor>>();
             builder.Property(c => c.PortId).HasColumnName("PortId");
             builder.HasOne(c => c.Port)
                 .WithMany()
@@ -64,7 +64,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<SwitchOffCondition> builder)
         {
-            builder.HasBaseType<PortBasedCondition<SwitchSensorPort>>();
+            builder.HasBaseType<PortBasedCondition<SwitchSensor>>();
             builder.Property(c => c.PortId).HasColumnName("PortId");
             builder.HasOne(c => c.Port)
                 .WithMany()
@@ -77,7 +77,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<TemperatureWithinRangeCondition> builder)
         {
-            builder.HasBaseType<PortBasedCondition<EnvironmentSensorPort>>();
+            builder.HasBaseType<PortBasedCondition<EnvironmentSensor>>();
             builder.Property(c => c.PortId).HasColumnName("PortId");
             builder.HasOne(c => c.Port)
                 .WithMany()

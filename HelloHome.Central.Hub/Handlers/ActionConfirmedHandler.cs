@@ -36,7 +36,7 @@ namespace HelloHome.Central.Hub.Handlers
                 if(port == null)
                     throw new ArgumentException($"Port {srCommand.PortNumber} on Node with rfAdr {srCommand.ToRfAddress} was not found in databse.");
                 _touchNode.Touch(port.Node, request.Rssi);
-                if (port is RelayActuatorPort raPort)
+                if (port is RelayActuator raPort)
                 {
                     raPort.RelayState = (OnOffState) srCommand.NewState;
                     raPort.History = new List<RelayHistory>
@@ -51,7 +51,7 @@ namespace HelloHome.Central.Hub.Handlers
                 }
                 else
                 {
-                    throw new ArgumentException($"Port {srCommand.PortNumber} on Node with rfAdr {srCommand.ToRfAddress} does not seems to of type {nameof(RelayActuatorPort)}");
+                    throw new ArgumentException($"Port {srCommand.PortNumber} on Node with rfAdr {srCommand.ToRfAddress} does not seems to of type {nameof(RelayActuator)}");
                 }
             }
         }

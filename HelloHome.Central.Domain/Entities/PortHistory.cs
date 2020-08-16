@@ -14,50 +14,50 @@ namespace HelloHome.Central.Domain.Entities
     {
         public TPort Port { get; set; }
     }
-    public class PulseHistory : PortHistory<PulseSensorPort>
+    public class PulseHistory : PortHistory<PulseSensor>
     {
         public int NewPulses { get; set; }
         public int Total { get; set; }
         public bool IsOffset { get; set; }
     }
 	
-    public class NodeHealthHistory : PortHistory<NodeHealthSensorPort>
+    public class NodeHealthHistory : PortHistory<NodeHealthSensor>
     {
         public float? VIn { get; set; }
         public int SendErrorCount { get; set; }
     }
 	
-    public class EnvironmentHistory : PortHistory<EnvironmentSensorPort>
+    public class EnvironmentHistory : PortHistory<EnvironmentSensor>
     {
         public float? Temperature { get; set; }
         public float? Humidity { get; set; }
         public float? Pressure { get; set; }
     }
-    public class SwitchPortHistory : PortHistory<SwitchSensorPort>
+    public class SwitchHistory : PortHistory<SwitchSensor>
     {
         public OnOffState NewSensorState { get; set; }
     }
 
-    public class VarioButtonPortHistory : PortHistory<VarioSensorPort>
+    public class VarioHistory : PortHistory<VarioSensor>
     {
         public int NewLevel { get; set; }
     }
 
-    public class PushButtonHistory : PortHistory<PushSensorPort>
+    public class PushButtonHistory : PortHistory<PushButtonSensor>
     {
         public PressStyle PressStyle { get; set; }
     }
 
-    public class FloatDataLogPortHistory : PortHistory<FloatDataLogPort>
+    public class FloatLoggerHistory : PortHistory<FloatLogger>
     {
         public float Data { get; set; }
     }
-    public class IntDataLogPortHistory : PortHistory<IntDataLogPort>
+    public class IntLoggerHistory : PortHistory<IntLogger>
     {
         public int Data { get; set; }
     }
 
-    public class RelayHistory : PortHistory<RelayActuatorPort>
+    public class RelayHistory : PortHistory<RelayActuator>
     {
         public OnOffState NewRelayState { get; set; }
     }
