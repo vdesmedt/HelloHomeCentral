@@ -80,6 +80,8 @@ namespace HelloHome.Central.Hub.NodeBridge
                                     {
                                         _incomingMessages.Add(new ActionConfirmedReport
                                         {
+                                            Rssi = inMsg.Rssi,
+                                            FromRfAddress = inMsg.FromRfAddress,
                                             ConfigmedAction =retryList[sc.MessageId].Message 
                                         });
                                         retryList.Remove(sc.MessageId);

@@ -125,6 +125,10 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<RelayActuatorPort> builder)
         {
             builder.HasBaseType<ActuatorPort>();
+            builder.HasMany(x => x.History)
+                .WithOne(x => x.Port)
+                .HasForeignKey(x => x.PortId)
+                .HasConstraintName("FK_Port_PortHistory_PortId");
             builder.Property(x => x.RelayState).HasColumnName("PortState");
         }
     }

@@ -56,4 +56,9 @@ namespace HelloHome.Central.Domain.Entities
     {
         public int Data { get; set; }
     }
+
+    public class RelayHistory : PortHistory<RelayActuatorPort>
+    {
+        public OnOffState NewRelayState { get; set; }
+    }
 }

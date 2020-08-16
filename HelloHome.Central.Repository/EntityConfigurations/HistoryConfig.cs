@@ -18,7 +18,8 @@ namespace HelloHome.Central.Repository.EntityConfigurations
                 .HasValue<SwitchPortHistory>(5)
                 .HasValue<VarioButtonPortHistory>(6)
                 .HasValue<IntDataLogPortHistory>(7)
-                .HasValue<FloatDataLogPortHistory>(8);
+                .HasValue<FloatDataLogPortHistory>(8)
+                .HasValue<RelayHistory>(9);
         }
     }
     
@@ -85,6 +86,14 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             {
                 builder.HasBaseType<PortHistory>();
                 builder.Property(x => x.Data).HasColumnName("FloatLogData");
+            }
+        }
+        public class RelayPortHistoryConfig : IEntityTypeConfiguration<RelayHistory>
+        {
+            public void Configure(EntityTypeBuilder<RelayHistory> builder)
+            {
+                builder.HasBaseType<PortHistory>();
+                builder.Property(x => x.NewRelayState).HasColumnName("NewSensorState");
             }
         }
     }
