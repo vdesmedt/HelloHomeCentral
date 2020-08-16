@@ -15,8 +15,7 @@ namespace HelloHome.Central.Domain.Logic.CoreLogic
     public class CoreLogic : ICoreLogic
     {
         private readonly IUnitOfWork _unitOfWork;
-        private IList<Script> _scripts;
-
+        
         public CoreLogic(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
