@@ -50,6 +50,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<PushButtonHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
+            builder.Property(v => v.PressStyle).HasColumnName("NewSensorState");
         }
     }
     public class SwitchPortHistoryConfig : IEntityTypeConfiguration<SwitchPortHistory>
@@ -57,6 +58,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<SwitchPortHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
+            builder.Property(v => v.NewSensorState).HasColumnName("NewSensorState");
         }
     }
 
@@ -65,6 +67,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<VarioButtonPortHistory> builder)
         {
             builder.HasBaseType<PortHistory>();
+            builder.Property(v => v.NewLevel).HasColumnName("NewSensorState");
         }
 
         public class IntDataLogPortHistoryConfig : IEntityTypeConfiguration<IntDataLogPortHistory>
