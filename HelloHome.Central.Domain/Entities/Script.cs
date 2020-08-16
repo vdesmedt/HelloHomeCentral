@@ -9,6 +9,7 @@ namespace HelloHome.Central.Domain.Entities
         public Trigger Trigger { get; set; }
         public int TriggerId { get; set; }
         public IList<ScriptAction> Actions { get; set; }
+        public IList<ScriptCondition> Conditions { get; set; }
         public Script OnFinnish { get; set; }
     }
 
@@ -19,5 +20,13 @@ namespace HelloHome.Central.Domain.Entities
         public Action Action { get; set; }
         public int ActionId { get; set; }
         public int Sequence { get; set; }
+    }
+
+    public class ScriptCondition
+    {
+        public Script Script { get; set; }
+        public int ScriptId { get; set; }
+        public Condition Condition { get; set; }
+        public int ConditionId { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using HelloHome.Central.Domain.CmdQrys;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Domain.Logic;
+using HelloHome.Central.Domain.Logic.CoreLogic;
 using HelloHome.Central.Hub.Handlers.Base;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
@@ -24,15 +25,19 @@ namespace HelloHome.Central.Hub.Handlers
         private readonly IFindTriggersForPortQuery _findTriggersForPortQuery;
         private readonly ITouchNode _touchNode;
         private readonly ITimeProvider _timeProvider;
+        private readonly ICoreLogic _coreLogic;
+        private readonly IActionToCommandMapper _actionToCommandMapper;
 
         public PushButtonPressedHandler(IUnitOfWork dbCtx, IFindNodeQuery findNodeQuery,
             IFindTriggersForPortQuery findTriggersForPortQuery, ITouchNode touchNode,
-            ITimeProvider timeProvider) : base(dbCtx)
+            ITimeProvider timeProvider, ICoreLogic coreLogic, IActionToCommandMapper actionToCommandMapper) : base(dbCtx)
         {
             _findNodeQuery = findNodeQuery;
             _findTriggersForPortQuery = findTriggersForPortQuery;
             _touchNode = touchNode;
             _timeProvider = timeProvider;
+            _coreLogic = coreLogic;
+            _actionToCommandMapper = actionToCommandMapper;
         }
 
         protected override async Task HandleAsync(PushButtonPressedReport request,
@@ -74,29 +79,11 @@ namespace HelloHome.Central.Hub.Handlers
             foreach (var trigger in triggers)
             {
                 if (trigger.PressStyle == request.PressStyle)
-                    foreach (var action in trigger.Actions)
-                    {
-                        if (action is TurnOnAction tnAction)
-                        {
-                            outgoingMessages.Add(new SetRelayStateCommand
-                            {
-                                ToRfAddress = tnAction.Actuator.Node.RfAddress,
-                                PortNumber = tnAction.Actuator.PortNumber,
-                                NewState = 1
-                            });
-                            tnAction.Relay.RelayState = OnOffState.On;
-                        }
-                        else if (action is TurnOffAction tfAction)
-                        {
-                            outgoingMessages.Add(new SetRelayStateCommand
-                            {
-                                ToRfAddress = tfAction.Actuator.Node.RfAddress,
-                                PortNumber = tfAction.Actuator.PortNumber,
-                                NewState = 0
-                            });
-                            tfAction.Relay.RelayState = OnOffState.Off;
-                        }
-                    }
+                {
+                    var actions = _coreLogic.GetActionsFor(trigger);
+                    foreach(var a in actions)
+                        outgoingMessages.Add(_actionToCommandMapper.Map(a));
+                }
             }
         }
     }

@@ -9,12 +9,13 @@ namespace HelloHome.Central.Repository.EntityConfigurations
         public void Configure(EntityTypeBuilder<Action> builder)
         {
             builder.ToTable("Action");
-            builder.HasDiscriminator<int>("Type")
-                .HasValue<ScheduleAction>(1)
-                .HasValue<ActuatorAction>(10)
-                .HasValue<RelayAction>(100)
-                .HasValue<TurnOnAction>(101)
-                .HasValue<TurnOffAction>(102);
+            builder.HasDiscriminator<string>("Type")
+                .HasValue<ScheduleAction>("SC")
+                .HasValue<ActuatorAction>("AA")
+                .HasValue<RelayAction>("RA")
+                .HasValue<TurnOnAction>("TN")
+                .HasValue<TurnOffAction>("TF");
+            builder.Property("Type").HasMaxLength(2).IsUnicode(false);
             builder.HasOne(x => x.Trigger).WithMany(x=>x.Actions).HasForeignKey(x => x.TriggerId).IsRequired(false);
         }
     }

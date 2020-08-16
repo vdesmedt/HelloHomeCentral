@@ -18,6 +18,7 @@ namespace HelloHome.Central.Repository
         public DbSet<Trigger> Triggers { get; set; }
         public DbSet<NodeLog> NodeLogs { get; set; }
         public DbSet<Script> Scripts { get; set; }
+        public DbSet<Condition> Conditions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

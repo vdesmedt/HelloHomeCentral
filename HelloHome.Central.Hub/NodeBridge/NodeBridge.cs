@@ -77,7 +77,9 @@ namespace HelloHome.Central.Hub.NodeBridge
                                 else
                                 {
                                     if (sc.Success)
+                                    {
                                         retryList.Remove(sc.MessageId);
+                                    }
                                     else if (retryList[sc.MessageId].RetryCount >= retryList[sc.MessageId].MaxRetry)
                                     {
                                         retryList.Remove(sc.MessageId);
@@ -130,6 +132,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                             }
                         }
                     }
+
                     _incomingMessages.CompleteAdding();
                     _messageChannel.Close();
                 }
@@ -137,7 +140,6 @@ namespace HelloHome.Central.Hub.NodeBridge
                 {
                     Logger.Error(e, $"Exception in Communication Task : {e.Message}");
                 }
-
             }, cancellationToken);
         }
 

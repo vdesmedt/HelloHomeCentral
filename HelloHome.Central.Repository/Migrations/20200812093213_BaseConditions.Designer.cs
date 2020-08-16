@@ -3,14 +3,16 @@ using System;
 using HelloHome.Central.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HelloHome.Central.Repository.Migrations
 {
     [DbContext(typeof(HhDbContext))]
-    partial class HhDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200812093213_BaseConditions")]
+    partial class BaseConditions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,11 +28,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.Property<int?>("TriggerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("varchar(2) CHARACTER SET utf8mb4")
-                        .HasMaxLength(2)
-                        .IsUnicode(false);
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -38,7 +37,7 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.ToTable("Action");
 
-                    b.HasDiscriminator<string>("Type").HasValue("Action");
+                    b.HasDiscriminator<int>("Type");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.Condition", b =>
@@ -251,7 +250,7 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.HasIndex("ActuatorId");
 
-                    b.HasDiscriminator().HasValue("AA");
+                    b.HasDiscriminator().HasValue(10);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.ScheduleAction", b =>
@@ -266,7 +265,7 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.HasIndex("ScheduledActionId");
 
-                    b.HasDiscriminator().HasValue("SC");
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PortBasedCondition<HelloHome.Central.Domain.Entities.EnvironmentSensorPort>", b =>
@@ -482,7 +481,7 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.ActuatorAction");
 
-                    b.HasDiscriminator().HasValue("RA");
+                    b.HasDiscriminator().HasValue(100);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.TemperatureWithinRangeCondition", b =>
@@ -670,14 +669,14 @@ namespace HelloHome.Central.Repository.Migrations
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.RelayAction");
 
-                    b.HasDiscriminator().HasValue("TF");
+                    b.HasDiscriminator().HasValue(102);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.TurnOnAction", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.RelayAction");
 
-                    b.HasDiscriminator().HasValue("TN");
+                    b.HasDiscriminator().HasValue(101);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.Action", b =>
