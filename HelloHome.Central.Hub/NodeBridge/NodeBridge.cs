@@ -78,6 +78,10 @@ namespace HelloHome.Central.Hub.NodeBridge
                                 {
                                     if (sc.Success)
                                     {
+                                        _incomingMessages.Add(new ActionConfirmedReport
+                                        {
+                                            ConfigmedAction =retryList[sc.MessageId].Message 
+                                        });
                                         retryList.Remove(sc.MessageId);
                                     }
                                     else if (retryList[sc.MessageId].RetryCount >= retryList[sc.MessageId].MaxRetry)

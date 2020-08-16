@@ -11,6 +11,7 @@ namespace HelloHome.Central.Domain
     {
         DbSet<Node> Nodes { get; set; }
         DbSet<PortHistory> PortHistory { get; set; }
+        DbSet<Port> Ports { get; set; }
         DbSet<Trigger> Triggers { get; set; }
         DbSet<NodeLog> NodeLogs { get; set; }
         DbSet<Script> Scripts { get; set; }

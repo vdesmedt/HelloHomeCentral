@@ -15,6 +15,7 @@ namespace HelloHome.Central.Repository
 
         public DbSet<Node> Nodes { get; set; }
         public DbSet<PortHistory> PortHistory { get; set; }
+        public DbSet<Port> Ports { get; set; }
         public DbSet<Trigger> Triggers { get; set; }
         public DbSet<NodeLog> NodeLogs { get; set; }
         public DbSet<Script> Scripts { get; set; }
