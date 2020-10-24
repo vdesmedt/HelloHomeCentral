@@ -4,6 +4,6 @@
 </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lamar" Version="4.3.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
   </ItemGroup>
 </Project>
