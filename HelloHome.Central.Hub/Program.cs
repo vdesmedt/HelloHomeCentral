@@ -32,7 +32,7 @@ namespace HelloHome.Central.Hub
 
         public static async Task Main(string[] args)
         {
-            Logger.Debug("Starting...");
+            Logger.Debug($"Starting on MachineName {Environment.MachineName}");
             var host = new HostBuilder()
                 .UseLamar((context, registry) =>
                 {

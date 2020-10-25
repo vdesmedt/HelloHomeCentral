@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
@@ -34,7 +35,7 @@ namespace HelloHome.Central.Update
             {
                 Stream gzipStream = new GZipInputStream(binPack);
     
-                TarArchive tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+                TarArchive tarArchive = TarArchive.CreateInputTarArchive(gzipStream, Encoding.Default);
                 tarArchive.ExtractContents(Environment.CurrentDirectory);
                 tarArchive.Close();
                 

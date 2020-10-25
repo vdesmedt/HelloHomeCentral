@@ -16,7 +16,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 			var voltage = BitConverter.ToInt16 (record, 7) / 100.0f;
 			return new NodeInfoReport {
 				FromRfAddress = BitConverter.ToUInt16(record, 0),
-				Rssi = (int)BitConverter.ToInt16(record,2),
+				Rssi = BitConverter.ToInt16(record,2),
 				SendErrorCount = BitConverter.ToInt16(record, 5),
 				Voltage = voltage > 0 ? voltage : (float?)null,
 			};
