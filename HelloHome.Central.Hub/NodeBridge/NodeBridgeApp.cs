@@ -11,14 +11,16 @@ namespace HelloHome.Central.Hub.NodeBridge
         private static readonly Logger Logger = LogManager.GetLogger(nameof(NodeBridgeApp));
 
         private readonly INodeBridge _nodeBridge;
+        private readonly IOptionsMonitor<RFM2PiConfig> _rmf2PiConfig;
         private CancellationTokenSource _commCts;
         private Task _commTask;
         private CancellationTokenSource _processCts;
         private Task _processTask;
 
-        public NodeBridgeApp(INodeBridge nodeBridge)
+        public NodeBridgeApp(INodeBridge nodeBridge, IOptionsMonitor<RFM2PiConfig> rmf2PiConfig)
         {
             _nodeBridge = nodeBridge;
+            _rmf2PiConfig = rmf2PiConfig;
         }
         
         public Task StartAsync(CancellationToken cancellationToken)
@@ -27,6 +29,7 @@ namespace HelloHome.Central.Hub.NodeBridge
             _commTask = _nodeBridge.Communication(_commCts.Token);
             _processCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             _processTask = _nodeBridge.Processing(_processCts.Token);
+            _nodeBridge.Send(new RFM2piConfigCommand {ToRfAddress = 1, HighPower = _rmf2PiConfig.CurrentValue.HighPower, NetworkId = _rmf2PiConfig.CurrentValue.NetworkId});
             return Task.CompletedTask;
         }
 

@@ -68,6 +68,7 @@ namespace HelloHome.Central.Hub
                         builder.UseLoggerFactory(new NLogLoggerFactory(new NLogLoggerProvider()));
                     });
                     services.Configure<SerialConfig>(hostContext.Configuration.GetSection("Serial"));
+                    services.Configure<RFM2PiConfig>(hostContext.Configuration.GetSection("RFM2Pi"));
                     services.Configure<EmonCmsConfig>(hostContext.Configuration.GetSection("EmonCms"));
                 })
                 .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())

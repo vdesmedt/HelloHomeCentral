@@ -14,6 +14,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         private static readonly Logger Logger = LogManager.GetLogger(nameof(SerialByteStream));
         private readonly SerialPort _port;
 
+
         public SerialByteStream(IOptionsMonitor<SerialConfig> config)
         {
             _port = new SerialPort(config.CurrentValue.Port, config.CurrentValue.BaudRate, Parity.None, 8, StopBits.One)
@@ -24,9 +25,12 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 
         public void Open()
         {
-            Logger.Info("Opening serial port {portname} with baudRate {baudrate} and timeout {timeout} (8N1)", _port.PortName, _port.BaudRate, _port.ReadTimeout);
+            Logger.Info("Opening serial port {portname} with baudRate {baudrate} and timeout {timeout} (8N1)",
+                _port.PortName, _port.BaudRate, _port.ReadTimeout);
             _port.Open();
-            Logger.Info(() => $"Port {_port.PortName} opened");
+            Logger.Info("Waiting 2000ms for RFM2Pi node to be ready");
+            Thread.Sleep(2000);
+            Logger.Info(() => $"Port {_port.PortName} opened & ready");
         }
 
         public int ByteAvailable()
@@ -38,7 +42,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
         {
             try
             {
-                if(!_port.IsOpen)
+                if (!_port.IsOpen)
                     _port.Open();
                 return _port.Read(buffer, offset, count);
             }
@@ -64,6 +68,6 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             if (_port.IsOpen)
                 _port.Close();
             _port.Dispose();
-        }        
+        }
     }
 }

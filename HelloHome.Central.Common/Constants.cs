@@ -23,6 +23,7 @@
                 public const byte NodeRestartCommand = 2 + (1 << 2);
                 public const byte SetRelayStateCommand = 2 + (2 << 2);
                 public const byte PongCommand = 2 + (3 << 2);
+                public const byte Rfm2PiConfigCommand = 2 + (4 << 2);
             }
         }
     }
