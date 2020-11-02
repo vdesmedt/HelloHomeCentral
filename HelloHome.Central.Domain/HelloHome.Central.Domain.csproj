@@ -10,7 +10,4 @@
     <ProjectReference Include="..\HelloHome.Central.Common\HelloHome.Central.Common.csproj">
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logic\CoreLogic\Model" />
-  </ItemGroup>
 </Project>
