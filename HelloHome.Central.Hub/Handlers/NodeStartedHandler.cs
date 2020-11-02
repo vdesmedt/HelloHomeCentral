@@ -58,6 +58,7 @@ namespace HelloHome.Central.Hub.Handlers
 			node.Metadata.Version = request.Version;
             node.AggregatedData.NodeStartCount = request.StartCount;
             node.AggregatedData.StartupTime = _timeProvider.UtcNow;
+            node.Metadata.NodeType = request.NodeType;
 		    _touchNode.Touch (node, request.Rssi);
 			
 			outgoingMessages.Add(new NodeConfigCommand

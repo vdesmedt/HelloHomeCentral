@@ -37,6 +37,8 @@ namespace HelloHome.Central.Domain.Entities
         HelloJulo = 2, //Weather station 
         HelloRelay = 3, //Control x relays and measure current through them + x push buttons + optional SI7021
         HelloSwitch = 4, //4 push button + optional LCD
+        ElectronicLoad = 98,
+        Simulator = 99,
     }
 
     public class NodeMetadata
