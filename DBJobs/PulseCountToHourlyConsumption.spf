@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>database</key>
+			<string>HelloHome_Dev</string>
+			<key>host</key>
+			<string>127.0.0.1</string>
+			<key>kcid</key>
+			<string>-4593971785427885955</string>
+			<key>name</key>
+			<string>Local Root</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>root</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8mb4</string>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0
+			b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRk
+			YXRhgAGtCwwZGhscHSEoLDA1OlUkbnVsbNMNDg8QFBhXTlMua2V5
+			c1pOUy5vYmplY3RzViRjbGFzc6MREhOAAoADgASjFRYXgAWABoAI
+			gAxUdHlwZVRyb3dzVGtleXNfECZTZWxlY3Rpb25EZXRhaWxUeXBl
+			UHJpbWFyeUtleWVkRGV0YWlsc9MNDg8eHyCgoIAH0iIjJCVaJGNs
+			YXNzbmFtZVgkY2xhc3Nlc18QE05TTXV0YWJsZURpY3Rpb25hcnmj
+			JCYnXE5TRGljdGlvbmFyeVhOU09iamVjdNIODykroSqACYAL0g8t
+			Li9ZTlMuc3RyaW5ngApSSWTSIiMxMl8QD05TTXV0YWJsZVN0cmlu
+			Z6MxMzRYTlNTdHJpbmdYTlNPYmplY3TSIiM2N15OU011dGFibGVB
+			cnJheaM2ODlXTlNBcnJheVhOU09iamVjdNIiIyY7oiY8WE5TT2Jq
+			ZWN0AAgAEQAaACQAKQAyADcASQBMAFEAUwBhAGcAbgB2AIEAiACM
+			AI4AkACSAJYAmACaAJwAngCjAKgArQDWAN0A3gDfAOEA5gDxAPoB
+			EAEUASEBKgEvATEBMwE1AToBRAFGAUkBTgFgAWQBbQF2AXsBigGO
+			AZYBnwGkAacAAAAAAAACAQAAAAAAAAA9AAAAAAAAAAAAAAAAAAAB
+			sA==
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {1439, 924}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n+1) HOUR as s, date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n) HOUR as e from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+			<key>table</key>
+			<string>Port</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>373</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n+1) HOUR as s, date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n) HOUR as e
+
+ from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n+1) HOUR as s, date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n) HOUR as e from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n) HOUR as e, date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n +1) HOUR as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n) HOUR as e, date_add(date(now()), interval hour(now()) hour) - interval (100 * c.n + 10*d.n +u.n +1) HOUR as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e
+
+
+select date_add(date(now()), interval hour(now()) hour) as date_hr</string>
+		<string>select date_add(date(now()), interval hour(now()) hour) as date_hr</string>
+		<string>select date_add(date(date_completed), interval hour(date_completed) hour) as date_hr</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) HOUR as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) HOUR as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>CREATE TEMPORARY TABLE TS
+select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c;
+SELECT * FROM TS;
+DROP TEMPORARY TABLE TS;
+/*
+select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e
+*/</string>
+		<string>CREATE TEMPORARY TABLE TS
+select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c</string>
+		<string>DROP TEMPORARY TABLE TS</string>
+		<string>CREATE TEMPORARY TABLE TS
+select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c
+
+SELECT * FROM TS
+
+DROP TEMPORARY TABLE TS
+
+/*
+select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+left outer join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e
+*/</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulses) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e
+ having sum(NewPulses) is not null</string>
+		<string>select base.pid, Base.s, Base.e, sum(NewPulse) from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+group by base.pid, Base.s, Base.e
+ having sum(NewPulses) is not null</string>
+		<string>select base.pid, Base.s, Base.e, PortHistory.* from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId  and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+
+group by base.pid, Base.s, Base.e
+ having sum(NewPulses) is not null</string>
+		<string>select base.pid, Base.s, Base.e, PortHistory.* from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as e, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as s from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId /* and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e */
+
+group by base.pid, Base.s, Base.e
+ having sum(NewPulses) is not null</string>
+		<string>select base.pid, Base.s, Base.e, PortHistory.* from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as s, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as e from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId /* and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e */
+
+group by base.pid, Base.s, Base.e
+ having sum(NewPulses) is not null</string>
+		<string>select base.pid, Base.s, Base.e, PortHistory.* from
+(select pp.id as pid, ts.s, ts.e from
+(select curdate() - interval (100 * c.n + 10*d.n +u.n) DAY as s, curdate() - interval (100 * c.n + 10*d.n +u.n +1) DAY as e from
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as u
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as d
+cross join
+(select 0 as n union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) as c) as ts
+cross join (select id from Port where Type = 3) pp) base
+inner join PortHistory on Base.pid=PortHistory.PortId and PortHistory.Timestamp &gt;= Base.s and PortHistory.Timestamp &lt; Base.e 
+
+group by base.pid, Base.s, Base.e
+ having sum(NewPulses) is not null</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.5.5-10.4.11-MariaDB</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>
