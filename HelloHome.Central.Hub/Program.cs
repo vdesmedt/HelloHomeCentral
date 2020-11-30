@@ -34,6 +34,7 @@ namespace HelloHome.Central.Hub
         {
             Logger.Debug($"Starting on MachineName {Environment.MachineName}");
             var host = new HostBuilder()
+                .UseSystemd()
                 .UseLamar((context, registry) =>
                 {
                     registry.IncludeRegistry<HubServiceRegistry>();
