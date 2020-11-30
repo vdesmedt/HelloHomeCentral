@@ -28,9 +28,11 @@ namespace HelloHome.Central.Repository
             Console.WriteLine($"Environment being used:{env}");
             Console.WriteLine(configuration.GetConnectionString(env));
             var optionsBuilder = new DbContextOptionsBuilder<HhDbContext>();
-            optionsBuilder.UseMySql(configuration.GetConnectionString(env), optionBuilder =>
+            optionsBuilder.UseMySql(configuration.GetConnectionString(env),
+                new MariaDbServerVersion(new Version(10, 4, 11)),
+                optionBuilder =>
             {
-                optionBuilder.ServerVersion(new Version(10, 4, 11), ServerType.MariaDb);
+                //optionBuilder.ServerVersion(new Version(10, 4, 11), ServerType.MariaDb);
             });
 
             return new HhDbContext(optionsBuilder.Options);
