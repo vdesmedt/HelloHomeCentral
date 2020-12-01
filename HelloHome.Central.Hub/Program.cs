@@ -34,7 +34,6 @@ namespace HelloHome.Central.Hub
         {
             Logger.Debug($"Starting on MachineName {Environment.MachineName}");
             var host = new HostBuilder()
-                .UseSystemd()
                 .UseLamar((context, registry) =>
                 {
                     registry.IncludeRegistry<HubServiceRegistry>();
@@ -74,6 +73,7 @@ namespace HelloHome.Central.Hub
                     services.Configure<RFM2PiConfig>(hostContext.Configuration.GetSection("RFM2Pi"));
                     services.Configure<EmonCmsConfig>(hostContext.Configuration.GetSection("EmonCms"));
                 })
+                .UseSystemd()
                 .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
                 .UseConsoleLifetime()
                 .Build();
