@@ -10,6 +10,7 @@ using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using HelloHome.Central.Hub.NodeBridge.Performance;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
@@ -32,13 +33,15 @@ namespace HelloHome.Central.Hub.NodeBridge
         private readonly IMessageChannel _messageChannel;
         private readonly IMessageHandlerFactory _messageHandlerFactory;
         private readonly ITimeProvider _timeProvider;
+        private readonly IPerformanceStats _performanceStats;
 
         public NodeBridge(IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory,
-            ITimeProvider timeProvider)
+            ITimeProvider timeProvider, IPerformanceStats performanceStats)
         {
             _messageChannel = messageChannel;
             _messageHandlerFactory = messageHandlerFactory;
             _timeProvider = timeProvider;
+            _performanceStats = performanceStats;
             _instanceId = ++instanceCount;
             Logger.Info($"New NodBridge with instance id {_instanceId}");
         }
@@ -158,6 +161,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                 {
                     if (!_incomingMessages.TryTake(out var inMsg, 1000))
                         continue;
+                    var call = _performanceStats.StartCall();
                     Logger.Debug(() => $"Message of type {inMsg.GetType().Name} found in queue");
                     try
                     {
@@ -171,6 +175,10 @@ namespace HelloHome.Central.Hub.NodeBridge
                     catch (Exception e)
                     {
                         Logger.Error(e, () => $"Exception during processing of {inMsg.GetType().Name} : {e.Message}");
+                    }
+                    finally
+                    {
+                        _performanceStats.AddHandlerCall(call.End());
                     }
                 }
             });
