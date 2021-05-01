@@ -1,8 +1,8 @@
 
 {
   "ConnectionStrings": {
-    "dev": "Server=127.0.0.1;Port=3306;Database=HelloHome_Dev;User Id=hhgtw;Password=othe",
-    "pro": "Server=127.0.0.1;Port=3306;Database=HelloHome_Pro;User Id=root;Password=@Preo89!!",
+    "dev": "Server=127.0.0.1;Port=3306;Database=HelloHome_Dev;User Id=hhgtw;Password=H3ll0H0m3Gat3way",
+    "pro": "Server=192.168.50.247;Port=3306;Database=HelloHome_Pro;User Id=root;Password=@Preo89089",
     "pro2": "Server=192.168.50.247;Port=3307;Database=HelloHome_Pro;User Id=hhgtw;Password=@Preo890!!"
   }
 }
