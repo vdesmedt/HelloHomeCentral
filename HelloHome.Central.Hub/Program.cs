@@ -1,17 +1,10 @@
-﻿using HelloHome.Central.Domain;
-using System;
-using System.Diagnostics;
+﻿using System;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using System.Net.Mime;
 using System.Threading.Tasks;
-using HelloHome.Central.Common;
 using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Hub.IoC.Installers;
-using HelloHome.Central.Hub.MessageChannel;
-using HelloHome.Central.Hub.WebApi;
 using HelloHome.Central.Repository;
-using Lamar;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace HelloHome.Central.Hub
@@ -42,7 +34,6 @@ namespace HelloHome.Central.Hub
                 .ConfigureLogging((hostContext, configLogging) =>
                 {
                     configLogging.ClearProviders();
-                    configLogging.SetMinimumLevel(LogLevel.Trace);
                 })
                 .UseNLog()
                 .ConfigureHostConfiguration(configHost =>
@@ -74,7 +65,7 @@ namespace HelloHome.Central.Hub
                     services.Configure<RFM2PiConfig>(hostContext.Configuration.GetSection("RFM2Pi"));
                     services.Configure<EmonCmsConfig>(hostContext.Configuration.GetSection("EmonCms"));
                 })
-                .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
+                .ConfigureWebHostDefaults(builder => builder.UseStartup<WebApi.Startup>())
                 .Build();
 
             await host.RunAsync();
