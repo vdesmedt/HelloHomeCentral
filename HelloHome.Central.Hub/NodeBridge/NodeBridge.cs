@@ -79,17 +79,18 @@ namespace HelloHome.Central.Hub.NodeBridge
                                 }
                                 else
                                 {
+                                    var retryMsg = retryList[sc.MessageId];
                                     if (sc.Success)
                                     {
                                         _incomingMessages.Add(new ActionConfirmedReport
                                         {
                                             Rssi = inMsg.Rssi,
                                             FromRfAddress = inMsg.FromRfAddress,
-                                            ConfigmedAction =retryList[sc.MessageId].Message 
+                                            ConfigmedAction =retryMsg.Message 
                                         });
                                         retryList.Remove(sc.MessageId);
                                     }
-                                    else if (retryList[sc.MessageId].RetryCount >= retryList[sc.MessageId].MaxRetry)
+                                    else if (retryMsg.RetryCount >= retryMsg.MaxRetry)
                                     {
                                         retryList.Remove(sc.MessageId);
                                         Logger.Warn(() =>
@@ -97,8 +98,8 @@ namespace HelloHome.Central.Hub.NodeBridge
                                     }
                                     else
                                     {
-                                        retryList[sc.MessageId].NextTry = _timeProvider.UtcNow.AddMilliseconds(1000);
-                                        retryList[sc.MessageId].ReadyForRetry = true;
+                                        retryMsg.NextTry = _timeProvider.UtcNow.AddMilliseconds(1000);
+                                        retryMsg.ReadyForRetry = true;
                                     }
                                 }
                             }
