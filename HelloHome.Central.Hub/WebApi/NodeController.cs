@@ -30,6 +30,7 @@ namespace HelloHome.Central.Hub.WebApi
             foreach (var n in nodes)
             {
                 n.Metadata.Node = null;
+                n.AggregatedData.Node = null;
             }
 
             return nodes;
@@ -53,7 +54,7 @@ namespace HelloHome.Central.Hub.WebApi
         [HttpGet("{id}/restart")]
         public ActionResult<bool> Restart(int id)
         {
-            var node = _unitOfWork.Nodes.SingleOrDefault(_ => _.Id == 12);
+            var node = _unitOfWork.Nodes.SingleOrDefault(_ => _.Id == id);
             if (node == default(Node))
                 return NotFound();
             _hub.Send(new RestartCommand { ToRfAddress = node.RfAddress });
