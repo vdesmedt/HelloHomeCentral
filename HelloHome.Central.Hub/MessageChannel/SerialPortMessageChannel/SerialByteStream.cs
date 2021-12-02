@@ -52,6 +52,32 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             }
         }
 
+        public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
+        {
+            try
+            {
+                if (!_port.IsOpen)
+                    _port.Open();
+                return await _port.BaseStream.ReadAsync(buffer, offset, count);
+            }
+            catch (TimeoutException)
+            {
+                return 0;
+            }
+        }
+
+        public string ReadLine()
+        {
+            try
+            {
+                return _port.ReadLine();
+            }
+            catch (TimeoutException)
+            {
+                return String.Empty;
+            }
+        }
+
 
         public void Write(byte[] buffer, int offset, int cout)
         {
