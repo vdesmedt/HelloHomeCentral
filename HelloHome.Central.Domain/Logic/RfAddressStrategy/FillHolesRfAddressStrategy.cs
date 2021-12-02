@@ -38,11 +38,10 @@ namespace HelloHome.Central.Domain.Logic.RfAddressStrategy
 		{
 			if (!_exisitingRfAddresses.Any ())
 				return RfAddressLowerBound;
-			var maxExisting = _exisitingRfAddresses.Max ();
-			var holes = Enumerable.Range(1, maxExisting).Select(i => (byte)i).Where (i => !_exisitingRfAddresses.Contains(i)).ToList ();
+			var holes = Enumerable.Range(RfAddressLowerBound, RfAddressUpperBound).Where (i => !_exisitingRfAddresses.Contains(i)).ToList ();
 			if (holes.Any()) 
 				return holes [_rnd.Next(holes.Count - 1)];
-			return (byte)(_rnd.Next(maxExisting+1, RfAddressUpperBound));
+			throw new ApplicationException("No more addresses available");
 		}
 
 	    #endregion
