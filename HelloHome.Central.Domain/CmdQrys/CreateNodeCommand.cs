@@ -20,14 +20,14 @@ namespace HelloHome.Central.Domain.CmdQrys
         private readonly INodeLogger _nodeLogger;
 
         public CreateNodeCommand(
-		    IUnitOfWork ctx, 
+            IUnitOfWork ctx,
             INodeLogger nodeLogger)
         {
             _ctx = ctx;
             _nodeLogger = nodeLogger;
         }
 
-        public  Task<Node> ExecuteAsync(long signature, int rfId, NodeType nodeType)
+        public async Task<Node> ExecuteAsync(long signature, int rfId, NodeType nodeType)
         {
             var node = new Node
             {
@@ -36,16 +36,16 @@ namespace HelloHome.Central.Domain.CmdQrys
                 Metadata = new NodeMetadata
                 {
                     Name = "Newly created",
-                    NodeType = nodeType,                    
+                    NodeType = nodeType,
                 },
                 AggregatedData = new NodeAggregatedData
                 {
                     MaxUpTime = TimeSpan.Zero,
                 }
             };
-            _ctx.Nodes.Add(node);
+            await _ctx.Nodes.AddAsync(node);
             _nodeLogger.Log(node, "CRTD");
-            return Task.FromResult(node);
+            return node;
         }
     }
 }
