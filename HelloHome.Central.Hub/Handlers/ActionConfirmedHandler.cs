@@ -32,7 +32,7 @@ namespace HelloHome.Central.Hub.Handlers
         {
             if (request.ConfigmedAction is SetRelayStateCommand srCommand)
             {
-                var port = await _findPortQuery.ByNodeRfAndPortNumber(srCommand.ToRfAddress, srCommand.PortNumber, PortInclude.NodeAggregatedData);
+                var port = await _findPortQuery.ByNodeRfAndPortNumberAsyn(srCommand.ToRfAddress, srCommand.PortNumber, PortInclude.NodeAggregatedData);
                 if(port == null)
                     throw new ArgumentException($"Port {srCommand.PortNumber} on Node with rfAdr {srCommand.ToRfAddress} was not found in databse.");
                 _touchNode.Touch(port.Node, request.Rssi);
