@@ -20,7 +20,9 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
             return new PingReport() {
                 FromRfAddress = BitConverter.ToUInt16(record, 0),
                 Rssi = BitConverter.ToInt16 (record, 2),
-                Millis = BitConverter.ToUInt32(record, 5),
+                //Byte 4 is msgType
+                MsgId = record[5],
+                Millis = BitConverter.ToUInt32(record, 6),
             };
         }
     }

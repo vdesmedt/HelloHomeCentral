@@ -10,7 +10,7 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 
 		public override string ToString ()
 		{
-			return $"[PulseReport: Node={FromRfAddress}, PortNumber={PortNumber}, NewPulse={NewPulse}]";
+			return $"[PulseReport: Node={FromRfAddress}, MsgId={MsgId}, PortNumber={PortNumber}, NewPulse={NewPulse}]";
 		}
 	}
 }

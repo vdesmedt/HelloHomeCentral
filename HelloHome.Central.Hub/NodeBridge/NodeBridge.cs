@@ -60,6 +60,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                 try
                 {
                     _messageChannel.Open();
+                    Dictionary<int, int> lastMsgIdFromNodes = new Dictionary<int, int>();
                     var retryList = new Dictionary<int, RetryOutgoingMessage>();
                     while (!cancellationToken.IsCancellationRequested)
                     {
@@ -75,7 +76,8 @@ namespace HelloHome.Central.Hub.NodeBridge
                                     $"Sending report for msg {sc.MessageId} found in channel with status {(sc.Success ? "OK" : "NOK")}.");
                                 if (!retryList.ContainsKey(sc.MessageId))
                                 {
-                                    Logger.Warn($"MessageId {sc.MessageId} not found in retry list. Ignoring");
+                                    Logger.Warn(() =>
+                                        $"MessageId {sc.MessageId} not found in retry list. Ignoring");
                                 }
                                 else
                                 {
@@ -86,7 +88,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                                         {
                                             Rssi = inMsg.Rssi,
                                             FromRfAddress = inMsg.FromRfAddress,
-                                            ConfigmedAction =retryMsg.Message 
+                                            ConfigmedAction = retryMsg.Message
                                         });
                                         retryList.Remove(sc.MessageId);
                                     }
@@ -106,9 +108,21 @@ namespace HelloHome.Central.Hub.NodeBridge
                             //Process other incoming messages
                             else
                             {
-                                Logger.Debug(() =>
-                                    $"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
-                                _incomingMessages.Add(inMsg, cancellationToken);
+                                if (inMsg is NodeStartedReport)
+                                    lastMsgIdFromNodes[inMsg.FromRfAddress] = -1;
+                                if (lastMsgIdFromNodes.ContainsKey(inMsg.FromRfAddress) &&
+                                    lastMsgIdFromNodes[inMsg.FromRfAddress] == inMsg.MsgId)
+                                {
+                                    Logger.Info(() =>
+                                        $"Message with Id {inMsg.MsgId} coming from RFAddr {inMsg.FromRfAddress} was already added in queue and will be dismissed.");
+                                }
+                                else
+                                {
+                                    Logger.Debug(() =>
+                                        $"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
+                                    _incomingMessages.Add(inMsg, cancellationToken);
+                                    lastMsgIdFromNodes[inMsg.FromRfAddress] = inMsg.MsgId;
+                                }
                             }
 
                             inMsg = _messageChannel.TryReadNext();

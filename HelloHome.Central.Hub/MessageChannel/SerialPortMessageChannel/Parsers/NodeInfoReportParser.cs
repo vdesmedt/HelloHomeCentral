@@ -13,11 +13,13 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 
 	    public IncomingMessage Parse (byte[] record)
 		{
-			var voltage = BitConverter.ToInt16 (record, 7) / 100.0f;
+			var voltage = BitConverter.ToInt16 (record, 8) / 100.0f;
 			return new NodeInfoReport {
 				FromRfAddress = BitConverter.ToUInt16(record, 0),
 				Rssi = BitConverter.ToInt16(record,2),
-				SendErrorCount = BitConverter.ToInt16(record, 5),
+				//Byte 4 is msgType
+				MsgId = record[5],
+				SendErrorCount = BitConverter.ToInt16(record, 6),
 				Voltage = voltage > 0 ? voltage : (float?)null,
 			};
 		}

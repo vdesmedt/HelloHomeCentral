@@ -12,13 +12,16 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 		#region IReportParser implementation
 
 	    public IncomingMessage Parse (byte[] record)
-		{
+	    {
+		    int byteIndex = 0;
 			return new PulseReport {
 				FromRfAddress = BitConverter.ToUInt16(record, 0),
 				Rssi = BitConverter.ToInt16 (record, 2),
-				PortNumber = record[5],
-				NewPulse = BitConverter.ToUInt16(record, 6),
-			};
+				//Byte 4 is msgType
+				MsgId = record[5],
+				PortNumber = record[6],
+				NewPulse = BitConverter.ToUInt16(record, 7),
+			}; 
 		}
 
 		#endregion

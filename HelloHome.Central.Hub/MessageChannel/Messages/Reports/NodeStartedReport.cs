@@ -12,7 +12,7 @@ namespace HelloHome.Central.Hub.MessageChannel.Messages.Reports
 
 		public override string ToString ()
 		{
-            return $"[NodeStartedReport: From={FromRfAddress}, Version={Version}, Signature={Signature}, Type={NodeType}, StartCount={StartCount}]";
+            return $"[NodeStartedReport: From={FromRfAddress}, MsgId={MsgId}, Version={Version}, Signature={Signature}, Type={NodeType}, StartCount={StartCount}]";
 		}
 	}
 }

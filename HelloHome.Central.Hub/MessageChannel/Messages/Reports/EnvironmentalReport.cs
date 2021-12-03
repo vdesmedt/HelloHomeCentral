@@ -10,7 +10,7 @@
 
 		public override string ToString ()
 		{
-			return $"[EnvironmentalInfoReport: NodeId={FromRfAddress}, Temperature={Temperature}, Humidity={Humidity}, Pressure={Pressure}]";
+			return $"[EnvironmentalInfoReport: NodeId={FromRfAddress}, MsgId={MsgId}, Temperature={Temperature}, Humidity={Humidity}, Pressure={Pressure}]";
 		}
 	}
 }
