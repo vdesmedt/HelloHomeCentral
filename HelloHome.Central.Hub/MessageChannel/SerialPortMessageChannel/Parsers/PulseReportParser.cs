@@ -13,7 +13,6 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers
 
 	    public IncomingMessage Parse (byte[] record)
 	    {
-		    int byteIndex = 0;
 			return new PulseReport {
 				FromRfAddress = BitConverter.ToUInt16(record, 0),
 				Rssi = BitConverter.ToInt16 (record, 2),
