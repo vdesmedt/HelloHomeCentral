@@ -15,6 +15,7 @@
                 public const byte PushButtonPressedReport = 0 + (5 << 2);
                 public const byte SwitchButtonActivatedReport = 0 + (6 << 2);
                 public const byte VarioButtonChangedReport = 0 + (7 << 2);
+                public const byte PongReport = 0 + (10 << 2);
             }
 
             public static class Command
@@ -24,6 +25,7 @@
                 public const byte SetRelayStateCommand = 2 + (2 << 2);
                 public const byte PongCommand = 2 + (3 << 2);
                 public const byte Rfm2PiConfigCommand = 2 + (4 << 2);
+                public const byte PingCommand = 2 + (5 << 2);
             }
         }
     }

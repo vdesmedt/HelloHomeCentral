@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,16 @@ namespace HelloHome.Central.Hub.WebApi
                 return NotFound();
             _hub.Send(new RestartCommand { ToRfAddress = node.RfAddress });
             return true;
+        }
+
+        [HttpGet("{id}/ping")]
+        public ActionResult<int> Ping(int id)
+        {
+            var node = _unitOfWork.Nodes.SingleOrDefault(_ => _.Id == id);
+            if (node == default(Node))
+                return NotFound();
+            _hub.Send(new PingCommand { ToRfAddress = node.RfAddress, Millis = (UInt32)(DateTimeOffset.Now-DateTimeOffset.Now.Date).TotalMilliseconds});
+            return 0;
         }
     }
 }
