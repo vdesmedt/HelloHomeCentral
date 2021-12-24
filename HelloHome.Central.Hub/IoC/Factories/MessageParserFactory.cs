@@ -35,7 +35,7 @@ namespace HelloHome.Central.Hub.IoC.Factories
         
         public IMessageParser Build(byte[] rawBytes)
         {
-            if (rawBytes[0] == '/' && rawBytes[1] == '/')
+            if (rawBytes.Length >= 2 && rawBytes[0] == '/' && rawBytes[1] == '/')
                 return _container.GetInstance<CommentParser>();
 
             var type = _typeMap.TryGetValue(rawBytes[4], out var parserType) ? parserType : typeof(ParseAllParser);
