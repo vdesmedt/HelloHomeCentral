@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.CmdQrys;
+using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Hub.NodeBridge;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +36,16 @@ namespace HelloHome.Central.Hub.WebApi
             return true;
         }
 
+        [HttpGet("SetValue")]
+        public async Task<ActionResult<int>> SetValue(int nodeId, int portNumber, int value)
+        {
+            var port = await _findPortQuery.ByNodeIdAndPortNumberAsync<PulseSensor>(nodeId, portNumber, PortInclude.None);
+            if (port == null)
+                return NotFound();
+            var offset = value - port.PulseCount;
+            await _addPulseOffsetCommand.ExecuteAsync(port.Id, offset);
+            await _unitOfWork.CommitAsync();
+            return offset;
+        }
     }
 }
