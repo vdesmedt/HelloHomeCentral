@@ -8,13 +8,6 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 {
 	public class NodeConfigEncoder : MessageEncoder<NodeConfigCommand>
 	{
-		readonly PinConfigEncoder _pinConfigEncoder;
-
-		public NodeConfigEncoder (PinConfigEncoder pinConfigEncoder)
-		{
-			this._pinConfigEncoder = pinConfigEncoder;			
-		}
-
 		protected override void EncodeBody (NodeConfigCommand message, List<byte> bytes)
 		{
 			bytes.AddRange(BitConverter.GetBytes((long)message.Signature));
