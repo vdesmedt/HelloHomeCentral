@@ -9,6 +9,7 @@ using HelloHome.Central.Common;
 using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.MessageChannel.Messages;
+using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using HelloHome.Central.Hub.NodeBridge.Performance;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +60,7 @@ namespace HelloHome.Central.Hub.NodeBridge
             {
                 try
                 {
+                    var lastHeartBeat = Stopwatch.StartNew();
                     _messageChannel.Open();
                     Dictionary<int, int> lastMsgIdFromNodes = new Dictionary<int, int>();
                     var retryList = new Dictionary<int, RetryOutgoingMessage>();
@@ -126,6 +128,13 @@ namespace HelloHome.Central.Hub.NodeBridge
                             }
 
                             inMsg = _messageChannel.TryReadNext();
+                        }
+                        
+                        //HeartBear
+                        if (lastHeartBeat.ElapsedMilliseconds > 3000)
+                        {
+                            lastHeartBeat.Restart();
+                            _messageChannel.Send(new HeartBeatCommand { ToRfAddress = 1});
                         }
 
                         //Write any left message from outgoingQueue

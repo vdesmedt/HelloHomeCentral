@@ -26,6 +26,7 @@
                 public const byte PongCommand = 2 + (3 << 2);
                 public const byte Rfm2PiConfigCommand = 2 + (4 << 2);
                 public const byte PingCommand = 2 + (5 << 2);
+                public const byte HeartBeatCommand = 2 + (6 << 2);
             }
         }
     }
