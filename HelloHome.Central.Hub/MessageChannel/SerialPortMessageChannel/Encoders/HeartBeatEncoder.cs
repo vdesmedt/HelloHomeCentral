@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using HelloHome.Central.Common;
 using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base;
-using LamarCodeGeneration.Model;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders
 {

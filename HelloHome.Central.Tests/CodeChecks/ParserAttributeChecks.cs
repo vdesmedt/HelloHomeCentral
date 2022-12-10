@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
-using LamarCodeGeneration.Util;
+using JasperFx.Core.Reflection;
 using Xunit;
 
 namespace HelloHome.Central.Tests.CodeChecks

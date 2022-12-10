@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
+using JasperFx.Core.Reflection;
 using Lamar;
-using LamarCodeGeneration.Util;
 
 namespace HelloHome.Central.Hub.IoC.Factories
 {
@@ -26,7 +26,7 @@ namespace HelloHome.Central.Hub.IoC.Factories
             var handlerTypes = container.Model.AllInstances
                 .Where(_ => _.ServiceType == typeof(IMessageParser) && _.ImplementationType.HasAttribute<ParserForAttribute>() && ! _.ImplementationType.HasAttribute<NonDiscriminatedParserAttribute>())
                 .Select(_ => _.ImplementationType)
-                .Distinct();
+       @         .Distinct();
 
             byte discriminatorOf(Type parser) => parser.GetCustomAttribute<ParserForAttribute>().RawDiscriminator;
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using HelloHome.Central.Common.DataStructures;
-using LamarCodeGeneration.Frames;
 
 namespace HelloHome.Central.Hub.NodeBridge.Performance
 {
