@@ -14,8 +14,8 @@ namespace HelloHome.Central.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "3.1.6");
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.Action", b =>
                 {
@@ -28,9 +28,9 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(2) CHARACTER SET utf8mb4")
                         .HasMaxLength(2)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(2)");
 
                     b.HasKey("Id");
 
@@ -48,14 +48,14 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(2) CHARACTER SET utf8mb4")
                         .HasMaxLength(2)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(2)");
 
                     b.HasKey("Id");
 
@@ -94,8 +94,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Data")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("NodeId")
                         .HasColumnType("int");
@@ -105,8 +105,8 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                        .HasMaxLength(10);
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("Id");
 
@@ -122,8 +122,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("NodeId")
                         .HasColumnType("int");
@@ -175,8 +175,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int?>("OnFinnishId")
                         .HasColumnType("int");
@@ -274,8 +274,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Condition");
 
                     b.Property<int>("PortId")
-                        .HasColumnName("PortId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PortId");
 
                     b.HasIndex("PortId");
 
@@ -287,8 +287,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Condition");
 
                     b.Property<int>("PortId")
-                        .HasColumnName("PortId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PortId");
 
                     b.HasIndex("PortId");
 
@@ -300,8 +300,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Condition");
 
                     b.Property<int>("PortId")
-                        .HasColumnName("PortId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PortId");
 
                     b.HasIndex("PortId");
 
@@ -324,22 +324,16 @@ namespace HelloHome.Central.Repository.Migrations
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.ActuatorPort", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Port");
-
-                    b.HasDiscriminator();
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.LoggingPort", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Port");
-
-                    b.HasDiscriminator();
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SensorPort", b =>
                 {
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Port");
-
-                    b.HasDiscriminator();
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.EnvironmentHistory", b =>
@@ -356,8 +350,6 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("float");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.FloatDataLogPortHistory", b =>
@@ -365,12 +357,10 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.PortHistory");
 
                     b.Property<float>("Data")
-                        .HasColumnName("FloatLogData")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("FloatLogData");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(8);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.IntDataLogPortHistory", b =>
@@ -378,12 +368,10 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.PortHistory");
 
                     b.Property<int>("Data")
-                        .HasColumnName("IntLogData")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IntLogData");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(7);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeHealthHistory", b =>
@@ -397,8 +385,6 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("float");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PulseHistory", b =>
@@ -415,8 +401,6 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PushButtonHistory", b =>
@@ -424,12 +408,10 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.PortHistory");
 
                     b.Property<int>("PressStyle")
-                        .HasColumnName("NewSensorState")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NewSensorState");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(4);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SwitchPortHistory", b =>
@@ -437,12 +419,10 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.PortHistory");
 
                     b.Property<int>("NewSensorState")
-                        .HasColumnName("NewSensorState")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NewSensorState");
 
                     b.HasIndex("PortId");
-
-                    b.HasDiscriminator().HasValue(5);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.VarioButtonPortHistory", b =>
@@ -450,8 +430,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.PortHistory");
 
                     b.Property<int>("NewLevel")
-                        .HasColumnName("NewSensorState")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NewSensorState");
 
                     b.HasIndex("PortId");
 
@@ -463,10 +443,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.Trigger");
 
                     b.Property<string>("CronExpression")
-                        .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
-                        .HasMaxLength(20);
-
-                    b.HasDiscriminator().HasValue(1);
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SensorTrigger", b =>
@@ -477,8 +455,6 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasIndex("SensorPortId");
-
-                    b.HasDiscriminator();
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.RelayAction", b =>
@@ -534,10 +510,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.ActuatorPort");
 
                     b.Property<int>("RelayState")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(7);
+                        .HasColumnType("int")
+                        .HasColumnName("PortState");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.FloatDataLogPort", b =>
@@ -545,10 +519,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.LoggingPort");
 
                     b.Property<float>("Data")
-                        .HasColumnName("FloatLogData")
-                        .HasColumnType("float");
-
-                    b.HasDiscriminator().HasValue(8);
+                        .HasColumnType("float")
+                        .HasColumnName("FloatLogData");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.IntDataLogPort", b =>
@@ -556,10 +528,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.LoggingPort");
 
                     b.Property<int>("Data")
-                        .HasColumnName("IntLogData")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(9);
+                        .HasColumnType("int")
+                        .HasColumnName("IntLogData");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.EnvironmentSensorPort", b =>
@@ -576,10 +546,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("float");
 
                     b.Property<int>("UpdateFrequency")
-                        .HasColumnName("EnvUpdateFreq")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(2);
+                        .HasColumnType("int")
+                        .HasColumnName("EnvUpdateFreq");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeHealthSensorPort", b =>
@@ -590,13 +558,11 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("UpdateFrequency")
-                        .HasColumnName("HealtUpdateFreq")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HealtUpdateFreq");
 
                     b.Property<float>("VIn")
                         .HasColumnType("float");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PulseSensorPort", b =>
@@ -605,8 +571,6 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<int>("PulseCount")
                         .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PushSensorPort", b =>
@@ -614,10 +578,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
                     b.Property<int>("LastPressStyle")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(4);
+                        .HasColumnType("int")
+                        .HasColumnName("PortState");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SwitchSensorPort", b =>
@@ -625,10 +587,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
                     b.Property<int>("SwitchState")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(5);
+                        .HasColumnType("int")
+                        .HasColumnName("PortState");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.VarioSensorPort", b =>
@@ -636,8 +596,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasBaseType("HelloHome.Central.Domain.Entities.SensorPort");
 
                     b.Property<int>("Level")
-                        .HasColumnName("PortState")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PortState");
 
                     b.HasDiscriminator().HasValue(6);
                 });
@@ -648,8 +608,6 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<int?>("PressStyle")
                         .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SwitchTrigger", b =>
@@ -658,8 +616,6 @@ namespace HelloHome.Central.Repository.Migrations
 
                     b.Property<bool?>("TriggerOnState")
                         .HasColumnType("tinyint(1)");
-
-                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.VarioTrigger", b =>
@@ -688,6 +644,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasOne("HelloHome.Central.Domain.Entities.Trigger", "Trigger")
                         .WithMany("Actions")
                         .HasForeignKey("TriggerId");
+
+                    b.Navigation("Trigger");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.Node", b =>
@@ -730,6 +688,8 @@ namespace HelloHome.Central.Repository.Migrations
 
                             b1.WithOwner("Node")
                                 .HasForeignKey("NodeId");
+
+                            b1.Navigation("Node");
                         });
 
                     b.OwnsOne("HelloHome.Central.Domain.Entities.NodeMetadata", "Metadata", b1 =>
@@ -741,17 +701,17 @@ namespace HelloHome.Central.Repository.Migrations
                                 .HasColumnType("smallint");
 
                             b1.Property<string>("Name")
-                                .HasColumnName("Name")
-                                .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
-                                .HasMaxLength(50);
+                                .HasMaxLength(50)
+                                .HasColumnType("varchar(50)")
+                                .HasColumnName("Name");
 
                             b1.Property<int>("NodeType")
                                 .HasColumnType("int");
 
                             b1.Property<string>("Version")
-                                .HasColumnName("Version")
-                                .HasColumnType("varchar(10) CHARACTER SET utf8mb4")
-                                .HasMaxLength(10);
+                                .HasMaxLength(10)
+                                .HasColumnType("varchar(10)")
+                                .HasColumnName("Version");
 
                             b1.HasKey("NodeId");
 
@@ -759,7 +719,13 @@ namespace HelloHome.Central.Repository.Migrations
 
                             b1.WithOwner("Node")
                                 .HasForeignKey("NodeId");
+
+                            b1.Navigation("Node");
                         });
+
+                    b.Navigation("AggregatedData");
+
+                    b.Navigation("Metadata");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeLog", b =>
@@ -778,6 +744,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasForeignKey("NodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Node");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.Script", b =>
@@ -791,6 +759,10 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasForeignKey("TriggerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OnFinnish");
+
+                    b.Navigation("Trigger");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.ScriptAction", b =>
@@ -806,6 +778,10 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasForeignKey("ScriptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Action");
+
+                    b.Navigation("Script");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.ScriptCondition", b =>
@@ -821,6 +797,10 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasForeignKey("ScriptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Condition");
+
+                    b.Navigation("Script");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.ActuatorAction", b =>
@@ -828,6 +808,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasOne("HelloHome.Central.Domain.Entities.ActuatorPort", "Actuator")
                         .WithMany()
                         .HasForeignKey("ActuatorId");
+
+                    b.Navigation("Actuator");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.ScheduleAction", b =>
@@ -835,6 +817,8 @@ namespace HelloHome.Central.Repository.Migrations
                     b.HasOne("HelloHome.Central.Domain.Entities.Action", "ScheduledAction")
                         .WithMany()
                         .HasForeignKey("ScheduledActionId");
+
+                    b.Navigation("ScheduledAction");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PortBasedCondition<HelloHome.Central.Domain.Entities.EnvironmentSensorPort>", b =>
@@ -845,6 +829,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Condition_Port_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PortBasedCondition<HelloHome.Central.Domain.Entities.RelayActuatorPort>", b =>
@@ -855,6 +841,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Condition_Port_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PortBasedCondition<HelloHome.Central.Domain.Entities.SwitchSensorPort>", b =>
@@ -865,6 +853,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Condition_Port_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.EnvironmentHistory", b =>
@@ -875,6 +865,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.FloatDataLogPortHistory", b =>
@@ -885,6 +877,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.IntDataLogPortHistory", b =>
@@ -895,6 +889,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeHealthHistory", b =>
@@ -905,6 +901,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PulseHistory", b =>
@@ -915,6 +913,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.PushButtonHistory", b =>
@@ -925,6 +925,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SwitchPortHistory", b =>
@@ -935,6 +937,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.VarioButtonPortHistory", b =>
@@ -945,6 +949,8 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasConstraintName("FK_Port_PortHistory_PortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Port");
                 });
 
             modelBuilder.Entity("HelloHome.Central.Domain.Entities.SensorTrigger", b =>
@@ -954,6 +960,74 @@ namespace HelloHome.Central.Repository.Migrations
                         .HasForeignKey("SensorPortId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("SensorPort");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.Node", b =>
+                {
+                    b.Navigation("Logs");
+
+                    b.Navigation("Ports");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.Script", b =>
+                {
+                    b.Navigation("Actions");
+
+                    b.Navigation("Conditions");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.Trigger", b =>
+                {
+                    b.Navigation("Actions");
+
+                    b.Navigation("Scripts");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.SensorPort", b =>
+                {
+                    b.Navigation("Triggers");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.FloatDataLogPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.IntDataLogPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.EnvironmentSensorPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.NodeHealthSensorPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.PulseSensorPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.PushSensorPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.SwitchSensorPort", b =>
+                {
+                    b.Navigation("History");
+                });
+
+            modelBuilder.Entity("HelloHome.Central.Domain.Entities.VarioSensorPort", b =>
+                {
+                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }
