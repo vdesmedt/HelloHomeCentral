@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Net.Cache;
 using System.Threading.Tasks;
 using HelloHome.Central.Common.Configuration;
+using HelloHome.Central.Hub.IoC;
 using HelloHome.Central.Hub.IoC.Installers;
 using HelloHome.Central.Repository;
 using Lamar.Microsoft.DependencyInjection;
@@ -50,6 +52,7 @@ namespace HelloHome.Central.Hub
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.ConfigureLoggly(hostContext.Configuration);
                     services.AddHostedService<NodeBridge.NodeBridgeApp>();
                     services.AddDbContext<HhDbContext>(builder =>
                     {
