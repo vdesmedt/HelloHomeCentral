@@ -24,6 +24,9 @@ namespace HelloHome.Central.Domain.Entities
     {
         public int PulseCount { get; set; }
         public IList<PulseHistory> History { get; set; }
+        
+        public double? PulsePerUnitRatio { get; set; }
+        public UnitOfMeasurement? Unit { get; set; }
     }
 
     public class EnvironmentSensor : SensorPort
@@ -46,5 +49,15 @@ namespace HelloHome.Central.Domain.Entities
     public abstract class SensorPort : Port
     {
         public List<SensorTrigger> Triggers { get; set; }
+    }
+
+    public enum UnitOfMeasurement
+    {
+        M3 = 1,
+        Litre = 2,
+        KWh = 3,
+        Volt = 4,
+        Ampere = 5,
+        Celsius = 6,
     }
 }

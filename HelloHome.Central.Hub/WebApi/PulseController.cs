@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.CmdQrys;
@@ -10,42 +11,49 @@ namespace HelloHome.Central.Hub.WebApi
 {
     [ApiController]
     [Route("[controller]")]
-    public class PulseController : ControllerBase
+    public class PulseController(
+        IUnitOfWork unitOfWork,
+        NodeBridge.INodeBridge hub,
+        IFindPortQuery findPortQuery,
+        IAddPulseOffsetCommand addPulseOffsetCommand,
+        IEnergyMeterSnapshotCommand energyMeterSnapshotCommand)
+        : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly INodeBridge _hub;
-        private readonly IFindPortQuery _findPortQuery;
-        private readonly IAddPulseOffsetCommand _addPulseOffsetCommand;
-
-        public PulseController(IUnitOfWork unitOfWork, NodeBridge.INodeBridge hub, IFindPortQuery findPortQuery, IAddPulseOffsetCommand addPulseOffsetCommand)
-        {
-            _unitOfWork = unitOfWork;
-            _hub = hub;
-            _findPortQuery = findPortQuery;
-            _addPulseOffsetCommand = addPulseOffsetCommand;
-        }
+        private readonly INodeBridge _hub = hub;
+        private readonly IEnergyMeterSnapshotCommand _energyMeterSnapshotCommand = energyMeterSnapshotCommand;
 
         [HttpGet("Offset")]
         public async Task<ActionResult<bool>> PulseOffset(int nodeId, int portNumber, int offset)
         {
-            var port = await _findPortQuery.ByNodeIdAndPortNumberAsync(nodeId, portNumber, PortInclude.None);
+            var port = await findPortQuery.ByNodeIdAndPortNumberAsync(nodeId, portNumber, PortInclude.None);
             if (port == null)
                 return NotFound();
-            await _addPulseOffsetCommand.ExecuteAsync(port.Id, offset);
-            await _unitOfWork.CommitAsync();
+            await addPulseOffsetCommand.ExecuteAsync(port.Id, offset);
+            await unitOfWork.CommitAsync();
             return true;
         }
 
         [HttpGet("SetValue")]
         public async Task<ActionResult<int>> SetValue(int nodeId, int portNumber, int value)
         {
-            var port = await _findPortQuery.ByNodeIdAndPortNumberAsync<PulseSensor>(nodeId, portNumber, PortInclude.None);
+            var port = await findPortQuery.ByNodeIdAndPortNumberAsync<PulseSensor>(nodeId, portNumber, PortInclude.None);
             if (port == null)
                 return NotFound();
             var offset = value - port.PulseCount;
-            await _addPulseOffsetCommand.ExecuteAsync(port.Id, offset);
-            await _unitOfWork.CommitAsync();
+            await addPulseOffsetCommand.ExecuteAsync(port.Id, offset);
+            await unitOfWork.CommitAsync();
             return offset;
+        }
+
+        [HttpPut("{nodeIdentifier}/{portName}/Snapshot")]
+        public async Task<ActionResult<bool>> CreateSnapshot(string nodeIdentifier, string portName, [FromForm] decimal snapshot)
+        {
+            var port = await findPortQuery.ByNodeIdentifierAndPortNameAsync<PulseSensor>(nodeIdentifier, portName);
+            if (port == null)
+                return NotFound();
+            var snap = await energyMeterSnapshotCommand.CreateSnapshot(port.Id, (double)snapshot);
+            await unitOfWork.CommitAsync();
+            return true;
         }
     }
 }

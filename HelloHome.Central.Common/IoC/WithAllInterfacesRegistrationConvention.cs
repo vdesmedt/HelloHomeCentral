@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using System.Linq;
-using JasperFx.TypeDiscovery;
+using JasperFx.Core.TypeScanning;
 using Lamar;
 using Lamar.Scanning.Conventions;
 

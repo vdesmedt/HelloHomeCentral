@@ -20,6 +20,7 @@ namespace HelloHome.Central.Repository
         public DbSet<NodeLog> NodeLogs { get; set; }
         public DbSet<Script> Scripts { get; set; }
         public DbSet<Condition> Conditions { get; set; }
+        public DbSet<EnergyMeterSnapshot> EnergyMeterSnapshots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

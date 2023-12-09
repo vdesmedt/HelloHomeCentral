@@ -13,6 +13,7 @@ namespace HelloHome.Central.Domain.CmdQrys
         Node ByRfId(int rfId, NodeInclude includes = NodeInclude.None);
         Task<Node> BySignatureAsync(long signature, NodeInclude includes = NodeInclude.None);
         Task<Node> ByRfIdAsync(int rfId, NodeInclude includes = NodeInclude.None);
+        Task<Node> ByIdentifierAsync(string identifier, NodeInclude includes = NodeInclude.None);
     }
 
     public class FindNodeQuery : IFindNodeQuery
@@ -50,6 +51,13 @@ namespace HelloHome.Central.Domain.CmdQrys
             return await _ctx.Nodes
                 .Include(includes)
                 .FirstOrDefaultAsync(x => x.RfAddress == rfId);
+        }
+
+        public async Task<Node> ByIdentifierAsync(string identifier, NodeInclude includes = NodeInclude.None)
+        {
+            return await _ctx.Nodes
+                .Include(includes)
+                .FirstOrDefaultAsync(x => x.Identifier == identifier);
         }
     }
 }

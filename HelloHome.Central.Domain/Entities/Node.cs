@@ -13,6 +13,7 @@ namespace HelloHome.Central.Domain.Entities
 
         public int Id { get; set; }
 
+        public string Identifier { get; set; }
         /// <summary>
         /// UniqueId of the Flash chip
         /// </summary>

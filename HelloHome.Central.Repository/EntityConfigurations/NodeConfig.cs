@@ -14,6 +14,9 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             builder.ToTable("Node");
             builder.HasKey(x => x.Id);
             builder.HasIndex(x => x.RfAddress).IsUnique();
+            builder.Property(x => x.Identifier)
+                .HasMaxLength(20);
+            builder.HasIndex(x => x.Identifier).IsUnique();
             builder.OwnsOne(x => x.Metadata, on =>
             {
                 on.WithOwner(y => y.Node);
@@ -27,6 +30,8 @@ namespace HelloHome.Central.Repository.EntityConfigurations
             });
             builder.HasMany(x => x.Ports).WithOne(x => x.Node).HasForeignKey(x => x.NodeId);
             builder.HasMany(x => x.Logs).WithOne().HasForeignKey(x => x.NodeId);
+            
+            
         }
     }
 }

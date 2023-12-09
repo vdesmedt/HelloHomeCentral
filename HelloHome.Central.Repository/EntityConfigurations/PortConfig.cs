@@ -21,6 +21,7 @@ namespace HelloHome.Central.Repository.EntityConfigurations
                 .HasValue<RelayActuator>(7)
                 .HasValue<FloatLogger>(8)
                 .HasValue<IntLogger>(9);
+            builder.HasIndex(x => new { x.NodeId, x.Name }).IsUnique();
         }
     }
     
