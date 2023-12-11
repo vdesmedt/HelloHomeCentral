@@ -46,7 +46,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
             Assert.Equal("1234567", dbNode.Metadata.Version);
 
             //Config message is correct
-            Assert.Equal(1, responses.Count);
+            Assert.Single(responses);
             var configCommand = Assert.IsType<NodeConfigCommand>(responses[0]);
             Assert.Equal(nodeStartedReport.Signature, configCommand.Signature);
             Assert.Equal(nodeStartedReport.FromRfAddress, configCommand.ToRfAddress);
@@ -74,8 +74,7 @@ namespace HelloHome.Central.Tests.IntegrationTests
             };
 
             var responses = await Hub.ProcessOne(nodeStartedReport, _cts.Token);
-
-            Assert.Equal(1, responses.Count);
+            Assert.Single(responses);
             var configCommand = Assert.IsType<NodeConfigCommand>(responses[0]);
 
             Assert.Equal(nodeStartedReport.Signature, configCommand.Signature);

@@ -13,15 +13,11 @@ namespace HelloHome.Central.Hub.WebApi
     [Route("[controller]")]
     public class PulseController(
         IUnitOfWork unitOfWork,
-        NodeBridge.INodeBridge hub,
         IFindPortQuery findPortQuery,
         IAddPulseOffsetCommand addPulseOffsetCommand,
         IEnergyMeterSnapshotCommand energyMeterSnapshotCommand)
         : ControllerBase
     {
-        private readonly INodeBridge _hub = hub;
-        private readonly IEnergyMeterSnapshotCommand _energyMeterSnapshotCommand = energyMeterSnapshotCommand;
-
         [HttpGet("Offset")]
         public async Task<ActionResult<bool>> PulseOffset(int nodeId, int portNumber, int offset)
         {
