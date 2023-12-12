@@ -68,7 +68,7 @@ namespace HelloHome.Central.Hub
                     services.Configure<RFM2PiConfig>(hostContext.Configuration.GetSection("RFM2Pi"));
                     services.Configure<EmonCmsConfig>(hostContext.Configuration.GetSection("EmonCms"));
                 })
-                .ConfigureWebHostDefaults(builder => builder.UseStartup<WebApi.Startup>().UseUrls("http://localhost:5000"))
+                .ConfigureWebHostDefaults(builder => builder.UseStartup<WebApi.Startup>().UseUrls("http://*:5000"))
                 .Build();
 
             await host.RunAsync();
