@@ -10,18 +10,15 @@ using NLog;
 
 namespace HelloHome.Central.Hub.Handlers
 {
-    public class PongHandler :MessageHandler<PongReport>
+    public class PongHandler(IUnitOfWork dbCtx) : MessageHandler<PongReport>(dbCtx)
     {
         private static readonly Logger Logger = LogManager.GetLogger(nameof(PongHandler));
-        
-        public PongHandler(IUnitOfWork dbCtx) : base(dbCtx)
-        {
-        }
 
-        protected override async Task HandleAsync(PongReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
+        protected override Task HandleAsync(PongReport request, IList<OutgoingMessage> outgoingMessages, CancellationToken cToken)
         {
-            var ellapsed = (long)((DateTimeOffset.Now - DateTimeOffset.Now.Date).TotalMilliseconds - request.MillisIn);
-            Logger.Info($"Ping returned from {request.FromRfAddress} after {ellapsed} ms. Rssi is {request.PingRssi}/{request.Rssi}, Millis on Device is {request.MillisOut}");
+            var elapsed = (long)((DateTimeOffset.Now - DateTimeOffset.Now.Date).TotalMilliseconds - request.MillisIn);
+            Logger.Info($"Ping returned from {request.FromRfAddress} after {elapsed} ms. Rssi is {request.PingRssi}/{request.Rssi}, Millis on Device is {request.MillisOut}");
+            return Task.CompletedTask;
         }
     }
 }
