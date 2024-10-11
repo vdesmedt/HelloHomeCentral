@@ -2,6 +2,6 @@
 {
   "ConnectionStrings": {
     "dev": "Server=127.0.0.1;Port=3306;Database=hhDev;User Id=hhgtw;Password=H3ll0H0m3Gat3way",
-    "pro": "Server=raspddock;Port=3306;Database=hhPro;User Id=hhgtw;Password=@Preo890§§"
+    "pro": "Server=raspdock;Port=3306;Database=hhPro;User Id=hhgtw;Password=@Preo890§§"
   }
 }
