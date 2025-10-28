@@ -1,0 +1,28 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: hh-db
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./hhdb/datadir:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: mariapass
+      MARIADB_DATABASE: hhdev
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: hh-mqtt
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+  core:
+    container_name: hh-core
+    depends_on:
+      - db
+      - mqtt-broker
+    build:      
+      context: ../HelloHome.Central.Core
+      dockerfile: Dockerfile
+    

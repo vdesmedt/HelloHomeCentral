@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Domain.Entities;
-using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
-using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using HelloHome.Central.Domain.Messages.Commands;
+using HelloHome.Central.Domain.Messages.Reports;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

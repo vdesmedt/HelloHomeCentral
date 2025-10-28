@@ -1,5 +1,5 @@
 
-using HelloHome.Central.Hub.MessageChannel.Messages;
+using HelloHome.Central.Domain.Messages;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base
 {

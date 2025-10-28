@@ -5,7 +5,7 @@ using System.Net.Cache;
 using System.Threading.Tasks;
 using HelloHome.Central.Common.Configuration;
 using HelloHome.Central.Hub.IoC;
-using HelloHome.Central.Hub.IoC.Installers;
+using HelloHome.Central.Hub.IoC.Registries;
 using HelloHome.Central.Repository;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;

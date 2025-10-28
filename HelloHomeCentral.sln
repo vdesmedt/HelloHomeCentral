@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Repositor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Tests", "HelloHome.Central.Tests\HelloHome.Central.Tests.csproj", "{1AFC0B2F-0713-499F-88C0-8E539F7E8669}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Core", "HelloHome.Central.Core\HelloHome.Central.Core.csproj", "{04F1B15C-2CCF-454C-8F67-0F6468AAD12F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Common.IoC", "HelloHome.Central.Common.IoC\HelloHome.Central.Common.IoC.csproj", "{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{1AFC0B2F-0713-499F-88C0-8E539F7E8669}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AFC0B2F-0713-499F-88C0-8E539F7E8669}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AFC0B2F-0713-499F-88C0-8E539F7E8669}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F1B15C-2CCF-454C-8F67-0F6468AAD12F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F1B15C-2CCF-454C-8F67-0F6468AAD12F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F1B15C-2CCF-454C-8F67-0F6468AAD12F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F1B15C-2CCF-454C-8F67-0F6468AAD12F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

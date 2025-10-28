@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using HelloHome.Central.Hub.MessageChannel.Messages;
+using HelloHome.Central.Domain.Messages;
 
 namespace HelloHome.Central.Hub.NodeBridge
 {

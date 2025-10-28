@@ -6,12 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EasyConsole.Netstandard" Version="1.0.0" />
-    <PackageReference Include="Lamar" Version="15.0.1" />
     <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="15.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
@@ -41,9 +36,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HelloHome.Central.Common.IoC\HelloHome.Central.Common.IoC.csproj" />
     <ProjectReference Include="..\HelloHome.Central.Common\HelloHome.Central.Common.csproj" />
-    <ProjectReference Include="..\HelloHome.Central.Domain\HelloHome.Central.Domain.csproj" />
-    <ProjectReference Include="..\HelloHome.Central.Repository\HelloHome.Central.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appconfig.MacBook-Pro.json">

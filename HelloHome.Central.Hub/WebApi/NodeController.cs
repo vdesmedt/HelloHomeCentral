@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
+using HelloHome.Central.Domain.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel;
-using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

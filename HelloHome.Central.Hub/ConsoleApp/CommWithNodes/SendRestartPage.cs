@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading;
 using EasyConsole;
 using HelloHome.Central.Domain;
+using HelloHome.Central.Domain.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel;
-using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
 using Microsoft.EntityFrameworkCore;
 
 namespace HelloHome.Central.Hub.ConsoleApp.CommWithNodes

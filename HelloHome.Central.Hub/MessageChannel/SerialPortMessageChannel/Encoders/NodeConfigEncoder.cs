@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
+using HelloHome.Central.Domain.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base;
 using Constants = HelloHome.Central.Common.Constants;
 

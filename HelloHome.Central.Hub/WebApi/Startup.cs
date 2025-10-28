@@ -1,5 +1,4 @@
 using HelloHome.Central.Hub.IoC;
-using HelloHome.Central.Hub.IoC.Installers;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

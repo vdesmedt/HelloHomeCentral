@@ -1,7 +1,7 @@
 ﻿using System;
 using HelloHome.Central.Common;
-using HelloHome.Central.Hub.MessageChannel.Messages;
-using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using HelloHome.Central.Domain.Messages;
+using HelloHome.Central.Domain.Messages.Reports;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers

@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using HelloHome.Central.Hub.MessageChannel.Messages;
-using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
+using HelloHome.Central.Domain.Messages;
+using HelloHome.Central.Domain.Messages.Reports;
 
 namespace HelloHome.Central.Hub.MessageChannel
 {

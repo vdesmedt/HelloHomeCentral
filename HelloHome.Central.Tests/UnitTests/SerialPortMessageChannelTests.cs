@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HelloHome.Central.Domain.Messages;
 using HelloHome.Central.Hub.IoC.Factories;
-using HelloHome.Central.Hub.MessageChannel.Messages;
-using HelloHome.Central.Hub.MessageChannel.Messages.Reports;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;

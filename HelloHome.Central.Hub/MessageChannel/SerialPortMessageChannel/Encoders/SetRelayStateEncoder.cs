@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using HelloHome.Central.Common;
-using HelloHome.Central.Hub.MessageChannel.Messages.Commands;
+using HelloHome.Central.Domain.Messages.Commands;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders.Base;
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Encoders

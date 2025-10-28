@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Hub;
-using HelloHome.Central.Hub.IoC.Installers;
+using HelloHome.Central.Hub.IoC.Registries;
 using HelloHome.Central.Hub.MessageChannel;
 using HelloHome.Central.Hub.NodeBridge;
 using HelloHome.Central.Repository;
