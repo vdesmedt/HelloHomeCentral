@@ -30,7 +30,7 @@ public class MqttHostedService(
         mqttClient.ConnectedAsync += e =>
         {
             logger.LogInformation($"[MQTT] Connected: {e.ConnectResult?.ResultCode} at {DateTimeOffset.Now}");
-            //TODO: Subscribe to topics (after disconnection)
+            //TODO: Subscribe to topics (after disconnection) or use freshSession=false ???
             return Task.CompletedTask;
         };
         
