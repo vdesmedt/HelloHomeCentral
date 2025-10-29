@@ -23,4 +23,8 @@
     <ItemGroup>
       <ProjectReference Include="..\HelloHome.Central.Common.IoC\HelloHome.Central.Common.IoC.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Mqtt\Parsers\" />
+    </ItemGroup>
 </Project>

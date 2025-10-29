@@ -30,10 +30,10 @@ namespace HelloHome.Central.Common.IoC.Factories
 
     public class MessageHandlerFactory : IMessageHandlerFactory
     {
-        private readonly Container _container;
+        private readonly IContainer _container;
         private readonly ConcurrentDictionary<Type, Type> _typeMap;
 
-        public MessageHandlerFactory(Container container)
+        public MessageHandlerFactory(IContainer container)
         {
             _container = container;
             var handlerTypes = container.Model.AllInstances

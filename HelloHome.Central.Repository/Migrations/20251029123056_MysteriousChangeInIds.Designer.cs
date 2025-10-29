@@ -4,6 +4,7 @@ using HelloHome.Central.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HelloHome.Central.Repository.Migrations
 {
     [DbContext(typeof(HhDbContext))]
-    partial class HhDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251029123056_MysteriousChangeInIds")]
+    partial class MysteriousChangeInIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
