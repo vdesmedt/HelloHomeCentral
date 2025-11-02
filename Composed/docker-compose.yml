@@ -24,8 +24,33 @@ services:
     depends_on:
       - db
       - mqtt-broker
+    platform: linux/arm64
     build:      
-      context: ../HelloHome.Central.Core/
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: HelloHome.Central.Core/Dockerfile
+  api:
+    container_name: hh-api
+    platform: linux/arm64
+    build:      
+      context: ..
+      dockerfile: HelloHome.Central.API/Dockerfile
+    ports:
+    - "8080:8080"
+  simulator:
+    container_name: hh-simulator
+    platform: linux/arm64
+    build:      
+      context: ..
+      dockerfile: HelloHome.Central.Simulator/Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE=/api
+    volumes:
+      - ../HelloHome.Central.Simulator:/app
+      - hhsim-npm:/app/node_modules
+    depends_on:
+      - api
 volumes:
   hhdb-data:
+  hhsim-npm:

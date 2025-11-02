@@ -1,0 +1,6 @@
+@HelloHomeCentralAPI_HostAddress = http://localhost:8080
+
+GET {{HelloHomeCentralAPI_HostAddress}}/wf/
+Accept: application/json
+
+###

@@ -9,10 +9,10 @@ namespace HelloHome.Central.Hub.IoC.Registries
         private static readonly Logger Logger = NLog.LogManager.GetLogger(nameof(HubServiceRegistry));		
         public HubServiceRegistry()
         {
-            IncludeRegistry<BusinessLogicInstaller>();
-            IncludeRegistry<CommandAndQueriesInstaller>();
-            IncludeRegistry<DbContextInstaller>();
-            IncludeRegistry<HandlerInstaller>();
+            IncludeRegistry<BusinessLogicRegistry>();
+            IncludeRegistry<CommandAndQueriesRegistry>();
+            IncludeRegistry<DbContextRegistry>();
+            IncludeRegistry<HandlerRegistry>();
             IncludeRegistry<NodeBridgeRegistry>();
             IncludeRegistry<MessageChannelRegistry>();
         }

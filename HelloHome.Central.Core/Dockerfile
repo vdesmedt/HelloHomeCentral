@@ -9,11 +9,11 @@ COPY ["HelloHome.Central.Core/HelloHome.Central.Core.csproj", "HelloHome.Central
 RUN dotnet restore "HelloHome.Central.Core/HelloHome.Central.Core.csproj"
 COPY . .
 WORKDIR "/src/HelloHome.Central.Core"
-RUN dotnet build "./HelloHome.Central.Core.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "HelloHome.Central.Core.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./HelloHome.Central.Core.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "HelloHome.Central.Core.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

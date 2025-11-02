@@ -1,5 +1,5 @@
-﻿using HelloHome.Central.Hub.NodeBridge;
-using HelloHome.Central.Hub.NodeBridge.Performance;
+﻿using HelloHome.Central.Common.Performance;
+using HelloHome.Central.Hub.NodeBridge;
 using Lamar;
 using Microsoft.Extensions.DependencyInjection;
 

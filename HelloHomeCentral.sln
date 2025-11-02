@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Core", "H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Common.IoC", "HelloHome.Central.Common.IoC\HelloHome.Central.Common.IoC.csproj", "{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.API", "HelloHome.Central.API\HelloHome.Central.API.csproj", "{8F2CC2BD-2F56-41FF-AA5A-3890DB82D15E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloHome.Central.Common.Mqtt", "HelloHome.Central.Common.Mqtt\HelloHome.Central.Common.Mqtt.csproj", "{18DA7C83-3813-470A-AF3A-0DC2D0064129}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5F22DB8-98D9-427F-BBA9-3320EF14A34B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F2CC2BD-2F56-41FF-AA5A-3890DB82D15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F2CC2BD-2F56-41FF-AA5A-3890DB82D15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F2CC2BD-2F56-41FF-AA5A-3890DB82D15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F2CC2BD-2F56-41FF-AA5A-3890DB82D15E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DA7C83-3813-470A-AF3A-0DC2D0064129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DA7C83-3813-470A-AF3A-0DC2D0064129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DA7C83-3813-470A-AF3A-0DC2D0064129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DA7C83-3813-470A-AF3A-0DC2D0064129}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

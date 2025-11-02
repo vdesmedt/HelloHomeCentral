@@ -1,7 +1,7 @@
 using HelloHome.Central.Common.Performance;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HelloHome.Central.Hub.WebApi
+namespace HelloHome.Central.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
