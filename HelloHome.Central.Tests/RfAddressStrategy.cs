@@ -23,7 +23,7 @@ namespace HelloHome.Central.Tests
         public void ReturnHoleIfAny()
         {
             var existingAddresses = new List<int> {1, 3};
-            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 5};
+            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressLowerBound = 1, RfAddressUpperBound = 3};
 
             var rfa = sut.FindAvailableRfAddress();
             Assert.Equal(2, rfa);
@@ -33,7 +33,7 @@ namespace HelloHome.Central.Tests
         public void ReturnIfNoHole()
         {
             var existingAddresses = new List<int> {1, 2};
-            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 5};
+            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressLowerBound = 1, RfAddressUpperBound = 5};
 
             var rfa = sut.FindAvailableRfAddress();
             Assert.InRange(rfa, 3, 5);
@@ -43,7 +43,7 @@ namespace HelloHome.Central.Tests
         public void ThrowIfNoneAvailable()
         {
             var existingAddresses = new List<int> {1, 2, 3};
-            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 3};
+            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressLowerBound = 1, RfAddressUpperBound = 3};
 
             Assert.Throws<NoAvailableRfAddressException>(() => sut.FindAvailableRfAddress());
         }
@@ -52,7 +52,7 @@ namespace HelloHome.Central.Tests
         public void FindAllAvailable()
         {
             var existingAddresses = new List<int> {1, 2, 5, 12, 15};
-            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 15};
+            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressLowerBound = 1, RfAddressUpperBound = 15};
             for (var i = 0; i < 10; i++)
                 existingAddresses.Add(sut.FindAvailableRfAddress());
             Assert.Equal("123456789101112131415", existingAddresses.OrderBy(x => x).Aggregate(new StringBuilder(), (x, a) => x.Append(a), x => x.ToString()));
@@ -62,7 +62,7 @@ namespace HelloHome.Central.Tests
         public void ThreadSafe()
         {
             var existingAddresses = new ConcurrentBag<int> {1, 2, 5, 12, 15};
-            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressUpperBound = 15};
+            var sut = new FillHolesRfAddressStrategy(existingAddresses) {RfAddressLowerBound = 1, RfAddressUpperBound = 15};
             var adr = new int[10];
             Parallel.For(0, 10, x =>
             {

@@ -1,10 +1,12 @@
-using HelloHome.Central.Common.IoC;
+using HelloHome.Central.Common.IoC.Factories;
 using HelloHome.Central.Common.Mqtt;
 using HelloHome.Central.Common.Mqtt.Converters;
 using Lamar;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MQTTnet;
 
-namespace HelloHome.Central.Core.IoC;
+namespace HelloHome.Central.Common.IoC.Registries;
 
 public class MqttRegistry : Lamar.ServiceRegistry
 {
@@ -14,16 +16,15 @@ public class MqttRegistry : Lamar.ServiceRegistry
         this.AddSingleton<MqttClientFactory>();
         this.AddTransient<IMqttPublisher, MqttPublisher>();
         this.AddSingleton<IMqttSubscriber, MqttSubscriber>();
-        this.AddSingleton<IMessageFactory, MessageFactory>(sp =>
-        {
-            var ctn = sp.GetRequiredService<IContainer>();
-            return new MessageFactory(ctn);
-        });
+        this.AddSingleton<MessageConverterFactory>();
+        For<IMessageParserFactory>().Use(ctx => ctx.GetInstance<MessageConverterFactory>());
+        For<IMessageEncoderFactory>().Use(ctx => ctx.GetInstance<MessageConverterFactory>());
+        
         Scan(scanner =>
         {
-            scanner.AssemblyContainingType<IParser>();
-            scanner.Include(_ => _.GetInterfaces().Contains(typeof(IParser)));
-            scanner.Include(_ => _.GetInterfaces().Contains(typeof(IEncoder)));
+            scanner.AssemblyContainingType<IMessageParser>();
+            scanner.Include(_ => _.GetInterfaces().Contains(typeof(IMessageParser)));
+            scanner.Include(_ => _.GetInterfaces().Contains(typeof(IMessageEncoder)));
             scanner.Convention<WithAllInterfacesRegistrationConvention>();
         });
         this.AddSingleton<IMqttClient>(provider =>

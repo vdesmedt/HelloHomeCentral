@@ -9,7 +9,22 @@ export default defineConfig({
       port: 5173,
       strictPort: true,
       proxy: {
-        "/api": "http://api:8080"
+        "/api": {
+            target: 'http://host.docker.internal:8080/',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api/, ''),
+            configure: (proxy, options) => {
+                proxy.on('proxyReq', (proxyReq, req, res) => {
+                    console.log(`[proxy →] ${req.method} ${req.url} -> ${options.target}`)
+                })
+                proxy.on('proxyRes', (proxyRes, req) => {
+                    console.log(`[proxy ←] ${req.method} ${req.url} ${proxyRes.statusCode}`)
+                })
+                proxy.on('error', (err, req) => {
+                    console.error(`[proxy ✖] ${req.method} ${req.url} ${err.message}`)
+                })
+            }
+        }
       }
     }
 })

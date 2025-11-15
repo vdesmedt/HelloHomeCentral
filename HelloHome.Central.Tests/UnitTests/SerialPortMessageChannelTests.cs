@@ -6,6 +6,7 @@ using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel.Parsers.Base;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Moq;
 using Xunit;
@@ -29,24 +30,19 @@ namespace HelloHome.Central.Tests.UnitTests
     public class SerialPortMessageChannelTests
     {
         private readonly SerialPortMessageChannel _sut;
-        private readonly Mock<IByteStream> _byteStreamMock;
         private readonly Queue<byte[]> _byteSequenceQueue = new Queue<byte[]>();
-
-
-        private readonly Mock<IMessageParserFactory> _messageParserFactory;
-        private readonly Mock<IMessageEncoderFactory> _messageEncoderFactory;
-
-
+        private readonly Mock<ILogger<SerialPortMessageChannel>> _loggerMock = new();
+        
         public SerialPortMessageChannelTests()
         {
-            _byteStreamMock = new Mock<IByteStream>();
-            _byteStreamMock.Setup(_ => _.ByteAvailable()).Returns(() =>
+            var byteStreamMock = new Mock<IByteStream>();
+            byteStreamMock.Setup(_ => _.ByteAvailable()).Returns(() =>
             {
                 if (_byteSequenceQueue.Count == 0)
                     return 0;
                 return _byteSequenceQueue.Peek().Length;
             });
-            _byteStreamMock.Setup(_ => _.Read(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()))
+            byteStreamMock.Setup(_ => _.Read(It.IsAny<byte[]>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns((byte[] ba, int o, int c) =>
                 {
                     if (_byteSequenceQueue.Count == 0)
@@ -58,13 +54,16 @@ namespace HelloHome.Central.Tests.UnitTests
                     return byteToCopy;
                 });
 
-            _messageParserFactory = new Mock<IMessageParserFactory>();
-            _messageParserFactory.Setup(_ => _.Build(It.IsAny<byte[]>())).Returns((byte[] ba) => new DummyParser());
+            var messageParserFactory = new Mock<IMessageParserFactory>();
+            messageParserFactory.Setup(_ => _.Build(It.IsAny<byte[]>())).Returns((byte[] ba) => new DummyParser());
 
-            _messageEncoderFactory = new Mock<IMessageEncoderFactory>();
+            var messageEncoderFactory = new Mock<IMessageEncoderFactory>();
 
-            _sut = new SerialPortMessageChannel(_byteStreamMock.Object, _messageParserFactory.Object,
-                _messageEncoderFactory.Object);
+            _sut = new SerialPortMessageChannel(
+                _loggerMock.Object, 
+                byteStreamMock.Object, 
+                messageParserFactory.Object,
+                messageEncoderFactory.Object);
         }
 
         [Fact]

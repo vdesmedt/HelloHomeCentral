@@ -1,7 +1,5 @@
 using System;
-using System.Runtime;
 using HelloHome.Central.Common;
-using NLog.Time;
 
 namespace HelloHome.Central.Domain.Entities
 {

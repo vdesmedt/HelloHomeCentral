@@ -4,7 +4,6 @@ using HelloHome.Central.Common;
 using HelloHome.Central.Domain.CmdQrys.Base;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
-using NLog;
 
 namespace HelloHome.Central.Domain.CmdQrys;
 
@@ -15,8 +14,6 @@ public interface IEnergyMeterSnapshotCommand : ICommand
 
 public class EnergyMeterSnapshotCommand(IUnitOfWork ctx, FindPortQuery findPortQuery, ITimeProvider timerProvider) : IEnergyMeterSnapshotCommand
 {
-    private static readonly Logger Logger = LogManager.GetLogger(nameof(CreateNodeCommand));
-    
     public async Task<EnergyMeterSnapshot> CreateSnapshot(int portId, double snapshot)
     {
         var port = await findPortQuery.ByPortIdAsyn(portId, PortInclude.None);

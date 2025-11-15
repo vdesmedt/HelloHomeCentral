@@ -1,9 +1,10 @@
-using HelloHome.Central.Common.Mqtt;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Formatter;
 
-namespace HelloHome.Central.Core;
+namespace HelloHome.Central.Common.Mqtt;
 
 /// <summary>
 /// MqttHosterService manage the connection to the MQTT broker
@@ -12,7 +13,7 @@ namespace HelloHome.Central.Core;
 /// <param name="mqttConfig">Hostname, port, client name, etc...</param>
 /// <param name="mqttClient">A singleton mqttClient. The application should use one and only one instance of mqttClient.</param>
 public class MqttHostedService(
-    ILogger<MqttMessageHandlerWorker> logger, 
+    ILogger<MqttHostedService> logger, 
     IOptions<MqttSettings> mqttConfig, 
     IMqttClient mqttClient)
     : IHostedService

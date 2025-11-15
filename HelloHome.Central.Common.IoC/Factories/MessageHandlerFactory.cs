@@ -1,33 +1,28 @@
 using System.Collections.Concurrent;
 using HelloHome.Central.Domain.Handlers.Base;
 using HelloHome.Central.Domain.Messages;
+using JetBrains.Annotations;
 using Lamar;
 
 namespace HelloHome.Central.Common.IoC.Factories
 {
     public interface IMessageHandlerFactory
     {
-        IMessageHandler Build(IncomingMessage message);
-        MessageHandlerScope BuildInNestedScope(IncomingMessage message);
+        IMessageHandler Build(Message message);
+        MessageHandlerScope BuildInNestedScope(Message message);
     }
 
-    public class MessageHandlerScope : IDisposable
+    public class MessageHandlerScope(INestedContainer nestedContainer, Type handlerType) : IDisposable
     {
-        private readonly INestedContainer _nestedNestedContainer;
-        public readonly IMessageHandler Handler;
+        public readonly IMessageHandler Handler = (IMessageHandler)nestedContainer.GetInstance(handlerType);
 
-        public MessageHandlerScope(INestedContainer nestedContainer, Type handlerType)
-        {
-            _nestedNestedContainer = nestedContainer;
-            Handler = (IMessageHandler)nestedContainer.GetInstance(handlerType);
-        }
-        
         public void Dispose()
         {
-            _nestedNestedContainer.Dispose();
+            nestedContainer.Dispose();
         }
     }
 
+    [UsedImplicitly]
     public class MessageHandlerFactory : IMessageHandlerFactory
     {
         private readonly IContainer _container;
@@ -45,7 +40,7 @@ namespace HelloHome.Central.Common.IoC.Factories
                 new KeyValuePair<Type, Type>(t.BaseType.GenericTypeArguments[0], t)));
         }
 
-        public IMessageHandler Build(IncomingMessage message)
+        public IMessageHandler Build(Message message)
         {
             var reqType = message.GetType();
             if (_typeMap.TryGetValue(reqType, out var handlerType))
@@ -53,7 +48,7 @@ namespace HelloHome.Central.Common.IoC.Factories
             throw new Exception($"Handler not found for {reqType.Name}");
         }
 
-        public MessageHandlerScope BuildInNestedScope(IncomingMessage message)
+        public MessageHandlerScope BuildInNestedScope(Message message)
         {
             var reqType = message.GetType();
             if (_typeMap.TryGetValue(reqType, out var handlerType))

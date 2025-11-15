@@ -15,37 +15,36 @@ using HelloHome.Central.Hub.IoC.Factories;
 using HelloHome.Central.Hub.MessageChannel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
+using Microsoft.Extensions.Logging;
+
 
 namespace HelloHome.Central.Hub.NodeBridge
 {
     public class NodeBridge : INodeBridge
     {
-        private static int instanceCount = 0;
-        private int _instanceId = 0;
-
-        private static readonly Logger Logger = LogManager.GetLogger(nameof(NodeBridge));
-
-        private readonly BlockingCollection<IncomingMessage> _incomingMessages =
-            new BlockingCollection<IncomingMessage>(new ConcurrentQueue<IncomingMessage>());
-
-        private readonly BlockingCollection<OutgoingMessage> _outgoingMessages =
-            new BlockingCollection<OutgoingMessage>(new ConcurrentQueue<OutgoingMessage>());
-
+        private static int _instanceCount = 0;
+        private readonly ILogger<NodeBridge> _logger;
         private readonly IMessageChannel _messageChannel;
         private readonly IMessageHandlerFactory _messageHandlerFactory;
         private readonly ITimeProvider _timeProvider;
         private readonly IPerformanceStats _performanceStats;
 
-        public NodeBridge(IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory,
+        private readonly BlockingCollection<IncomingMessage> _incomingMessages =
+            new BlockingCollection<IncomingMessage>(new ConcurrentQueue<IncomingMessage>());
+        private readonly BlockingCollection<OutgoingMessage> _outgoingMessages =
+            new BlockingCollection<OutgoingMessage>(new ConcurrentQueue<OutgoingMessage>());
+
+
+        public NodeBridge(ILogger<NodeBridge> logger, IMessageChannel messageChannel, IMessageHandlerFactory messageHandlerFactory,
             ITimeProvider timeProvider, IPerformanceStats performanceStats)
         {
+            _logger = logger;
             _messageChannel = messageChannel;
             _messageHandlerFactory = messageHandlerFactory;
             _timeProvider = timeProvider;
             _performanceStats = performanceStats;
-            _instanceId = ++instanceCount;
-            Logger.Info($"New NodBridge with instance id {_instanceId}");
+            var instanceId = ++_instanceCount;
+            _logger.LogInformation($"New NodBridge with instance id {instanceId}");
         }
 
         public long LeftToProcess => _incomingMessages.Count;
@@ -68,19 +67,17 @@ namespace HelloHome.Central.Hub.NodeBridge
                     while (!cancellationToken.IsCancellationRequested)
                     {
                         //Read everything that can be
-                        Logger.Trace(() => "Try read from channel");
+                        _logger.LogTrace("Try read from channel");
                         var inMsg = _messageChannel.TryReadNext();
                         while (inMsg != null)
                         {
                             //Process SendingStatus
                             if (inMsg is SendingStatusReport sc)
                             {
-                                Logger.Debug(() =>
-                                    $"Sending report for msg {sc.MessageId} found in channel with status {(sc.Success ? "OK" : "NOK")}.");
+                                _logger.LogDebug($"Sending report for msg {sc.MessageId} found in channel with status {(sc.Success ? "OK" : "NOK")}.");
                                 if (!retryList.ContainsKey(sc.MessageId))
                                 {
-                                    Logger.Warn(() =>
-                                        $"MessageId {sc.MessageId} not found in retry list. Ignoring");
+                                    _logger.LogWarning($"MessageId {sc.MessageId} not found in retry list. Ignoring");
                                 }
                                 else
                                 {
@@ -98,8 +95,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                                     else if (retryMsg.RetryCount >= retryMsg.MaxRetry)
                                     {
                                         retryList.Remove(sc.MessageId);
-                                        Logger.Warn(() =>
-                                            $"Last try failed for message with id {sc.MessageId}. Removed from retryQueue.");
+                                        _logger.LogWarning($"Last try failed for message with id {sc.MessageId}. Removed from retryQueue.");
                                     }
                                     else
                                     {
@@ -116,13 +112,11 @@ namespace HelloHome.Central.Hub.NodeBridge
                                 if (lastMsgIdFromNodes.ContainsKey(inMsg.FromRfAddress) &&
                                     lastMsgIdFromNodes[inMsg.FromRfAddress] == inMsg.MsgId)
                                 {
-                                    Logger.Info(() =>
-                                        $"Message with Id {inMsg.MsgId} coming from RFAddr {inMsg.FromRfAddress} was already added in queue and will be dismissed.");
+                                    _logger.LogInformation($"Message with Id {inMsg.MsgId} coming from RFAddr {inMsg.FromRfAddress} was already added in queue and will be dismissed.");
                                 }
                                 else
                                 {
-                                    Logger.Debug(() =>
-                                        $"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
+                                    _logger.LogDebug($"Message of type {inMsg.GetType().Name} found in channel. Will enqueue.");
                                     _incomingMessages.Add(inMsg, cancellationToken);
                                     lastMsgIdFromNodes[inMsg.FromRfAddress] = inMsg.MsgId;
                                 }
@@ -139,27 +133,25 @@ namespace HelloHome.Central.Hub.NodeBridge
                         }
 
                         //Write any left message from outgoingQueue
-                        Logger.Trace(() => "Try read from Queue");
+                        _logger.LogTrace("Try read from Queue");
                         while (!_outgoingMessages.IsCompleted && _outgoingMessages.Count > 0)
                         {
                             if (_outgoingMessages.TryTake(out var outMsg, 10))
                             {
-                                Logger.Debug(() =>
-                                    $"Message of type {outMsg.GetType().Name} with id {outMsg.MessageId} found in queue. Will send.");
+                                _logger.LogDebug($"Message of type {outMsg.GetType().Name} with id {outMsg.MessageId} found in queue. Will send.");
                                 _messageChannel.Send(outMsg);
                                 retryList.Add(outMsg.MessageId, new RetryOutgoingMessage(outMsg));
                             }
                         }
 
                         //Retry
-                        Logger.Trace(() => "Retry sendings");
+                        _logger.LogTrace("Retry sendings");
                         var pivot = _timeProvider.UtcNow;
                         foreach (var retryMsg in retryList.Values)
                         {
                             if (retryMsg.ReadyForRetry && retryMsg.NextTry < pivot)
                             {
-                                Logger.Debug(() =>
-                                    $"Will retry messageId {retryMsg.Message.MessageId} ({retryMsg.Message.GetType().Name})");
+                                _logger.LogDebug($"Will retry messageId {retryMsg.Message.MessageId} ({retryMsg.Message.GetType().Name})");
                                 _messageChannel.Send(retryMsg.Message);
                                 retryMsg.ReadyForRetry = false;
                                 retryMsg.RetryCount++;
@@ -172,7 +164,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                 }
                 catch (Exception e)
                 {
-                    Logger.Error(e, $"Exception in Communication Task : {e.Message}");
+                    _logger.LogError(e, $"Exception in Communication Task : {e.Message}");
                 }
             }, cancellationToken);
         }
@@ -187,19 +179,19 @@ namespace HelloHome.Central.Hub.NodeBridge
                     if (!_incomingMessages.TryTake(out var inMsg, 1000))
                         continue;
                     var call = _performanceStats.StartCall();
-                    Logger.Debug(() => $"Message of type {inMsg.GetType().Name} found in queue");
+                    _logger.LogDebug($"Message of type {inMsg.GetType().Name} found in queue");
                     try
                     {
                         var responses = await ProcessOne(inMsg, cancellationToken);
                         foreach (var response in responses)
                         {
-                            Logger.Debug(() => $"Enqueuing response {response}");
+                            _logger.LogDebug($"Enqueuing response {response}");
                             _outgoingMessages.Add(response, cancellationToken);
                         }
                     }
                     catch (Exception e)
                     {
-                        Logger.Error(e, () => $"Exception during processing of {inMsg.GetType().Name} : {e.Message}");
+                        _logger.LogError(e, $"Exception during processing of {inMsg.GetType().Name} : {e.Message}");
                     }
                     finally
                     {
@@ -213,12 +205,10 @@ namespace HelloHome.Central.Hub.NodeBridge
         {
             var ts = Stopwatch.StartNew();
             using var scopedHandler = _messageHandlerFactory.BuildInNestedScope(msg);
-            Logger.Debug(() => $"{scopedHandler.Handler.GetType().Name} will be used to handle {msg.GetType().Name}");
+            _logger.LogDebug($"{scopedHandler.Handler.GetType().Name} will be used to handle {msg.GetType().Name}");
             var responses = await scopedHandler.Handler.HandleAsync(msg, token);
             ts.Stop();
-            Logger.Debug(() =>
-                $"{scopedHandler.Handler.GetType().Name} has finnish handling {msg.GetType().Name} in {ts.ElapsedMilliseconds} ms.");
-
+            _logger.LogDebug($"{scopedHandler.Handler.GetType().Name} has finnish handling {msg.GetType().Name} in {ts.ElapsedMilliseconds} ms.");
             return responses;
         }
     }

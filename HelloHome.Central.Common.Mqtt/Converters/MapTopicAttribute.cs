@@ -1,7 +1,23 @@
+using HelloHome.Central.Common.Mqtt.Topic;
+
 namespace HelloHome.Central.Common.Mqtt.Converters;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class MapTopicAttribute(string topic) : Attribute
+public class MapTopicAttribute : Attribute
 {
-    public string Topic { get; init; } = topic;
+    public Report? Report { get; init; }
+    public Command? Command { get; init; }
+    public MapTopicAttribute(Report report)
+    {
+        Report = report;
+        Topic = $"{report}".ToLower();
+    }
+
+    public MapTopicAttribute(Command command)
+    {
+        Command = command;
+        Topic = $"{command}".ToLower();
+    }
+    
+    public string Topic { get; init; }
 }

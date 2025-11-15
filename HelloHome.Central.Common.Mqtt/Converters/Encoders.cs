@@ -1,27 +1,59 @@
 using System.Text.Json;
 using HelloHome.Central.Common.Extensions;
+using HelloHome.Central.Common.Mqtt.Topic;
 using HelloHome.Central.Domain.Messages;
 using HelloHome.Central.Domain.Messages.Commands;
 using MQTTnet;
 
 namespace HelloHome.Central.Common.Mqtt.Converters;
 
-public interface IEncoder 
+public interface IMessageEncoderFactory
 {
-    MqttApplicationMessage Encode(OutgoingMessage message);
+    IMessageEncoder GetEncoderFor(Message message);
 }
 
-public abstract class Encoder<T> : IEncoder where T : OutgoingMessage
+public interface IMessageEncoder 
 {
-    public MqttApplicationMessage Encode(OutgoingMessage message)
+    MqttApplicationMessage EncodeMessage(Message message);
+}
+
+public abstract class MessageEncoder<T> : IMessageEncoder where T : Message
+{
+    public MqttApplicationMessage EncodeMessage(Message message)
     {
-        var topic = GetType().GetAttribute<MapTopicAttribute>()?.Topic ?? throw new Exception("Topic not found");
+        return EncodeMessage((T)message);
+    }
+
+    protected MqttApplicationMessage EncodeMessage(T message)
+    {
         return new MqttApplicationMessageBuilder()
-            .WithTopic($"Node/{message.ToRfAddress}/{topic}")
+            .WithTopic(GetTopic(message))
             .WithPayload(JsonSerializer.Serialize((T)message))
             .Build();
     }
+
+    protected abstract string GetTopic(T message);
 }
 
-[MapTopic("config")]
-public class NodeConfigEncoder : Encoder<NodeConfigCommand>;
+public abstract class OutgoingMessageEncoder<T> : MessageEncoder<T> where T : OutgoingMessage
+{
+    protected override string GetTopic(T message)
+    {
+        var command = GetType().GetAttribute<MapTopicAttribute>()?.Command ?? throw new Exception("Topic not found");
+        return HhTopic.ForCommand(command).ToNode(message.ToRfAddress).ToString();
+    }
+}
+
+public abstract class RequestEncoder<T> : MessageEncoder<T> where T : Request
+{
+    protected override string GetTopic(T message)
+    {
+        var command = GetType().GetAttribute<MapTopicAttribute>()?.Command ?? throw new Exception("Topic not found");
+        return HhTopic.ForCommand(command).ToCore().ToString();
+    }
+}
+
+[MapTopic(Command.Config)]
+public class NodeConfigMessageEncoder : OutgoingMessageEncoder<NodeConfigCommand>;
+[MapTopic(Command.Restart)]
+public class RestartCommandMessageEncoder : OutgoingMessageEncoder<RestartCommand>;

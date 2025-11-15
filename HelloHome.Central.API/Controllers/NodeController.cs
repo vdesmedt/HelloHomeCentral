@@ -1,24 +1,23 @@
+using HelloHome.Central.Common.Mqtt;
 using HelloHome.Central.Domain;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
+using HelloHome.Central.Domain.Messages.Commands;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MQTTnet.Protocol;
 
 namespace HelloHome.Central.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NodeController : ControllerBase
+    public class NodeController(IUnitOfWork unitOfWork, IMqttPublisher mqttPublisher) : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public NodeController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
         [HttpGet]
-        public IEnumerable<Node> Get()
+        public async Task<IEnumerable<Node>> Get()
         {
-            var nodes = _unitOfWork.Nodes.Include(NodeInclude.Metadata).ToList();
+            var nodes = await unitOfWork.Nodes.Include(NodeInclude.Metadata).ToListAsync();
+            
             foreach (var n in nodes)
             {
                 n.Metadata.Node = null;
@@ -29,36 +28,36 @@ namespace HelloHome.Central.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public Node Get(int id)
+        public async Task<Node> Get(int id)
         {
-            var node =  _unitOfWork.Nodes.Include(NodeInclude.Metadata).Include(NodeInclude.AggregatedData).Single(_ => _.Id == id);
+            var node =  await unitOfWork.Nodes.Include(NodeInclude.Metadata).Include(NodeInclude.AggregatedData).SingleAsync(_ => _.Id == id);
             node.Metadata.Node = null;
             node.AggregatedData.Node = null;
             return node;
         }
 
         [HttpGet("{id}/history-env")]
-        public IEnumerable<EnvironmentHistory> GetHistory(int id)
+        public async Task<IEnumerable<EnvironmentHistory>> GetHistory(int id)
         {
-            return _unitOfWork.PortHistory.OfType<EnvironmentHistory>().Where(_ => _.Port.NodeId == id).ToList();
+            return await unitOfWork.PortHistory.OfType<EnvironmentHistory>().Where(_ => _.Port.NodeId == id).ToListAsync();
         }
 
         [HttpGet("{id}/restart")]
-        public ActionResult<bool> Restart(int id)
+        public async Task<ActionResult<bool>> Restart(int id)
         {
-            var node = _unitOfWork.Nodes.SingleOrDefault(_ => _.Id == id);
-            if (node == default(Node))
+            var node = await unitOfWork.Nodes.SingleOrDefaultAsync(n => n.Id == id);
+            if (node == null)
                 return NotFound();
-            //TODO: Implement using Mqtt
-            //_hub.Send(new RestartCommand { ToRfAddress = node.RfAddress });
+            var restartCommand = new RestartCommand { ToRfAddress = node.RfAddress };
+            await mqttPublisher.PublishAsync("core",restartCommand, CancellationToken.None);
             return true;
         }
 
         [HttpGet("{id}/ping")]
-        public ActionResult<int> Ping(int id)
+        public async Task<ActionResult<int>> Ping(int id)
         {
-            var node = _unitOfWork.Nodes.SingleOrDefault(_ => _.Id == id);
-            if (node == default(Node))
+            var node = await unitOfWork.Nodes.SingleOrDefaultAsync(n => n.Id == id);
+            if (node == null)
                 return NotFound();
             //TODO: Implement using Mqtt
             //_hub.Send(new PingCommand { ToRfAddress = node.RfAddress, Millis = (UInt32)(DateTimeOffset.Now-DateTimeOffset.Now.Date).TotalMilliseconds});

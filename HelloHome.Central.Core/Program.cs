@@ -1,8 +1,11 @@
 using HelloHome.Central.Common.IoC.Registries;
-using HelloHome.Central.Core.IoC;
+using HelloHome.Central.Common.Mqtt;
 using HelloHome.Central.Repository;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
 
 namespace HelloHome.Central.Core;
 
@@ -26,15 +29,38 @@ public static class Program
                 services.AddHostedService<MqttMessageHandlerWorker>();
                 services.AddDbContext<HhDbContext>(builder =>
                 {
-                    builder.UseMySql(hostContext.Configuration.GetConnectionString("local"), 
+                    builder.UseMySql(hostContext.Configuration.GetConnectionString("local"),
                         new MariaDbServerVersion(new Version(12, 4, 2)),
                         optionBuilder =>
                         {
                             //optionBuilder.ServerVersion(new Version(10, 4, 11), ServerType.MariaDb);
                         });
-                    //builder.UseLoggerFactory(new NLogLoggerFactory(new NLogLoggerProvider()));
+                });
+            })
+            .ConfigureLogging((hostBuilderContext, loggingBuilder) =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.AddOpenTelemetry(x =>
+                {
+                    x.SetResourceBuilder(ResourceBuilder.CreateEmpty()
+                        .AddService("HelloHome.Central.Core")
+                        .AddAttributes(new Dictionary<string, object>
+                        {
+                            {"Environment", hostBuilderContext.HostingEnvironment.EnvironmentName}
+                        }));
+                    x.IncludeScopes = true;
+                    x.IncludeFormattedMessage = true;
+                    
+                    x.AddConsoleExporter();
+                    x.AddOtlpExporter(o =>
+                    {
+                        o.Endpoint = new Uri("http://seq:80/ingest/otlp/v1/logs");
+                        o.Protocol = OtlpExportProtocol.HttpProtobuf;
+                        o.Headers = "X-Seq-ApiKey=E21iZem6nzzgwc3vk5wa";
+                    });
                 });
             });
+        
 
         var host = builder.Build();
         await host.RunAsync();

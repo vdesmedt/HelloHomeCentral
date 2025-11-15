@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using HelloHome.Central.Common.Exceptions;
 using HelloHome.Central.Domain.CmdQrys;
-using NLog;
+
 
 namespace HelloHome.Central.Domain.Logic.RfAddressStrategy
 {
 	public class FillHolesRfAddressStrategy : IRfAddressStrategy
 	{
-		private static readonly Logger Logger = LogManager.GetLogger(nameof(FillHolesRfAddressStrategy));		
-
 		private readonly SortedSet<int> _exisitingRfAddresses;
 		private readonly Random _rnd;
 

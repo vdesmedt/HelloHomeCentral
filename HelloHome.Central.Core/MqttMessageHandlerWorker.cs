@@ -1,6 +1,7 @@
 using System.Threading.Channels;
 using HelloHome.Central.Common.IoC.Factories;
-using HelloHome.Central.Core.IoC;
+using HelloHome.Central.Common.Mqtt.Converters;
+using HelloHome.Central.Common.Mqtt.Topic;
 using MQTTnet;
 
 namespace HelloHome.Central.Core;
@@ -9,7 +10,8 @@ public class MqttMessageHandlerWorker(
     ILogger<MqttMessageHandlerWorker> logger, 
     MqttClientFactory mqttClientFactory,
     IMqttClient mqttClient,
-    MessageFactory messageFactory,
+    IMessageParserFactory messageParserFactory,
+    IMessageEncoderFactory messageEncoderFactory,
     IMessageHandlerFactory messageHandlerFactory)
     : BackgroundService
 {
@@ -24,17 +26,20 @@ public class MqttMessageHandlerWorker(
     {
         try
         {
-            var inMsg = messageFactory.FromMqtt(e.ApplicationMessage);
+            var hhTopic = HhTopic.Parse(e.ApplicationMessage.Topic);
+            var inMsgParser = messageParserFactory.GetParserFor(hhTopic);
+            var inMsg = inMsgParser.ParseMessage(e.ApplicationMessage);
             var handler = messageHandlerFactory.BuildInNestedScope(inMsg);
             var outMsgs = await handler.Handler.HandleAsync(inMsg, stoppingToken);
             foreach (var outMsg in outMsgs) {
-                var mqttOutMsg = messageFactory.FromMessage(outMsg);
+                var outMsgEncoder = messageEncoderFactory.GetEncoderFor(outMsg);
+                var mqttOutMsg = outMsgEncoder.EncodeMessage(outMsg);
                 await _outbox.Writer.WriteAsync(mqttOutMsg, stoppingToken);
             }
         }
         catch (Exception ex)
         {
-            logger.LogDebug(ex, $"Exception during processing of {ex.Message}");
+            logger.LogError(ex, "Exception during handling of message with topic {topic}", e.ApplicationMessage.Topic);
         }
     }
 
@@ -57,9 +62,11 @@ public class MqttMessageHandlerWorker(
         };
         
         //Subscribe to Node/# Topic
-        await mqttClient.SubscribeAsync(
-            mqttClientFactory.CreateTopicFilterBuilder().WithTopic("Node/#").Build(), 
+        var mqttTopicFilter = mqttClientFactory.CreateTopicFilterBuilder().WithTopic("node/+/report/#").Build();
+        var subScribeRes = await mqttClient.SubscribeAsync(
+            mqttTopicFilter, 
             stoppingToken);
+        logger.LogInformation("Subscribed to {topic-filter}", mqttTopicFilter.Topic);
         
         //Process inbox in parallel
         int degreeOfParallelism = Environment.ProcessorCount;
@@ -72,7 +79,7 @@ public class MqttMessageHandlerWorker(
                 {
                     await foreach (var msg in _inbox.Reader.ReadAllAsync(stoppingToken))
                     {
-                        logger.LogInformation($"[MQTT] processor {taskIndex} process msg with topic {msg.ApplicationMessage.Topic}");
+                        logger.LogInformation("[MQTT] processor {taskIndex} process msg with topic {topic}", taskIndex, msg.ApplicationMessage.Topic);
                         HandleMqttMessageAssync(msg, stoppingToken);
                     }
                 }

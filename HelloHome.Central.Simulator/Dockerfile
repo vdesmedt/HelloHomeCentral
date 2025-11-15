@@ -2,6 +2,7 @@
 WORKDIR /app
 COPY HelloHome.Central.Simulator/package*.json ./
 RUN npm ci
-COPY . .
+COPY HelloHome.Central.Simulator/ .
+ENV DEBUG='vite:* vite'
 EXPOSE 5173
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]

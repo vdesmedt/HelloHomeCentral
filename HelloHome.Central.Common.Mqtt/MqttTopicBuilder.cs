@@ -1,4 +1,30 @@
+using MQTTnet;
+
 namespace HelloHome.Central.Common.Mqtt;
+
+public interface ITopicBuilder
+{
+    void Build();
+}
+
+public class TopicBuilder(MqttApplicationMessage msg) : ITopicBuilder
+{
+    private readonly MqttApplicationMessage _msg = msg;
+
+    public void Build()
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public static class MqttTopicBuilderExtensions
+{
+    public static ITopicBuilder BuildTopic(this MqttApplicationMessage msg, int nodeId,
+        MqttTopicBuilder.ReportType reportType)
+    {
+        return new TopicBuilder(msg);
+    }
+}
 
 public class MqttTopicBuilder
 {

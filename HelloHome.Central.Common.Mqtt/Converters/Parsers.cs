@@ -1,17 +1,24 @@
 using System.Text.Json;
+using HelloHome.Central.Common.Mqtt.Topic;
 using HelloHome.Central.Domain.Messages;
 using HelloHome.Central.Domain.Messages.Reports;
 using MQTTnet;
 
 namespace HelloHome.Central.Common.Mqtt.Converters;
-public interface IParser
+
+public interface IMessageParserFactory
 {
-    IncomingMessage Parse(MqttApplicationMessage mqtMsg);
+    IMessageParser GetParserFor(HhTopic topic);
 }
 
-public abstract class Parser<T> : IParser  where T : IncomingMessage
+public interface IMessageParser
 {
-    public IncomingMessage Parse(MqttApplicationMessage mqtMsg)
+    Message ParseMessage(MqttApplicationMessage mqtMsg);
+}
+
+public abstract class MessageParser<T> : IMessageParser  where T : Message
+{
+    public Message ParseMessage(MqttApplicationMessage mqtMsg)
     {
         var json = mqtMsg.ConvertPayloadToString();
         var rpt = JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
@@ -24,5 +31,11 @@ public abstract class Parser<T> : IParser  where T : IncomingMessage
     }
 }
 
-[MapTopic("started")]
-public class Parsers : Parser<NodeStartedReport>;
+[MapTopic(Report.Started)]
+public class NodeStartedReportParser : MessageParser<NodeStartedReport>;
+
+[MapTopic(Report.Environment)]
+public class EnvironmentalReportParser : MessageParser<EnvironmentalReport>;
+
+[MapTopic(Report.Pulses)]
+public class PulseReportParser : MessageParser<PulseReport>;

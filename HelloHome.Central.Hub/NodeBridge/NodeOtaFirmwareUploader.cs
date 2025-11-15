@@ -5,22 +5,12 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel;
-using NLog;
-using NLog.LayoutRenderers.Wrappers;
+using Microsoft.Extensions.Logging;
 
 namespace HelloHome.Central.Hub.NodeBridge
 {
-    public class NodeOtaFirmwareUploader
+    public class NodeOtaFirmwareUploader(IByteStream byteStream, ILogger logger)
     {
-        private readonly IByteStream _byteStream;
-        private readonly ILogger _logger;
-
-        public NodeOtaFirmwareUploader(IByteStream byteStream, ILogger logger)
-        {
-            _byteStream = byteStream;
-            _logger = logger;
-        }
-
         const int LINEPERPACKET = 3;
 
         public bool UpdateNode(string firmware, int nodeId)
@@ -28,11 +18,11 @@ namespace HelloHome.Central.Hub.NodeBridge
             var sw = Stopwatch.StartNew();
             if (WaitForTargetSet(nodeId))
             {
-                _logger.Trace("TARGET SET OK");
+                logger.LogTrace("TARGET SET OK");
             }
             else
             {
-                _logger.Warn("TARGET SET FAIL, exiting...");
+                logger.LogWarning("TARGET SET FAIL, exiting...");
                 return false;
             }
 
@@ -86,22 +76,22 @@ namespace HelloHome.Central.Hub.NodeBridge
             {
                 if (WaitForHandshake(true) == HANDSHAKE_OK)
                 {
-                    _logger.Info("SUCCESS");
+                    logger.LogInformation("SUCCESS");
                     return true;
                 }
 
-                _logger.Warn(
+                logger.LogWarning(
                     "FAIL, IMG REFUSED BY TARGET (size exceeded? verify target MCU matches compiled target)");
                 return false;
             }
             
             if (handshakeResponse == HANDSHAKE_FAIL_TIMEOUT)
             {
-                _logger.Warn("FAIL: No response from Moteino programmer");
+                logger.LogWarning("FAIL: No response from Moteino programmer");
                 return false;
             }
 
-            _logger.Warn(
+            logger.LogWarning(
                 "FAIL: No response from Moteino Target, is Target listening on same Freq/NetworkID & OTA enabled?");
 
             return false;
@@ -110,8 +100,8 @@ namespace HelloHome.Central.Hub.NodeBridge
         private void SerWriteLn(string msg)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(msg + "\n");
-            _byteStream.Write(bytes, 0, bytes.Length);
-            _logger.Trace(msg);
+            byteStream.Write(bytes, 0, bytes.Length);
+            logger.LogTrace(msg);
         }
 
         private const int HANDSHAKE_OK = 0;
@@ -133,7 +123,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                         SerWriteLn("FLX?");
                     }
 
-                    var rx = _byteStream.ReadLine().Trim().ToUpper();
+                    var rx = byteStream.ReadLine().Trim().ToUpper();
                     if (!String.IsNullOrEmpty(rx))
                     {
                         if (rx == "FLX?OK")
@@ -161,7 +151,7 @@ namespace HelloHome.Central.Hub.NodeBridge
             {
                 if (sw.ElapsedMilliseconds < 3000)
                 {
-                    var rx = _byteStream.ReadLine().Trim();
+                    var rx = byteStream.ReadLine().Trim();
                     if (rx.Length > 0)
                         return rx == $"{to}:OK";
                 }
@@ -179,7 +169,7 @@ namespace HelloHome.Central.Hub.NodeBridge
             {
                 if (sw.ElapsedMilliseconds < 3000)
                 {
-                    var rx = _byteStream.ReadLine().Trim();
+                    var rx = byteStream.ReadLine().Trim();
                     if (rx.ToUpper().StartsWith("RFTX >") || rx.ToUpper().StartsWith("RFACK >"))
                     {
                         rx = String.Empty;
@@ -197,7 +187,7 @@ namespace HelloHome.Central.Hub.NodeBridge
                             return 2;
                         }
 
-                        _logger.Warn($"Programmer reply '{rx}' does not match expected pattern: '{pattern}'");
+                        logger.LogWarning("Programmer reply '{rx}' does not match expected pattern: '{pattern}'", rx, pattern);
                     }
                 }
                 else

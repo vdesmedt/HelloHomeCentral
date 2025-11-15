@@ -4,33 +4,27 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Common.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NLog;
+
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 {
-    public class SerialByteStream : IByteStream, IDisposable
+    public class SerialByteStream(ILogger<SerialByteStream> logger, IOptionsMonitor<SerialConfig> config) : IByteStream, IDisposable
     {
-        private static readonly Logger Logger = LogManager.GetLogger(nameof(SerialByteStream));
-        private readonly SerialPort _port;
-
-
-        public SerialByteStream(IOptionsMonitor<SerialConfig> config)
+        private readonly SerialPort _port = new(config.CurrentValue.Port, config.CurrentValue.BaudRate, Parity.None, 8, StopBits.One)
         {
-            _port = new SerialPort(config.CurrentValue.Port, config.CurrentValue.BaudRate, Parity.None, 8, StopBits.One)
-            {
-                ReadTimeout = config.CurrentValue.TimeOut
-            };
-        }
+            ReadTimeout = config.CurrentValue.TimeOut
+        };
 
         public void Open()
         {
-            Logger.Info("Opening serial port {portname} with baudRate {baudrate} and timeout {timeout} (8N1)",
+            logger.LogInformation("Opening serial port {port-name} with baudRate {baud-rate} and timeout {timeout} (8N1)",
                 _port.PortName, _port.BaudRate, _port.ReadTimeout);
             _port.Open();
-            Logger.Info("Waiting 2000ms for RFM2Pi node to be ready");
+            logger.LogInformation("Waiting 2000ms for RFM2Pi node to be ready");
             Thread.Sleep(2000);
-            Logger.Info(() => $"Port {_port.PortName} opened & ready");
+            logger.LogInformation("Port {port-name} opened & ready", _port.PortName);
         }
 
         public int ByteAvailable()

@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain.Entities;
-using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Domain.Messages.Commands;
 using HelloHome.Central.Domain.Messages.Reports;
-using Moq;
-using NLog.Time;
 using Xunit;
 
 namespace HelloHome.Central.Tests.IntegrationTests

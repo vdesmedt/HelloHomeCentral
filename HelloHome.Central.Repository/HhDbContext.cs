@@ -22,6 +22,11 @@ namespace HelloHome.Central.Repository
         public DbSet<Condition> Conditions { get; set; }
         public DbSet<EnergyMeterSnapshot> EnergyMeterSnapshots { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var configurationTypes = Assembly.GetExecutingAssembly()

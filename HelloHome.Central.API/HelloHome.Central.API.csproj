@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\HelloHome.Central.Common.IoC\HelloHome.Central.Common.IoC.csproj" />
+      <ProjectReference Include="..\HelloHome.Central.Common.Mqtt\HelloHome.Central.Common.Mqtt.csproj" />
       <ProjectReference Include="..\HelloHome.Central.Common\HelloHome.Central.Common.csproj" />
       <ProjectReference Include="..\HelloHome.Central.Domain\HelloHome.Central.Domain.csproj" />
       <ProjectReference Include="..\HelloHome.Central.Repository\HelloHome.Central.Repository.csproj" />

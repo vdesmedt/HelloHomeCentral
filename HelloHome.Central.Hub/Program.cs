@@ -1,32 +1,25 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
 using System.IO;
-using System.Net.Cache;
 using System.Threading.Tasks;
 using HelloHome.Central.Common.Configuration;
-using HelloHome.Central.Hub.IoC;
 using HelloHome.Central.Hub.IoC.Registries;
 using HelloHome.Central.Repository;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
-using NLog.Web;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace HelloHome.Central.Hub
 {
     public static class Program
     {
-        private static readonly Logger Logger = NLog.LogManager.GetLogger(nameof(Program));		
-
         public static async Task Main(string[] args)
         {
-            Logger.Debug($"Starting on MachineName {Environment.MachineName}");
+            
+            //Logger.Debug($"Starting on MachineName {Environment.MachineName}");
             var host = new HostBuilder()
                 .UseSystemd()
                 .UseLamar((context, registry) =>
@@ -37,7 +30,6 @@ namespace HelloHome.Central.Hub
                 {
                     configLogging.ClearProviders();
                 })
-                .UseNLog()
                 .ConfigureHostConfiguration(configHost =>
                 {
                     configHost.SetBasePath(Directory.GetCurrentDirectory());
@@ -52,7 +44,6 @@ namespace HelloHome.Central.Hub
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.ConfigureLoggly(hostContext.Configuration);
                     services.AddHostedService<NodeBridge.NodeBridgeApp>();
                     services.AddDbContext<HhDbContext>(builder =>
                     {
@@ -62,7 +53,6 @@ namespace HelloHome.Central.Hub
                         {
                             //optionBuilder.ServerVersion(new Version(10, 4, 11), ServerType.MariaDb);
                         });
-                        builder.UseLoggerFactory(new NLogLoggerFactory(new NLogLoggerProvider()));
                     });
                     services.Configure<SerialConfig>(hostContext.Configuration.GetSection("Serial"));
                     services.Configure<RFM2PiConfig>(hostContext.Configuration.GetSection("RFM2Pi"));

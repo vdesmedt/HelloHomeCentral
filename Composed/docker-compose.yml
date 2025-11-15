@@ -19,6 +19,17 @@ services:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
+  seq:
+    image: datalust/seq:latest
+    container_name: hh-seq
+    ports:
+      - "5341:5381"
+      - "8081:80"
+    volumes:
+      - hhseq-data:/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=seqpass
   core:
     container_name: hh-core
     depends_on:
@@ -26,13 +37,13 @@ services:
       - mqtt-broker
     platform: linux/arm64
     build:      
-      context: ..
+      context: ../../HelloHomeCentral
       dockerfile: HelloHome.Central.Core/Dockerfile
   api:
     container_name: hh-api
     platform: linux/arm64
     build:      
-      context: ..
+      context: ../../HelloHomeCentral
       dockerfile: HelloHome.Central.API/Dockerfile
     ports:
     - "8080:8080"
@@ -40,7 +51,7 @@ services:
     container_name: hh-simulator
     platform: linux/arm64
     build:      
-      context: ..
+      context: ../../HelloHomeCentral
       dockerfile: HelloHome.Central.Simulator/Dockerfile
     ports:
       - "5173:5173"
@@ -54,3 +65,4 @@ services:
 volumes:
   hhdb-data:
   hhsim-npm:
+  hhseq-data:

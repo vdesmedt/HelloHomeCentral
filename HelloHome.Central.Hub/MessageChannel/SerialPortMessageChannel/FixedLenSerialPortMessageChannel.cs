@@ -1,47 +1,33 @@
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Threading;
 using HelloHome.Central.Domain.Messages;
 using HelloHome.Central.Hub.IoC.Factories;
-using NLog;
+using Microsoft.Extensions.Logging;
 
 
 namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 {
-    public class FixedLenSerialPortMessageChannel : IMessageChannel
+    public class FixedLenSerialPortMessageChannel(
+        ILogger<FixedLenSerialPortMessageChannel> logger,
+        IByteStream byteStream,
+        IMessageParserFactory messageParserFactoryFactory,
+        IMessageEncoderFactory messageEncoderFactoryFactory)
+        : IMessageChannel
     {
-        private static readonly Logger Logger = LogManager.GetLogger(nameof(FixedLenSerialPortMessageChannel));
-
-        private readonly IByteStream _byteStream;
-        private readonly IMessageParserFactory _messageParserFactory;
-        private readonly IMessageEncoderFactory _messageEncoderFactory;
-
-        public FixedLenSerialPortMessageChannel(IByteStream byteStream, IMessageParserFactory messageParserFactoryFactory,
-            IMessageEncoderFactory messageEncoderFactoryFactory)
-        {
-            _byteStream = byteStream;
-            _messageParserFactory = messageParserFactoryFactory;
-            _messageEncoderFactory = messageEncoderFactoryFactory;
-        }
-
         public void Open()
         {
-            _byteStream.Open();
+            byteStream.Open();
         }
 
 
         public void Send(OutgoingMessage message)
         {
-            var encoder = _messageEncoderFactory.Build(message);
+            var encoder = messageEncoderFactoryFactory.Build(message);
             var bytes = encoder.Encode(message);
             if (bytes.Length > 71)
                 throw new ArgumentException("Message length must be lower than 71 bytes");
-            _byteStream.Write(new byte[] { (byte)bytes.Length }, 0, 1);
-            _byteStream.Write(bytes, 0, bytes.Length);
-            Logger.Debug(() =>
-                $"sent to Rfm2Pi : {message} -> {bytes.Length.ToString("X2")}-{BitConverter.ToString(bytes)}");
+            byteStream.Write(new byte[] { (byte)bytes.Length }, 0, 1);
+            byteStream.Write(bytes, 0, bytes.Length);
+            logger.LogDebug("sent to Rfm2Pi : {message} -> {bytesLength}-{bytes}", message, bytes.Length.ToString("X2"), BitConverter.ToString(bytes));
         }
 
 
@@ -62,10 +48,10 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
             {
                 if(_currentBufferIndex == 0)
                 {
-                    if (_byteStream.Read(_buffer, 0, 1) > 0)
+                    if (byteStream.Read(_buffer, 0, 1) > 0)
                     {
                         _expectedMessageLen = _buffer[0];
-                        Logger.Trace(() => $"Expected message lenght : {_expectedMessageLen.ToString()}");
+                        logger.LogTrace("Expected message lenght : {expectedLenght}", _expectedMessageLen.ToString());
                         _currentBufferIndex++;
                     }
                     else
@@ -75,17 +61,17 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                 }
 
                 //Copy all bytes that can be from stream
-                var byteCount = _byteStream.Read(_buffer, _currentBufferIndex, _expectedMessageLen - _currentBufferIndex);
+                var byteCount = byteStream.Read(_buffer, _currentBufferIndex, _expectedMessageLen - _currentBufferIndex);
                 if(byteCount == 0) 
                     return null;
                 
-                Logger.Debug($"Found {byteCount.ToString()} bytes in UART. Copied to channel buffer starting at {_currentBufferIndex.ToString()}");
+                logger.LogDebug("Found {byte-count} bytes in UART. Copied to channel buffer starting at {currentBufferIndex}",byteCount, _currentBufferIndex);
                 _currentBufferIndex += byteCount;
 
 
                 if (_currentBufferIndex == _expectedMessageLen)
                 {
-                    Logger.Debug("Expected size reached");
+                    logger.LogDebug("Expected size reached");
                     
                     //Copy buffer to msgBytes
                     var msgBytes = new byte[_expectedMessageLen];
@@ -95,8 +81,8 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                     _currentBufferIndex = 0;
                     _expectedMessageLen = 0;
 
-                    Logger.Debug(() => $"Found message in channel buffer : {BitConverter.ToString(msgBytes)}");
-                    var parser = _messageParserFactory.Build(msgBytes);
+                    logger.LogDebug("Found message in channel buffer : {bytes}",BitConverter.ToString(msgBytes));
+                    var parser = messageParserFactoryFactory.Build(msgBytes);
                     IncomingMessage msg = null;
                     try
                     {
@@ -104,11 +90,11 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
                     }
                     catch (ArgumentException e)
                     {
-                        Logger.Error(e);
+                        logger.LogError(e, "Exception thrown while parsing message.");
                         return null;
                     }
 
-                    Logger.Info(() => $"Incoming message parsed to {msg}");
+                    logger.LogInformation("Incoming message parsed to {message}", msg);
                     return msg;
                 }
             }
@@ -117,7 +103,7 @@ namespace HelloHome.Central.Hub.MessageChannel.SerialPortMessageChannel
 
         public void Close()
         {
-            _byteStream.Close();
+            byteStream.Close();
         }
     }
 }

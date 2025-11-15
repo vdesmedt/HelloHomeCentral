@@ -2,7 +2,8 @@
 using HelloHome.Central.Common;
 using HelloHome.Central.Domain.CmdQrys.Base;
 using HelloHome.Central.Domain.Entities;
-using NLog;
+using Microsoft.Extensions.Logging;
+
 
 namespace HelloHome.Central.Domain.Logic
 {
@@ -11,31 +12,22 @@ namespace HelloHome.Central.Domain.Logic
         void Touch(Node node, int rssi);
     }
 
-    public class TouchNode : ITouchNode
+    public class TouchNode(ILogger<TouchNode> logger, ITimeProvider timeProvider) : ITouchNode
     {
-        private static readonly Logger Logger = LogManager.GetLogger(nameof(TouchNode));
-
-        private readonly ITimeProvider _timeProvider;
-
-        public TouchNode(ITimeProvider timeProvider)
-        {
-            _timeProvider = timeProvider;
-        }
-
         public void Touch(Node node, int rssi)
         {
             if(node.AggregatedData == default(NodeAggregatedData))
                 throw new ArgumentException("node entity should be loaded with its aggregated data for Touch to work");
-            node.LastSeen = _timeProvider.UtcNow;
+            node.LastSeen = timeProvider.UtcNow;
             node.AggregatedData.Rssi = rssi;
             node.AggregatedData.MaxUpTime =
                 TimeSpan.FromDays(
                     Math.Max(
                         node.AggregatedData.MaxUpTime.TotalDays,
-                        (_timeProvider.UtcNow - node.AggregatedData.StartupTime).TotalDays
+                        (timeProvider.UtcNow - node.AggregatedData.StartupTime).TotalDays
                     )
                 );
-            Logger.Debug(() => $"Node with signature {node.Signature} was touched");
+            logger.LogDebug("Node with signature {signature} was touched",node.Signature);
         }
     }
 }

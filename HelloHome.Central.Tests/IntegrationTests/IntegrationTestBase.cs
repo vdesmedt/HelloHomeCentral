@@ -10,22 +10,23 @@ using Lamar;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace HelloHome.Central.Tests.IntegrationTests
 {
     public abstract class IntegrationTestBase
     {
-        protected readonly Container _container;
+        private readonly Container _container;
 
         protected IntegrationTestBase()
         {
             _container = Container.For<HubServiceRegistry>();
-
             _container.Configure(c =>
             {
                 c.AddSingleton<IMessageChannel>(p => MsgChannelMoq.Object);
             });
+            RegisterMock<ILogger<NodeBridge>>();
         }
 
         protected HhDbContext RegisterDbContext(string inMemoryDbName)

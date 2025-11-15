@@ -1,3 +1,4 @@
+using HelloHome.Central.Common.Mqtt;
 using HelloHome.Central.Repository;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -5,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseLamar(registry =>
 {
+    registry.IncludeRegistry(new HelloHome.Central.Common.IoC.Registries.MqttRegistry(builder.Configuration));
     registry.IncludeRegistry<HelloHome.Central.Common.IoC.Registries.DbContextRegistry>();
     registry.IncludeRegistry<HelloHome.Central.Common.IoC.Registries.CommandAndQueriesRegistry>();
     registry.IncludeRegistry<HelloHome.Central.Common.IoC.Registries.BusinessLogicRegistry>();
     registry.IncludeRegistry<HelloHome.Central.Common.IoC.Registries.HandlerRegistry>();
 });
+builder.Services.AddHostedService<MqttHostedService>();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
