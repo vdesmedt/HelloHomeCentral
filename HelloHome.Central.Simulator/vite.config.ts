@@ -14,7 +14,7 @@ export default defineConfig({
             changeOrigin: true,
             rewrite: (path) => path.replace(/^\/api/, ''),
             configure: (proxy, options) => {
-                proxy.on('proxyReq', (proxyReq, req, res) => {
+                proxy.on('proxyReq', (_proxyReq, req) => {
                     console.log(`[proxy →] ${req.method} ${req.url} -> ${options.target}`)
                 })
                 proxy.on('proxyRes', (proxyRes, req) => {

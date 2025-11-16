@@ -11,7 +11,7 @@ function App() {
                 <NodeList />
             </div>
             <div className='col-md-10'>
-                <NodeGrid ids={[1,3,3,5]}/>
+                <NodeGrid ids={[1,3,7,5]}/>
             </div>
         </div>
         </>

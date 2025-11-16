@@ -1,7 +1,17 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace HelloHome.Central.Domain.Entities
 {
+    [JsonDerivedType(typeof(EnvironmentHistory))]
+    [JsonDerivedType(typeof(PulseHistory))]
+    [JsonDerivedType(typeof(NodeHealthHistory))]
+    [JsonDerivedType(typeof(SwitchHistory))]
+    [JsonDerivedType(typeof(VarioHistory))]
+    [JsonDerivedType(typeof(PushButtonHistory))]
+    [JsonDerivedType(typeof(FloatLoggerHistory))]
+    [JsonDerivedType(typeof(IntLoggerHistory))]
+    [JsonDerivedType(typeof(RelayHistory))]
     public abstract class PortHistory
     {
         public int Id { get; set; }

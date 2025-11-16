@@ -1,5 +1,6 @@
 using HelloHome.Central.Common.Mqtt;
 using HelloHome.Central.Domain;
+using HelloHome.Central.Domain.CmdQrys;
 using HelloHome.Central.Domain.Entities;
 using HelloHome.Central.Domain.Entities.Includes;
 using HelloHome.Central.Domain.Messages.Commands;
@@ -11,7 +12,7 @@ namespace HelloHome.Central.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NodeController(IUnitOfWork unitOfWork, IMqttPublisher mqttPublisher) : ControllerBase
+    public class NodeController(IUnitOfWork unitOfWork, IMqttPublisher mqttPublisher, IGetNodeWithLastValuesQuery nodeWithLastValuesQuery) : ControllerBase
     {
         [HttpGet]
         public async Task<IEnumerable<Node>> Get()
@@ -36,13 +37,20 @@ namespace HelloHome.Central.API.Controllers
             return node;
         }
 
+        [HttpGet("{id}/last-values")]
+        public async Task<Node> GetLastValues(int id)
+        {
+            var node = await nodeWithLastValuesQuery.ExecuteAsync(id);
+            return node;
+        }
+
         [HttpGet("{id}/history-env")]
         public async Task<IEnumerable<EnvironmentHistory>> GetHistory(int id)
         {
             return await unitOfWork.PortHistory.OfType<EnvironmentHistory>().Where(_ => _.Port.NodeId == id).ToListAsync();
         }
 
-        [HttpGet("{id}/restart")]
+        [HttpPost("{id}/restart")]
         public async Task<ActionResult<bool>> Restart(int id)
         {
             var node = await unitOfWork.Nodes.SingleOrDefaultAsync(n => n.Id == id);

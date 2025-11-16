@@ -19,6 +19,9 @@ namespace HelloHome.Central.Domain.Entities
         /// </summary>
         public long Signature { get; set; }
 
+        /// <summary>
+        /// RFM96W RF address
+        /// </summary>
         public int RfAddress { get; set; }
 
         public DateTime LastSeen { get; set; }

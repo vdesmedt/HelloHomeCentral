@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {getNodes} from "../api.ts";
+import {getNodes, type NodeType} from "../api.ts";
 
 const NodeList = () => {
-    const [nodes, setNodes] = useState<{ id:number, signature:string, metadata: { name:string}}[]>([]);
+    const [nodes, setNodes] = useState<NodeType[]>([]);
 
     useEffect(() => {
         getNodes().then(x => setNodes(x)).catch(console.error);

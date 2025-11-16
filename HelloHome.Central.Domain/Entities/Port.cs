@@ -1,5 +1,6 @@
 ﻿using System.Dynamic;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace HelloHome.Central.Domain.Entities
 {
@@ -10,6 +11,9 @@ namespace HelloHome.Central.Domain.Entities
         Last = 5,
     }
 
+    [JsonDerivedType(typeof(EnvironmentSensor), "Environment")]
+    [JsonDerivedType(typeof(PulseSensor), "Pulse")]
+    [JsonDerivedType(typeof(NodeHealthSensor), "NodeHealth")]
     public abstract class Port
     {
         public int Id { get; set; }

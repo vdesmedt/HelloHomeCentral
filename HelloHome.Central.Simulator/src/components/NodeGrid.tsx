@@ -1,4 +1,4 @@
-import NodeView from "./NodeView.tsx";
+import NodeView from "./NodeView/NodeView.tsx";
 
 const NodeGrid = (  { ids } : { ids:number[] } ) => {
     return (<>
