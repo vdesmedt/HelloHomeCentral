@@ -9,13 +9,13 @@ namespace HelloHome.Central.Domain.CmdQrys
 {
     public interface IFindPortQuery : IQuery
     {
-        Task<Port> ByNodeRfAndPortNumberAsyn(int rfAddress, byte portNumber, PortInclude includes);
+        Task<Port> ByNodeRfAndPortNumberAsync(int rfAddress, byte portNumber, PortInclude includes);
         Task<Port> ByNodeIdAndPortNumberAsync(int nodeId, int portNumber, PortInclude includes);
         Task<T> ByNodeIdAndPortNumberAsync<T>(int nodeId, int portNumber, PortInclude includes) where T:Port;
         Task<T> ByNodeIdentifierAndPortNumberAsync<T>(string nodeIdentifier, int portNumber,
             PortInclude includes = PortInclude.None) where T : Port;
         Task<Port> ByPortIdAsyn(int id, PortInclude includes);
-        Task<T> ByPortIdAsyn<T>(int id, PortInclude includes) where T:Port;
+        Task<T> ByPortIdAsync<T>(int id, PortInclude includes) where T:Port;
 
         Task<T> ByNodeIdentifierAndPortNameAsync<T>(string nodeIdentifier, string portName,
             PortInclude includes = PortInclude.None) where T : Port;
@@ -37,7 +37,7 @@ namespace HelloHome.Central.Domain.CmdQrys
                 .SingleOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<T> ByPortIdAsyn<T>(int id, PortInclude includes) where T:Port
+        public async Task<T> ByPortIdAsync<T>(int id, PortInclude includes) where T:Port
         {
             return await _ctx.Ports
                 .Include(includes)
@@ -45,7 +45,7 @@ namespace HelloHome.Central.Domain.CmdQrys
                 .SingleOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<Port> ByNodeRfAndPortNumberAsyn(int rfAddress, byte portNumber, PortInclude includes)
+        public async Task<Port> ByNodeRfAndPortNumberAsync(int rfAddress, byte portNumber, PortInclude includes)
         {
             return await _ctx.Ports
                 .Include(includes)
