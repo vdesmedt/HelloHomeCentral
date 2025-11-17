@@ -40,19 +40,19 @@ public static class Program
             .ConfigureLogging((hostBuilderContext, loggingBuilder) =>
             {
                 loggingBuilder.ClearProviders();
-                loggingBuilder.AddOpenTelemetry(x =>
+                loggingBuilder.AddOpenTelemetry(opt =>
                 {
-                    x.SetResourceBuilder(ResourceBuilder.CreateEmpty()
+                    opt.SetResourceBuilder(ResourceBuilder.CreateEmpty()
                         .AddService("HelloHome.Central.Core")
                         .AddAttributes(new Dictionary<string, object>
                         {
                             {"Environment", hostBuilderContext.HostingEnvironment.EnvironmentName}
                         }));
-                    x.IncludeScopes = true;
-                    x.IncludeFormattedMessage = true;
+                    opt.IncludeScopes = true;
+                    opt.IncludeFormattedMessage = true;
                     
-                    x.AddConsoleExporter();
-                    x.AddOtlpExporter(o =>
+                    opt.AddConsoleExporter();
+                    opt.AddOtlpExporter(o =>
                     {
                         o.Endpoint = new Uri("http://seq:80/ingest/otlp/v1/logs");
                         o.Protocol = OtlpExportProtocol.HttpProtobuf;
