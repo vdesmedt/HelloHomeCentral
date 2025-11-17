@@ -3,6 +3,9 @@ using HelloHome.Central.Repository;
 using Lamar.Microsoft.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseLamar(registry =>
@@ -28,6 +31,27 @@ builder.Services
     {
         opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
+
+builder.Logging.ClearProviders();
+builder.Logging.AddOpenTelemetry(opt =>
+{
+    opt.SetResourceBuilder(ResourceBuilder.CreateEmpty()
+        .AddService("HelloHome.Central.API")
+        .AddAttributes(new Dictionary<string, object>
+        {
+            {"Environment", builder.Environment.EnvironmentName}
+        }));
+    opt.IncludeScopes = true;
+    opt.IncludeFormattedMessage = true;
+                    
+    opt.AddConsoleExporter();
+    opt.AddOtlpExporter(o =>
+    {
+        o.Endpoint = new Uri("http://seq:80/ingest/otlp/v1/logs");
+        o.Protocol = OtlpExportProtocol.HttpProtobuf;
+        o.Headers = "X-Seq-ApiKey=E21iZem6nzzgwc3vk5wa";
+    });
+});
 
 var app = builder.Build();
 
