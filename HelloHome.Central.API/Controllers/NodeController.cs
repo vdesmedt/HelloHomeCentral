@@ -12,7 +12,7 @@ namespace HelloHome.Central.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NodeController(IUnitOfWork unitOfWork, IMqttPublisher mqttPublisher, IGetNodeWithLastValuesQuery nodeWithLastValuesQuery) : ControllerBase
+    public class NodeController(ILogger<NodeController> logger, IUnitOfWork unitOfWork, IMqttPublisher mqttPublisher, IGetNodeWithLastValuesQuery nodeWithLastValuesQuery) : ControllerBase
     {
         [HttpGet]
         public async Task<IEnumerable<Node>> Get()
@@ -58,6 +58,7 @@ namespace HelloHome.Central.API.Controllers
                 return NotFound();
             var restartCommand = new RestartCommand { ToRfAddress = node.RfAddress };
             await mqttPublisher.PublishAsync("core",restartCommand, CancellationToken.None);
+            logger.LogTrace("Node {node-id} restarted", id);
             return true;
         }
 
