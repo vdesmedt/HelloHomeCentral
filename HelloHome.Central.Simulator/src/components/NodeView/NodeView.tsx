@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {getNodeState, type NodeType, type PortType} from "../../api.ts";
-import pulsePortView from "./PortView/PulsePort.tsx";
+import PulsePort from "./PortView/PulsePort.tsx";
 import EnvironmentPortView from "./PortView/EnvironmentPort.tsx";
 import nodeTitleView from "./NodeTitle.tsx";
 import nodeActionView from "./NodeActionView.tsx";
@@ -14,7 +14,7 @@ const NodeView = ({nodeId} : {nodeId:number}) => {
 
     const portView = (port:PortType) => {
         switch(port.$type) {
-            case "Pulse": return pulsePortView(port);
+            case "Pulse": return <PulsePort port={port}/>;
             case "Environment": return EnvironmentPortView(port);
         }
     }

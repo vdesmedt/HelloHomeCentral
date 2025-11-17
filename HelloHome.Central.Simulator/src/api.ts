@@ -16,6 +16,14 @@ export async function restartNode(id: number) : Promise<void> {
     if (!res.ok) throw new Error("API error");
 }
 
+export async function addPulses(portId:number, newPulses:number) : Promise<void> {
+    const form = new FormData();
+    form.append("pulses", newPulses.toString());
+    const res = await fetch(`${API_BASE}/pulse/${portId}`, { method: "POST", body: form });
+    if (!res.ok) throw new Error("API error");
+}
+
+
 interface History { id:number, timestamp:string, rssi:number, total:number|undefined, temperature:number|undefined, humidity:number|undefined, pressure:number|undefined}
 interface Port { id:number, $type:string, history:History[] }
 interface Node { id:number, identifier:string, signature:string, lastSeen: string, metadata: { name:string }, ports:Port[] }
