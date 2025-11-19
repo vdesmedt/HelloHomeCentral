@@ -14,6 +14,12 @@ namespace HelloHome.Central.Domain.Entities
     [JsonDerivedType(typeof(EnvironmentSensor), "Environment")]
     [JsonDerivedType(typeof(PulseSensor), "Pulse")]
     [JsonDerivedType(typeof(NodeHealthSensor), "NodeHealth")]
+    [JsonDerivedType(typeof(SwitchSensor),"Switch")]
+    [JsonDerivedType(typeof(VarioSensor),"Vario")]
+    [JsonDerivedType(typeof(PushButtonSensor),"PushButton")]
+    [JsonDerivedType(typeof(FloatLogger),"FloatLogger")]
+    [JsonDerivedType(typeof(IntLogger),"IntLogger")]
+    [JsonDerivedType(typeof(RelayActuator),"Relay")]
     public abstract class Port
     {
         public int Id { get; set; }
