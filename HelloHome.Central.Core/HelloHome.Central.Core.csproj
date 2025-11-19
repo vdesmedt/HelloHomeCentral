@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -10,11 +11,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Lamar.Microsoft.DependencyInjection" Version="15.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7"/>
-        <PackageReference Include="MQTTnet" Version="5.0.1.1416" />
-        <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.14.0" />
-        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+        <PackageReference Include="Lamar.Microsoft.DependencyInjection"  />
+        <PackageReference Include="Microsoft.Extensions.Hosting"  />
+        <PackageReference Include="MQTTnet"  />
+        <PackageReference Include="OpenTelemetry.Exporter.Console"  />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol"  />
     </ItemGroup>
 
     <ItemGroup>
