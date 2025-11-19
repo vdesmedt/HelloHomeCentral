@@ -47,6 +47,14 @@ public class GetNodeWithLastValuesQuery(IUnitOfWork ctx) : IQuery, IGetNodeWithL
                             .FirstOrDefaultAsync(h => h.PortId == port.Id)
                     };
                     break;
+                case PushButtonSensor pushButtonSensor:
+                    pushButtonSensor.History = new List<PushButtonHistory>
+                    {
+                        await ctx.PortHistory.OfType<PushButtonHistory>().OrderByDescending(h => h.Id)
+                            .FirstOrDefaultAsync(h => h.PortId == port.Id)
+                    };
+                    break;
+                    
                 default:
                     throw new NotImplementedException(
                         $"Port type {port.GetType()} not supported yet by : GetNodeWithLastValuesQuery");
