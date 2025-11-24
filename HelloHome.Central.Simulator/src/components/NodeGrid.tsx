@@ -1,24 +1,18 @@
-import NodeView from "./NodeView/NodeView.tsx";
+import NodeSlot from "./NodeView/NodeSlot.tsx";
 
-const NodeGrid = (  { ids } : { ids:number[] } ) => {
-    return (<>
-        <div className='row'>
-            <div className='col-md-5 border border-1 p-3'>
-                <NodeView nodeId={ids[0]}/>
-            </div>
-            <div className='col-md-5 border border-1 p-3'>
-                <NodeView nodeId={ids[1]}/>
-            </div>
+const NodeGrid = () => {
+
+
+    return (
+        <div className="row" id="nodeDetailsContainer">
+            <NodeSlot slotNumber={1}/>
+            <NodeSlot slotNumber={2}/>
+            <NodeSlot slotNumber={3}/>
+            <NodeSlot slotNumber={4}/>
+            <NodeSlot slotNumber={5}/>
+            <NodeSlot slotNumber={6}/>
         </div>
-        <div className='row'>
-            <div className='col-md-5 border border-1 p-3'>
-                <NodeView nodeId={ids[2]}/>
-            </div>
-            <div className='col-md-5 border border-1 p-3'>
-                <NodeView nodeId={ids[3]}/>
-            </div>
-        </div>
-    </>);
+    );
 }
 
 export default NodeGrid;

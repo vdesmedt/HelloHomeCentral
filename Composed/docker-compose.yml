@@ -15,6 +15,7 @@ services:
     container_name: hh-mqtt
     ports:
       - "1883:1883"
+      - "8082:8080"
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data

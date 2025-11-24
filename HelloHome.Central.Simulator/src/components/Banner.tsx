@@ -6,14 +6,17 @@ class Banner extends Component<{ headerText: string }> {
     render() {
         const {headerText: headerText} = this.props;
         return (
-            <header className="row">
-                <div className="col-lg-5">
-                    <img src={logo} alt="logo" className={styles.logo}/>
+            <nav className="navbar navbar-dark mb-4">
+                <div className="container-fluid">
+            <span className="navbar-brand">
+                <img src={logo} className={styles.logo} alt="HelloHome Logo"/>
+                <i className="bi"></i> {headerText}
+            </span>
+                    <span className="text-white">
+                <i className="bi bi-circle-fill text-success me-1"></i> System Online
+            </span>
                 </div>
-                <div className="col-lg-7">
-                    <h1>{headerText}</h1>
-                </div>
-            </header>);
+            </nav>);
     }
 }
 

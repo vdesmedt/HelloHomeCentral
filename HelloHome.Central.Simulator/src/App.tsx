@@ -1,21 +1,24 @@
 import "./App.css";
 import Banner from "./components/Banner.tsx";
-import NodeList from "./components/NodeList.tsx";
 import NodeGrid from "./components/NodeGrid.tsx";
+import SideBar from "./components/SideBar.tsx";
 function App() {
     return (
         <>
         <Banner headerText="HelloHome Simulator"/>
-        <div className='row' >
-            <div className='col-md-2'>
-                <NodeList />
-            </div>
-            <div className='col-md-10'>
-                <NodeGrid ids={[1,3,7,5]}/>
-            </div>
+        <div className="container-fluid">
+            <div className='row' >
+                {/* Sidebar - Node List */}
+                <div className='col-lg-2 col-md-3'>
+                    <SideBar />
+                </div>
+                {/* Main Content - Node Details (Up to 4) */}
+                <div className='col-lg-10 col-md-9'>
+                    <NodeGrid />
+                </div>
+                </div>
         </div>
         </>
     );
 }
-
 export default App;
