@@ -287,6 +287,5 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-.DS_Store
-HelloHome.Central.Repository/.DS_Store
+**/.DS_Store
 .DS_Store
