@@ -24,7 +24,17 @@ export async function addPulses(portId:number, newPulses:number) : Promise<void>
 }
 
 
-interface History { id:number, timestamp:string, rssi:number, total:number|undefined, temperature:number|undefined, humidity:number|undefined, pressure:number|undefined}
+interface History {
+    id:number,
+    timestamp:string,
+    rssi:number,
+    total:number|undefined,
+    temperature:number|undefined,
+    humidity:number|undefined,
+    pressure:number|undefined,
+    newRelayState?: number | string,
+    relayState?: number | string
+}
 interface Port { id:number, portNumber:number, nodeId:number, $type:string, history:History[] }
 interface Node { id:number, identifier:string, rfAddress:number, signature:string, lastSeen: string, metadata: { name:string }, ports:Port[] }
 
