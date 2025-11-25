@@ -174,40 +174,80 @@ body {
 }
 
 .port-section {
-    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px;
+    background-color: #fff;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .port-header {
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
 .port-header i {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
-.port-item {
+.port-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.1;
+}
+
+.port-title small {
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.port-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.port-stat {
+    flex: 1 1 150px;
     background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    border-left: 3px solid var(--info-color);
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.port-stat .label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
 }
 
 .port-value {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--secondary-color);
-    margin: 10px 0;
+    margin: 0;
 }
 
-.simulate-btn {
-    margin-top: 10px;
+.simulate-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.simulate-group .form-control {
+    max-width: 120px;
 }
 
 .status-badge {

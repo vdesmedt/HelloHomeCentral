@@ -19,13 +19,19 @@ const PushButtonPort = ({port}: {port:PortType}) => {
                 <div className="sensor-icon switch-icon">
                     <i className="bi bi-toggle-on"></i>
                 </div>
-                <strong>Push Sensor</strong>
+                <div className="port-title">
+                    <strong>Push Sensor</strong>
+                    <small>Port #{port.portNumber}</small>
+                </div>
             </div>
-            <div className="port-item">
-                <div className="btn-group simulate-btn" role="group">
-                    <button type="button" className="btn btn-success btn-sm switch-on" onClick={handleClick}>
-                        <i className="bi bi-toggle-on me-1"></i> Simulate Push
-                    </button>
+            <div className="port-body">
+                <div className="port-stat">
+                    <p className="label">Trigger</p>
+                    <div className="simulate-group" role="group">
+                        <button type="button" className="btn btn-success btn-sm switch-on" onClick={handleClick}>
+                            <i className="bi bi-toggle-on me-1"></i> Simulate Push
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -19,18 +19,23 @@ const SwitchPort = ({port}: {port:PortType}) => {
                 <div className="sensor-icon switch-icon">
                     <i className="bi bi-toggle-on"></i>
                 </div>
-                <strong>Switch Sensor</strong>
+                <div className="port-title">
+                    <strong>Switch Sensor</strong>
+                    <small>Port #{port.portNumber}</small>
+                </div>
             </div>
-            <div className="port-item">
-                <label className="form-label mb-1">Switch State</label>
-                <div className="port-value">STATE</div>
-                <div className="btn-group simulate-btn" role="group">
-                    <button type="button" className="btn btn-success btn-sm switch-on" onClick={handleClick}>
-                        <i className="bi bi-toggle-on me-1"></i> Simulate ON
-                    </button>
-                    <button type="button" className="btn btn-secondary btn-sm switch-off" onClick={handleClick}>
-                        <i className="bi bi-toggle-off me-1"></i> Simulate OFF
-                    </button>
+            <div className="port-body">
+                <div className="port-stat">
+                    <p className="label">Switch State</p>
+                    <div className="port-value">STATE</div>
+                    <div className="simulate-group" role="group">
+                        <button type="button" className="btn btn-success btn-sm switch-on" onClick={handleClick}>
+                            <i className="bi bi-toggle-on me-1"></i> Simulate ON
+                        </button>
+                        <button type="button" className="btn btn-secondary btn-sm switch-off" onClick={handleClick}>
+                            <i className="bi bi-toggle-off me-1"></i> Simulate OFF
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
