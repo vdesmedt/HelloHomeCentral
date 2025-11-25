@@ -18,18 +18,23 @@ const RelayPort = ({port}: { port: PortType }) => {
                 <div className="sensor-icon switch-icon">
                     <i className="bi bi-lightning-charge"></i>
                 </div>
-                <strong>Relay</strong>
+                <div className="port-title">
+                    <strong>Relay</strong>
+                    <small>Port #{port.portNumber}</small>
+                </div>
             </div>
-            <div className="port-item">
-                <label className="form-label mb-1">Current State</label>
-                <div className="port-value">{relayStateLabel}</div>
-                <div className="btn-group simulate-btn" role="group">
-                    <button type="button" className="btn btn-success btn-sm" onClick={handleClick("on")}>
-                        <i className="bi bi-power me-1"></i> Turn On
-                    </button>
-                    <button type="button" className="btn btn-secondary btn-sm" onClick={handleClick("off")}>
-                        <i className="bi bi-power me-1"></i> Turn Off
-                    </button>
+            <div className="port-body">
+                <div className="port-stat">
+                    <p className="label">Current State</p>
+                    <div className="port-value">{relayStateLabel}</div>
+                    <div className="simulate-group" role="group">
+                        <button type="button" className="btn btn-success btn-sm" onClick={handleClick("on")}>
+                            <i className="bi bi-power me-1"></i> Turn On
+                        </button>
+                        <button type="button" className="btn btn-secondary btn-sm" onClick={handleClick("off")}>
+                            <i className="bi bi-power me-1"></i> Turn Off
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
