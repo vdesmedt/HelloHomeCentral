@@ -54,6 +54,13 @@ public class GetNodeWithLastValuesQuery(IUnitOfWork ctx) : IQuery, IGetNodeWithL
                             .FirstOrDefaultAsync(h => h.PortId == port.Id)
                     };
                     break;
+                case RelayActuator relayActuator:
+                    relayActuator.History = new List<RelayHistory>
+                    {
+                        await ctx.PortHistory.OfType<RelayHistory>().OrderByDescending(h => h.Id)
+                            .FirstOrDefaultAsync(h => h.PortId == port.Id)
+                    };
+                    break;
                     
                 default:
                     throw new NotImplementedException(
