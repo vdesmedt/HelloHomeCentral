@@ -3,6 +3,7 @@ import EnvironmentPortView from "./PortView/EnvironmentPort.tsx";
 import PulsePort from "./PortView/PulsePort.tsx";
 import SwitchPort from "./PortView/SwitchPort.tsx";
 import PushButtonPort from "./PortView/PushButtonPort.tsx";
+import RelayPort from "./PortView/RelayPort.tsx";
 
 const NodeView = ({node, clearSlot}: { node: NodeType, clearSlot:() => void}) => {
 
@@ -15,6 +16,7 @@ const NodeView = ({node, clearSlot}: { node: NodeType, clearSlot:() => void}) =>
             case "Pulse" : return <PulsePort port={port}/>
             case "Switch" : return <SwitchPort port={port}/>
             case "PushButton" : return <PushButtonPort port={port}/>
+            case "Relay" : return <RelayPort port={port}/>
         }
     }
 
